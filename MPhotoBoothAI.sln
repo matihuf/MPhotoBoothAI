@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9447C35B-2ECF-445C-9BB9-C50D92424A6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Avalonia", "src\MPhotoBoothAI.Avalonia\MPhotoBoothAI.Avalonia.csproj", "{97F9FE03-AC9A-4EB4-AF1D-CC5FD1F18558}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Application", "src\MPhotoBoothAI.Application\MPhotoBoothAI.Application.csproj", "{DF91C96A-1FC9-4670-B228-731981379663}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Infrastructure", "src\MPhotoBoothAI.Infrastructure\MPhotoBoothAI.Infrastructure.csproj", "{1A465149-A066-4277-8A51-C89772D7E1F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97F9FE03-AC9A-4EB4-AF1D-CC5FD1F18558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97F9FE03-AC9A-4EB4-AF1D-CC5FD1F18558}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97F9FE03-AC9A-4EB4-AF1D-CC5FD1F18558}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97F9FE03-AC9A-4EB4-AF1D-CC5FD1F18558}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF91C96A-1FC9-4670-B228-731981379663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF91C96A-1FC9-4670-B228-731981379663}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF91C96A-1FC9-4670-B228-731981379663}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF91C96A-1FC9-4670-B228-731981379663}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A465149-A066-4277-8A51-C89772D7E1F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A465149-A066-4277-8A51-C89772D7E1F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A465149-A066-4277-8A51-C89772D7E1F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A465149-A066-4277-8A51-C89772D7E1F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{97F9FE03-AC9A-4EB4-AF1D-CC5FD1F18558} = {9447C35B-2ECF-445C-9BB9-C50D92424A6D}
+		{DF91C96A-1FC9-4670-B228-731981379663} = {9447C35B-2ECF-445C-9BB9-C50D92424A6D}
+		{1A465149-A066-4277-8A51-C89772D7E1F7} = {9447C35B-2ECF-445C-9BB9-C50D92424A6D}
+	EndGlobalSection
+EndGlobal
