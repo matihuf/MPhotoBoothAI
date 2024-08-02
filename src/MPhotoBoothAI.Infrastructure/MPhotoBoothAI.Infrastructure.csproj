@@ -11,19 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Emgu.CV.Platform.NetStandard">
-      <HintPath>Emgu.CV.Platform.NetStandard.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="libcvextern.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>  
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Models/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Emgu.CV" Version="4.8.0.5324" />
   </ItemGroup>
 
 </Project>
