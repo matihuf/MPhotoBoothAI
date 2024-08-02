@@ -1,4 +1,4 @@
-﻿namespace MPhotoBoothAI.ViewModels;
+﻿namespace MPhotoBoothAI.Application.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {

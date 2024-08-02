@@ -1,9 +1,9 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using MPhotoBoothAI.ViewModels;
+using MPhotoBoothAI.Application.ViewModels;
 
-namespace MPhotoBoothAI;
+namespace MPhotoBoothAI.Avalonia;
 
 public class ViewLocator : IDataTemplate
 {

@@ -14,8 +14,4 @@
     <Folder Include="Models/" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Emgu.CV" Version="4.8.0.5324" />
-  </ItemGroup>
-
 </Project>

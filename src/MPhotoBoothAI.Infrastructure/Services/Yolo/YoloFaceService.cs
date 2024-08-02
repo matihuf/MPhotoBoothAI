@@ -3,10 +3,11 @@ using Emgu.CV;
 using Emgu.CV.Dnn;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using MPhotoBoothAI.Application;
 
 namespace MPhotoBoothAI.Infrastructure;
 
-public class YoloFace(Net net, ResizeImageService resizeImageService)
+public class YoloFaceService(Net net, ResizeImageService resizeImageService) : IYoloFaceService
 {
     private readonly Net _net = net;
     private readonly ResizeImageService _resizeImageService = resizeImageService;

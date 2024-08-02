@@ -24,6 +24,12 @@
     <ProjectReference Include="..\..\src\MPhotoBoothAI.Infrastructure\MPhotoBoothAI.Infrastructure.csproj" />
   </ItemGroup>
 
+   <ItemGroup>
+    <Content Include="../../models/yolov8n-face.onnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>  
+  </ItemGroup>
+
   <ItemGroup>
     <None Update="TestData\woman.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -10,9 +10,9 @@ public class YoloFaceServiceTests
     public void YoloFace_Should_Return()
     {
         //arrange
-        using var net = DnnInvoke.ReadNetFromONNX("../../../../../models/yolov8n-face.onnx");
+        using var net = DnnInvoke.ReadNetFromONNX("yolov8n-face.onnx");
         using var frame = CvInvoke.Imread("TestData/woman.jpg");
-        var yoloFace = new YoloFace(net, new ResizeImageService());
+        var yoloFace = new YoloFaceService(net, new ResizeImageService());
         //act
         yoloFace.Run(frame, 0.45f, 0.5f);
     }

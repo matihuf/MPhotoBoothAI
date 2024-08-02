@@ -1,15 +1,13 @@
 using System;
-using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
-using MPhotoBoothAI.Avalonia;
-using MPhotoBoothAI.ViewModels;
-using MPhotoBoothAI.Views;
+using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Avalonia .Views;
+using AvaloniaApplication = Avalonia.Application;
+namespace MPhotoBoothAI.Avalonia;
 
-namespace MPhotoBoothAI;
-
-public partial class App : Application
+public partial class App : AvaloniaApplication
 {
     public static IServiceProvider? ServiceProvider { get; private set; }
 
@@ -28,7 +26,7 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = ServiceProvider.GetRequiredService<MainWindowViewModel>()
+                DataContext = ServiceProvider.GetRequiredService<FaceDetectionViewModel>()
             };
         }
 

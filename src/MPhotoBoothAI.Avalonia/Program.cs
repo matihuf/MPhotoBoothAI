@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace MPhotoBoothAI;
+namespace MPhotoBoothAI.Avalonia;
 
 sealed class Program
 {
