@@ -1,43 +1,51 @@
 ﻿using System;
 using System.Globalization;
+using Avalonia;
+using Avalonia.Data;
 using Avalonia.Data.Converters;
+using Avalonia.Media.Imaging;
+using Emgu.CV;
 
 namespace MPhotoBoothAI.Avalonia.Converters;
 
 public class MatConverter : IValueConverter
 {
-    public static MatConverter Instance = new MatConverter();
+    public static readonly MatConverter Instance = new MatConverter();
+
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value == null)
-        {
             return null;
+        if (!targetType.IsAssignableFrom(typeof(WriteableBitmap)))
+            return new BindingNotification(new NotSupportedException(), BindingErrorType.Error);
+
+        var mat = value switch
+        {
+            //      MatImageMessage msg => msg.Image,
+            Mat mata => mata,
+            _ => null,
+        };
+        if (mat == null) return new BindingNotification(new NotSupportedException(), BindingErrorType.Error);
+        if (parameter is WriteableBitmap wb)
+        {
+            try
+            { // may not be good size
+                mat.ToBitmapParallel(wb);
+                return wb;
+            }
+            catch (ArgumentException e)
+            {
+                // ignored
+                //        App.TryGetLogger<MatBitmapValueConverter>()?.LogError(e, "Error converting to bitmap");
+            }
         }
-        return null; //ConvertToAvaloniaBitmap(((Mat)value).ToBitmap());
+        var wbx = new WriteableBitmap(new PixelSize(mat.Width, mat.Height), new Vector(96,96));
+        mat.ToBitmapParallel(wbx);
+        return wbx;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        throw new NotImplementedException();
+        return new BindingNotification(new NotSupportedException(), BindingErrorType.Error);
     }
-
-    // private static Bitmap ConvertToAvaloniaBitmap(System.Drawing.Bitmap bitmap)
-    // {
-    //     if (bitmap == null)
-    //     {
-    //         return null;
-    //     }
-    //     System.Drawing.Bitmap bitmapTmp = new System.Drawing.Bitmap(bitmap);
-    //     var bitmapdata = bitmapTmp.LockBits(new System.Drawing.Rectangle(0, 0, bitmapTmp.Width, bitmapTmp.Height),
-    //         System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-    //     Bitmap bitmap1 = new Bitmap(PixelFormat.Bgra8888, AlphaFormat.Unpremul,
-    //         bitmapdata.Scan0,
-    //         new PixelSize(bitmapdata.Width, bitmapdata.Height),
-    //         new Vector(96, 96),
-    //         bitmapdata.Stride);
-    //     bitmapTmp.UnlockBits(bitmapdata);
-    //     bitmapTmp.Dispose();
-    //     return bitmap1;
-    // }
 }

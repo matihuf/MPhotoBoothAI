@@ -20,14 +20,14 @@ RUN git fetch origin 4.8.0
 RUN git checkout 4.8.0
 RUN git submodule update --init --recursive
 
-
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 # install cmake for compiling open cv dependencies & emgu dependencies
 RUN apt-get update && apt-get install -y build-essential cmake protobuf-compiler ffmpeg libgtk-3-dev libgstreamer1.0-dev libavcodec-dev libswscale-dev libavformat-dev libv4l-dev ocl-icd-dev freeglut3-dev libgeotiff-dev libusb-1.0-0-dev libdc1394-dev
 
-WORKDIR /mnt/emgu_repo/emgucv/platforms/ubuntu/22.04
-RUN ./apt_install_dependency
+RUN apt-get install -y build-essential libgtk-3-dev libgstreamer1.0-dev libavcodec-dev libswscale-dev libavformat-dev libdc1394-dev libv4l-dev cmake-curses-gui ocl-icd-dev freeglut3-dev libgeotiff-dev libusb-1.0-0-dev libvtk9-dev libfreetype-dev libharfbuzz-dev qtbase5-dev libeigen3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgflags-dev libgoogle-glog-dev libatlas-base-dev liblapacke-dev libva-dev 
 
 # this takes a long time
+WORKDIR /mnt/emgu_repo/emgucv/platforms/ubuntu/22.04
 RUN ./cmake_configure
 
 WORKDIR /mnt/my_app_root

@@ -41,9 +41,7 @@ public class YoloFaceService(Net net, ResizeImageService resizeImageService) : I
         {
             int idx = indices[i];
             Rectangle box = boxes[idx];
-            using var mat = frame.Clone();
-            DrawPred(mat, box, confidences[idx]);
-            mat.Save($"{i}.jpg");
+            DrawPred(frame, box, confidences[idx]);
         }
     }
 

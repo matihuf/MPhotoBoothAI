@@ -2,5 +2,5 @@
 
 public interface ICameraService : ISubject, IDisposable
 {
-
+    void Start();
 }

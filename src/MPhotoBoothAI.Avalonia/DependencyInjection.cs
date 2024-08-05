@@ -27,7 +27,7 @@ public static class DependencyInjection
     {
         services.AddTransient<ResizeImageService>();
         services.AddTransient<IYoloFaceService, YoloFaceService>();
-        services.AddSingleton((src) =>  DnnInvoke.ReadNetFromONNX("yolov8n-face.onnx"));
+        services.AddSingleton((src) =>  DnnInvoke.ReadNetFromONNX("/workspaces/MPhotoBoothAI/src/MPhotoBoothAI.Avalonia/bin/Debug/net8.0/yolov8n-face.onnx"));
     }
 
     private static void AddCamera(IServiceCollection services)
