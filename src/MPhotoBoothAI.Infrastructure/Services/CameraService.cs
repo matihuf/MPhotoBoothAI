@@ -1,7 +1,7 @@
 ﻿using Emgu.CV;
 using MPhotoBoothAI.Application;
 
-namespace MPhotoBoothAI.Infrastructure;
+namespace MPhotoBoothAI.Infrastructure.Services;
 
 public class CameraService(VideoCapture videoCapture) : ICameraService
 {

@@ -1,5 +1,5 @@
 ﻿using Emgu.CV;
-using MPhotoBoothAI.Infrastructure;
+using MPhotoBoothAI.Infrastructure.Services;
 
 namespace MPhotoBoothAI.Integration.Tests;
 

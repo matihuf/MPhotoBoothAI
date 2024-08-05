@@ -5,7 +5,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using MPhotoBoothAI.Application;
 
-namespace MPhotoBoothAI.Infrastructure;
+namespace MPhotoBoothAI.Infrastructure.Services;
 
 public class YoloFaceService(Net net, ResizeImageService resizeImageService) : IYoloFaceService
 {

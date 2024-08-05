@@ -2,8 +2,8 @@
 using Emgu.CV.Dnn;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application;
-using MPhotoBoothAI.Infrastructure;
 using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Infrastructure.Services;
 
 namespace MPhotoBoothAI.Avalonia;
 

@@ -1,6 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Dnn;
-using MPhotoBoothAI.Infrastructure;
+using MPhotoBoothAI.Infrastructure.Services;
 
 namespace MPhotoBoothAI.Integration.Tests;
 

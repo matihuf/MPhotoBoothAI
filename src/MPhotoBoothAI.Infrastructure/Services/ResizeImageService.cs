@@ -4,7 +4,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using MPhotoBoothAI.Infrastructure.Models;
 
-namespace MPhotoBoothAI.Infrastructure;
+namespace MPhotoBoothAI.Infrastructure.Services;
 
 public class ResizeImageService
 {
