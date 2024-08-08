@@ -3,11 +3,12 @@ using Emgu.CV;
 using Emgu.CV.Dnn;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using MPhotoBoothAI.Application;
+using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Application.Models;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class YoloFaceService(Net net, ResizeImageService resizeImageService) : IYoloFaceService
+public class FaceDetectionService(Net net, ResizeImageService resizeImageService) : IFaceDetectionService
 {
     private readonly Net _net = net;
     private readonly ResizeImageService _resizeImageService = resizeImageService;
@@ -17,7 +18,7 @@ public class YoloFaceService(Net net, ResizeImageService resizeImageService) : I
     private readonly int _regMax = 16;
     private float confThreshold;
 
-    public void Run(Mat frame, float confThreshold, float nmsThreshold)
+    public IEnumerable<FaceDetection> Detect(Mat frame, float confThreshold, float nmsThreshold)
     {
         var resized = _resizeImageService.Resize(frame);
         using var blob = DnnInvoke.BlobFromImage(resized.Image, 1 / 255.0, new Size(_inputWidth, _inputHeight), new MCvScalar(0, 0, 0), true, false);
@@ -30,7 +31,7 @@ public class YoloFaceService(Net net, ResizeImageService resizeImageService) : I
 
         List<Rectangle> boxes = [];
         List<float> confidences = [];
-        List<List<Point>> landmarks = [];
+        VectorOfVectorOfPointF landmarks = new();
         this.confThreshold = confThreshold;
         GenerateProposal(outs[0], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw);
         GenerateProposal(outs[1], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw);
@@ -40,12 +41,11 @@ public class YoloFaceService(Net net, ResizeImageService resizeImageService) : I
         for (int i = 0; i < indices.Length; ++i)
         {
             int idx = indices[i];
-            Rectangle box = boxes[idx];
-            DrawPred(frame, box, confidences[idx]);
+            yield return new FaceDetection(frame.Clone(), boxes[idx], confidences[idx], landmarks[idx]);
         }
     }
 
-    public void GenerateProposal(Mat outMat, List<Rectangle> boxes, List<float> confidences, List<List<Point>> landmarks,
+    public void GenerateProposal(Mat outMat, List<Rectangle> boxes, List<float> confidences, VectorOfVectorOfPointF landmarks,
              int imgh, int imgw, float ratioh, float ratiow, int padh, int padw)
     {
         int[] sizes = outMat.SizeOfDimension;
@@ -113,14 +113,14 @@ public class YoloFaceService(Net net, ResizeImageService resizeImageService) : I
                     boxes.Add(box);
                     confidences.Add(box_prob);
 
-                    List<Point> kpts = new List<Point>(5);
+                    var kpts = new PointF[5];
                     for (int k = 0; k < 5; k++)
                     {
                         float x = ((ptr_kp[(k * 3) * area + index] * 2 + j) * stride - padw) * ratiow;
                         float y = ((ptr_kp[(k * 3 + 1) * area + index] * 2 + i) * stride - padh) * ratioh;
-                        kpts.Add(new Point((int)x, (int)y));
+                        kpts[k] = new PointF(x, y);
                     }
-                    landmarks.Add(kpts);
+                    landmarks.Push(new VectorOfPointF(kpts));
                 }
             }
         }

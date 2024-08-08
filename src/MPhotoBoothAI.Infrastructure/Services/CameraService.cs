@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
-using MPhotoBoothAI.Application;
+using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Application.Interfaces.Observers;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 

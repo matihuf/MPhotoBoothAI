@@ -1,6 +1,6 @@
 ﻿using Emgu.CV;
 
-namespace MPhotoBoothAI.Application;
+namespace MPhotoBoothAI.Application.Interfaces.Observers;
 
 public interface IObserver
 {

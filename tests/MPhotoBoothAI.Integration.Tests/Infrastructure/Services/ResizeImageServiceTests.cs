@@ -1,7 +1,7 @@
 ﻿using Emgu.CV;
 using MPhotoBoothAI.Infrastructure.Services;
 
-namespace MPhotoBoothAI.Integration.Tests;
+namespace MPhotoBoothAI.Integration.Tests.Infrastructure.Services;
 
 public class ResizeImageServiceTests
 {
