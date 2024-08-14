@@ -2,10 +2,12 @@
 using Emgu.CV;
 using Emgu.CV.Dnn;
 using Emgu.CV.Util;
+using Microsoft.Extensions.DependencyInjection;
+using MPhotoBoothAI.Application;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class FaceLandmarksService(Net lNet)
+public class FaceLandmarksService([FromKeyedServices(Consts.AiModels.FaceLandmarks)] Net lNet)
 {
     private readonly Net _lNet = lNet;
 

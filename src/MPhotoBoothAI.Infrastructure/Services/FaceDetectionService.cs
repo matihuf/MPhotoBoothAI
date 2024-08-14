@@ -3,12 +3,14 @@ using Emgu.CV;
 using Emgu.CV.Dnn;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Microsoft.Extensions.DependencyInjection;
+using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class FaceDetectionService(Net net, ResizeImageService resizeImageService) : IFaceDetectionService
+public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace)] Net net, ResizeImageService resizeImageService) : IFaceDetectionService
 {
     private readonly Net _net = net;
     private readonly ResizeImageService _resizeImageService = resizeImageService;
@@ -161,11 +163,5 @@ public class FaceDetectionService(Net net, ResizeImageService resizeImageService
         {
             y[i] /= sum;
         }
-    }
-
-    private static void DrawPred(Mat frame, Rectangle box, float conf)
-    {
-        CvInvoke.Rectangle(frame, box, new MCvScalar(0, 0, 255), 3);
-        CvInvoke.PutText(frame, conf.ToString(), new Point(100, 100), Emgu.CV.CvEnum.FontFace.HersheyComplexSmall, 5, new MCvScalar(0, 0, 255), 1);
     }
 }
