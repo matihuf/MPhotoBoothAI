@@ -2,6 +2,7 @@
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
+using MPhotoBoothAI.Application.Models;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
@@ -48,13 +49,15 @@ public class FaceAlignService()
         new(41.5493f, 92.3655f), new(70.7299f, 92.2041f)
     ];
 
-    public Mat Align(Mat frame, VectorOfPointF landmarks)
+    public FaceAlign Align(Mat frame, VectorOfPointF landmarks)
     {
-        using var affinePartial2D = EstimateNorm(landmarks, _cropSize.Width, string.Empty);
-        using var affinePartial2DFirstRow = affinePartial2D.Row(0);
-        var dst = new Mat();
-        CvInvoke.WarpAffine(frame, dst, affinePartial2D, _cropSize);
-        return dst;
+        var norm = EstimateNorm(landmarks, _cropSize.Width, string.Empty);
+        using var affinePartial2DFirstRow = norm.Row(0);
+        using var dst = new Mat();
+        CvInvoke.WarpAffine(frame, dst, norm, _cropSize);
+        var rgb = new Mat();
+        CvInvoke.CvtColor(dst, rgb, ColorConversion.Bgra2Rgb);
+        return new FaceAlign(norm, rgb);
     }
 
     private static Mat EstimateNorm(VectorOfPointF landmarks, int imageSize = 112, string mode = "arcface")

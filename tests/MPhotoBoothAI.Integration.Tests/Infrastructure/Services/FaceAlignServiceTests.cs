@@ -20,10 +20,10 @@ public class FaceAlignServiceTests
 
         var faceAlignService = new FaceAlignService();
         //act
-        using var result = faceAlignService.Align(sourceFace.Frame, sourceFace.Landmarks);
+        using var result = faceAlignService.Align(sourceFaceFrame, sourceFace.Landmarks);
         //assert
         string tmpFile = "womanAlignTmp.jpg";
-        CvInvoke.Imwrite(tmpFile, result);
+        CvInvoke.Imwrite(tmpFile, result.Align);
         using var x = CvInvoke.Imread(tmpFile);
         Assert.True(expected.Equals(x));
     }

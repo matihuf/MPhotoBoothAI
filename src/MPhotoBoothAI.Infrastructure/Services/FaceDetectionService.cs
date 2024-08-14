@@ -41,7 +41,7 @@ public class FaceDetectionService(Net net, ResizeImageService resizeImageService
         for (int i = 0; i < indices.Length; ++i)
         {
             int idx = indices[i];
-            yield return new FaceDetection(frame.Clone(), boxes[idx], confidences[idx], landmarks[idx]);
+            yield return new FaceDetection(boxes[idx], confidences[idx], landmarks[idx]);
         }
     }
 

@@ -33,6 +33,9 @@
     </Content>
     <Content Include="../../models/G_unet_2blocks.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../../models/face_landmarks.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>        
   </ItemGroup>
 
@@ -53,6 +56,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\womanSwapped.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\mask.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -5,15 +5,15 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Util;
 
-namespace MPhotoBoothAI.Infrastructure;
+namespace MPhotoBoothAI.Infrastructure.Services.Swap;
 
-public class FaceSwapService(Net arfaceNet, Net gNet)
+public class FaceSwapPredictService(Net arfaceNet, Net gNet)
 {
     private readonly Net _arfaceNet = arfaceNet;
     private readonly Net _gNet = gNet;
     private const float _normalizeFactor = 127.5f;
 
-    public Mat Swap(Mat sourceFace, Mat targetFace)
+    public Mat Predict(Mat sourceFace, Mat targetFace)
     {
         using var sourceFaceHalf = HalfSize(sourceFace);
         using var sourceBlob = Preprocess(sourceFaceHalf);
@@ -62,9 +62,7 @@ public class FaceSwapService(Net arfaceNet, Net gNet)
 
     private static Mat Preprocess(Mat face)
     {
-        using var preprocesses = new Mat();
-        CvInvoke.CvtColor(face, preprocesses, ColorConversion.Bgra2Rgb);
-        using var normalized = Normalize(preprocesses);
+        using var normalized = Normalize(face);
         return DnnInvoke.BlobFromImage(normalized, 1, face.Size);
     }
 
