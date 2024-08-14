@@ -8,16 +8,16 @@ public class FaceSwapService : IDisposable
 {
     private readonly ScalarArray _oneScalarArray = new(1.0);
 
-    public Mat Swap(Mat mask, Mat final_img, Mat tfm, Mat final)
+    public Mat Swap(Mat mask, Mat swapPredict, Mat targetAlignFaceNorm, Mat target)
     {
         using var mat_rev = new Mat();
-        CvInvoke.InvertAffineTransform(tfm, mat_rev);
+        CvInvoke.InvertAffineTransform(targetAlignFaceNorm, mat_rev);
         using var swap_t = new Mat();
-        CvInvoke.WarpAffine(final_img, swap_t, mat_rev, final.Size, borderMode: BorderType.Replicate);
+        CvInvoke.WarpAffine(swapPredict, swap_t, mat_rev, target.Size, borderMode: BorderType.Replicate);
 
         using var premask_t = new Mat();
-        CvInvoke.WarpAffine(mask, premask_t, mat_rev, final.Size);
-        Mat mask_t = new Mat(premask_t.Size, DepthType.Cv32F, 1); // Tworzenie macierzy z jednym kanałem
+        CvInvoke.WarpAffine(mask, premask_t, mat_rev, target.Size);
+        using var mask_t = new Mat(premask_t.Size, DepthType.Cv32F, 1);
         using var channels = new VectorOfMat(premask_t, premask_t, premask_t);
         CvInvoke.Merge(channels, mask_t);
 
@@ -33,7 +33,7 @@ public class FaceSwapService : IDisposable
 
         using var partTwo = new Mat();
         using var final_64 = new Mat();
-        final.ConvertTo(final_64, DepthType.Cv32F);
+        target.ConvertTo(final_64, DepthType.Cv32F);
         CvInvoke.Multiply(oneMinusWarpAffine, final_64, partTwo);
 
         var result = new Mat();

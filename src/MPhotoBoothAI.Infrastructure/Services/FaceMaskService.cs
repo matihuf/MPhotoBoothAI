@@ -66,14 +66,14 @@ public class FaceMaskService
         return Normalize(erodeMask);
     }
 
-      private static Mat Normalize(Mat face)
+    private static Mat Normalize(Mat face)
     {
         var normalizedImg = new Mat();
         face.ConvertTo(normalizedImg, DepthType.Cv32F, 1.0 / 255f, 0);
         return normalizedImg;
     }
 
-    private Mat ErodeAndBlur(Mat maskInput, int erode, int sigmaX, int sigmaY)
+    private static Mat ErodeAndBlur(Mat maskInput, int erode, int sigmaX, int sigmaY)
     {
         using var mask = new Mat();
         maskInput.ConvertTo(mask, DepthType.Cv8U);
@@ -98,9 +98,9 @@ public class FaceMaskService
         CvInvoke.Rectangle(erodeResult, new Rectangle(0, 0, clipSize, erodeResult.Rows), CvInvoke.MorphologyDefaultBorderValue, -1);
         // Set right border to zero
         CvInvoke.Rectangle(erodeResult, new Rectangle(erodeResult.Cols - clipSize, 0, clipSize, erodeResult.Rows), CvInvoke.MorphologyDefaultBorderValue, -1);
-    
+
         var gaussianBlur = new Mat();
-        CvInvoke.GaussianBlur(erodeResult, gaussianBlur, new Size(0,0), sigmaX, sigmaY);
+        CvInvoke.GaussianBlur(erodeResult, gaussianBlur, new Size(0, 0), sigmaX, sigmaY);
 
         return gaussianBlur;
     }

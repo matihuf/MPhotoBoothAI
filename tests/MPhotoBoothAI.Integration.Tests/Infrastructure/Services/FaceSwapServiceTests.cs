@@ -39,7 +39,7 @@ public class FaceSwapServiceTests
 
         var swapService = new FaceSwapService();
         //act
-        using var result = swapService.Swap(mask, predictResult, targetAlignFace.Norm, targetFaceFrame.Clone());
+        using var result = swapService.Swap(mask, predictResult, targetAlignFace.Norm, targetFaceFrame);
         //assert
         string tmpFile = "swappedTmp.jpg";
         CvInvoke.Imwrite(tmpFile, result);
