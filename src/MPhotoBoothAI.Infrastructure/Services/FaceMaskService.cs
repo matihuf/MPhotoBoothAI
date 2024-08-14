@@ -63,9 +63,14 @@ public class FaceMaskService
         var expandedLandmarks = ExpandEyebrows(frameLandmarks, eyebrows_expand_mod);
         using Mat mask = GetMask(frame, expandedLandmarks);
         using Mat erodeMask = ErodeAndBlur(mask, erode, sigmaX, sigmaY);
-        var result = new Mat();
-        erodeMask.ConvertTo(result, DepthType.Cv64F);
-        return result;
+        return Normalize(erodeMask);
+    }
+
+      private static Mat Normalize(Mat face)
+    {
+        var normalizedImg = new Mat();
+        face.ConvertTo(normalizedImg, DepthType.Cv32F, 1.0 / 255f, 0);
+        return normalizedImg;
     }
 
     private Mat ErodeAndBlur(Mat maskInput, int erode, int sigmaX, int sigmaY)
@@ -105,7 +110,7 @@ public class FaceMaskService
     {
         using var imgGray = new Mat();
         CvInvoke.CvtColor(frame, imgGray, ColorConversion.Bgr2Gray);
-        var mask = Mat.Zeros(imgGray.Rows, imgGray.Cols, DepthType.Cv8S, imgGray.NumberOfChannels);
+        var mask = Mat.Zeros(imgGray.Rows, imgGray.Cols, DepthType.Cv32F, imgGray.NumberOfChannels);
 
         Point[] points = new Point[landmarks.GetLength(0)];
         for (int i = 0; i < landmarks.GetLength(0); i++)
