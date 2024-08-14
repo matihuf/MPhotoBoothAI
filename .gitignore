@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # Emgu
 libcvextern.so
+
+#Ai models
+models/
