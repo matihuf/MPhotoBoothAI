@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
 using MPhotoBoothAI.Application.Managers;
@@ -11,7 +11,10 @@ namespace MPhotoBoothAI.Application.ViewModels;
 public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposable
 {
     private readonly FaceSwapManager _faceSwapManager;
+    private readonly IFilePickerService _filePickerService;
     private readonly ICameraService _cameraService;
+
+    private Mat _target;
 
     [ObservableProperty]
     private Mat _frame;
@@ -20,8 +23,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     private void Swap()
     {
         _cameraService.Detach(this);
-        string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        Frame = _faceSwapManager.Swap(Frame, CvInvoke.Imread($"{directory}/woman2.jpg"));
+        Frame = _faceSwapManager.Swap(Frame, _target);
     }
 
     [RelayCommand]
@@ -30,12 +32,21 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         _cameraService.Attach(this);
     }
 
-    public FaceDetectionViewModel(ICameraService cameraService, FaceSwapManager faceSwapManager)
+    [RelayCommand]
+    private async Task SetTarget()
+    {
+        byte[] target = await _filePickerService.PickFile();
+        CvInvoke.Imdecode(target, ImreadModes.Color, _target);
+    }
+
+    public FaceDetectionViewModel(ICameraService cameraService, FaceSwapManager faceSwapManager, IFilePickerService filePickerService)
     {
         _cameraService = cameraService;
         _cameraService.Start();
         _cameraService.Attach(this);
         _faceSwapManager = faceSwapManager;
+        _filePickerService = filePickerService;
+        _target = new Mat();
     }
 
     public void Notify(Mat mat)
@@ -56,6 +67,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         {
             _cameraService.Detach(this);
             Frame.Dispose();
+            _target.Dispose();
         }
     }
 }

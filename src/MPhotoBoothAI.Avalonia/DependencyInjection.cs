@@ -7,6 +7,7 @@ using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Managers;
 using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Avalonia.Services;
 using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Infrastructure.Services.Swap;
 
@@ -57,6 +58,7 @@ public static class DependencyInjection
         services.AddTransient<IFaceAlignService, FaceAlignService>();
         services.AddTransient<IFaceLandmarksService, FaceLandmarksService>();
         services.AddTransient<IFaceMaskService, FaceMaskService>();
+        services.AddTransient<IFilePickerService, FilePickerService>();
     }
 
     private static void AddCamera(IServiceCollection services)
