@@ -6,10 +6,11 @@ using Emgu.CV.Dnn;
 using Emgu.CV.Util;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application;
+using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Infrastructure.Services.Swap;
 
-public class FaceSwapPredictService([FromKeyedServices(Consts.AiModels.ArcfaceBackbone)] Net arfaceNet, [FromKeyedServices(Consts.AiModels.Gunet2blocks)] Net gNet)
+public class FaceSwapPredictService([FromKeyedServices(Consts.AiModels.ArcfaceBackbone)] Net arfaceNet, [FromKeyedServices(Consts.AiModels.Gunet2blocks)] Net gNet) : IFaceSwapPredictService
 {
     private readonly Net _arfaceNet = arfaceNet;
     private readonly Net _gNet = gNet;

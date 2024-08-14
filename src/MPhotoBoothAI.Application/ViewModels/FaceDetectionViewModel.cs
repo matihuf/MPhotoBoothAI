@@ -1,40 +1,47 @@
-﻿using System.Drawing;
+﻿using System.Reflection;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Emgu.CV;
-using Emgu.CV.Structure;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
+using MPhotoBoothAI.Application.Managers;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 
 public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposable
 {
-    private readonly IFaceDetectionService _yoloFaceService;
+    private readonly FaceSwapManager _faceSwapManager;
     private readonly ICameraService _cameraService;
 
     [ObservableProperty]
     private Mat _frame;
 
-    public FaceDetectionViewModel(ICameraService cameraService, IFaceDetectionService yoloFaceService)
+    [RelayCommand]
+    private void Swap()
+    {
+        _cameraService.Detach(this);
+        string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        Frame = _faceSwapManager.Swap(Frame, CvInvoke.Imread($"{directory}/woman2.jpg"));
+    }
+
+    [RelayCommand]
+    private void Reset()
+    {
+        _cameraService.Attach(this);
+    }
+
+    public FaceDetectionViewModel(ICameraService cameraService, FaceSwapManager faceSwapManager)
     {
         _cameraService = cameraService;
         _cameraService.Start();
         _cameraService.Attach(this);
-        _yoloFaceService = yoloFaceService;
+        _faceSwapManager = faceSwapManager;
     }
 
     public void Notify(Mat mat)
     {
-        var face = _yoloFaceService.Detect(mat, 0.45f, 0.5f).First();
-        DrawPred(mat, face.Box, face.Confidence);
         Frame = mat.Clone();
         mat.Dispose();
-    }
-
-        private static void DrawPred(Mat frame, Rectangle box, float conf)
-    {
-        CvInvoke.Rectangle(frame, box, new MCvScalar(0, 0, 255), 3);
-        CvInvoke.PutText(frame, conf.ToString(), new Point(100, 100), Emgu.CV.CvEnum.FontFace.HersheyComplexSmall, 5, new MCvScalar(0, 0, 255), 1);
     }
 
     public void Dispose()

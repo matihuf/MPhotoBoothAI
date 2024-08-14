@@ -4,10 +4,11 @@ using Emgu.CV.Dnn;
 using Emgu.CV.Util;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application;
+using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class FaceLandmarksService([FromKeyedServices(Consts.AiModels.FaceLandmarks)] Net lNet)
+public class FaceLandmarksService([FromKeyedServices(Consts.AiModels.FaceLandmarks)] Net lNet) : IFaceLandmarksService
 {
     private readonly Net _lNet = lNet;
 

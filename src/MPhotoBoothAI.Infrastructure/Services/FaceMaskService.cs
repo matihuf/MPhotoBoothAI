@@ -3,10 +3,11 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class FaceMaskService
+public class FaceMaskService : IFaceMaskService
 {
     // Top of the eye arrays
     private readonly int[] _botLIndices = [35, 41, 40, 42, 39];

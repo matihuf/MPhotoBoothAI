@@ -1,10 +1,11 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
+using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Infrastructure.Services.Swap;
 
-public class FaceSwapService : IDisposable
+public class FaceSwapService : IFaceSwapService, IDisposable
 {
     private readonly ScalarArray _oneScalarArray = new(1.0);
 
@@ -36,8 +37,10 @@ public class FaceSwapService : IDisposable
         target.ConvertTo(final_64, DepthType.Cv32F);
         CvInvoke.Multiply(oneMinusWarpAffine, final_64, partTwo);
 
+        using var sum = new Mat();
+        CvInvoke.Add(partOneBgr, partTwo, sum);
         var result = new Mat();
-        CvInvoke.Add(partOneBgr, partTwo, result);
+        sum.ConvertTo(result, DepthType.Cv8U);
         return result;
     }
 

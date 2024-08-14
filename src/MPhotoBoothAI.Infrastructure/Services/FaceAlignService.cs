@@ -2,11 +2,12 @@
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
+using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class FaceAlignService()
+public class FaceAlignService : IFaceAlignService
 {
     private readonly Size _cropSize = new(224, 224);
 
