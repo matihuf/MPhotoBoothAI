@@ -12,18 +12,11 @@ public class FaceSwapManager(FaceAlignManager faceAlignManager, FaceMaskManager 
 
     public Mat Swap(Mat source, Mat target)
     {
-        var aligns = _faceAlignManager.GetAligns(source, target);
-        try
-        {
-            using var predict = _faceSwapPredictService.Predict(aligns.source.Align, aligns.target.Align);
-            using var mask = _faceMaskManager.GetMask(aligns.target.Align, predict);
-            var swapped = _faceSwapService.Swap(mask, predict, aligns.target.Norm, target);
-            return swapped;
-        }
-        finally
-        {
-            aligns.target.Dispose();
-            aligns.source.Dispose();
-        }
+        using var sourceAlign = _faceAlignManager.GetAlign(source);
+        using var targetAlign = _faceAlignManager.GetAlign(target);
+        using var predict = _faceSwapPredictService.Predict(sourceAlign.Align, targetAlign.Align);
+        using var mask = _faceMaskManager.GetMask(targetAlign.Align, predict);
+        var swapped = _faceSwapService.Swap(mask, predict, targetAlign.Norm, target);
+        return swapped;
     }
 }
