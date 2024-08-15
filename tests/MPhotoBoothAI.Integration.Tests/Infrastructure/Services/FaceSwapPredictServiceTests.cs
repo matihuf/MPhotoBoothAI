@@ -1,12 +1,15 @@
 ﻿using Emgu.CV;
-using Emgu.CV.Dnn;
-using MPhotoBoothAI.Infrastructure.Services;
-using MPhotoBoothAI.Infrastructure.Services.Swap;
+using Microsoft.Extensions.DependencyInjection;
+using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Integration.Tests.Infrastructure.Services;
 
-public class FaceSwapPredictServiceTests
+public class FaceSwapPredictServiceTests(DependencyInjectionFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionFixture>
 {
+    private readonly IFaceDetectionService _faceDetectionService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceDetectionService>();
+    private readonly IFaceAlignService _faceAlignService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceAlignService>();
+    private readonly IFaceSwapPredictService _faceSwapPredictService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceSwapPredictService>();
+
     [Fact]
     public void Predict_ShouldReturnExpected()
     {
@@ -14,21 +17,14 @@ public class FaceSwapPredictServiceTests
         using var expected = CvInvoke.Imread("TestData/womanSwapped.jpg");
         using var sourceFaceFrame = CvInvoke.Imread("TestData/woman.jpg");
         using var targetFaceFrame = CvInvoke.Imread("TestData/woman2.jpg");
-        using var yoloNet = DnnInvoke.ReadNetFromONNX("yolov8n-face.onnx");
-        var faceAlignService = new FaceAlignService();
-        var faceDetectionService = new FaceDetectionService(yoloNet, new ResizeImageService());
 
-        using var sourceFace = faceDetectionService.Detect(sourceFaceFrame, 0.8f, 0.5f).First();
-        using var sourceAlignFace = faceAlignService.Align(sourceFaceFrame, sourceFace.Landmarks);
+        using var sourceFace = _faceDetectionService.Detect(sourceFaceFrame, 0.8f, 0.5f).First();
+        using var sourceAlignFace = _faceAlignService.Align(sourceFaceFrame, sourceFace.Landmarks);
 
-        using var targetFace = faceDetectionService.Detect(targetFaceFrame, 0.8f, 0.5f).First();
-        using var targetAlignFace = faceAlignService.Align(targetFaceFrame, targetFace.Landmarks);
-
-        using var arcfaceNet = DnnInvoke.ReadNetFromONNX("arcface_backbone.onnx");
-        using var gNet = DnnInvoke.ReadNetFromONNX("G_unet_2blocks.onnx");
-        var faceSwapPredictService = new FaceSwapPredictService(arcfaceNet, gNet);
+        using var targetFace = _faceDetectionService.Detect(targetFaceFrame, 0.8f, 0.5f).First();
+        using var targetAlignFace = _faceAlignService.Align(targetFaceFrame, targetFace.Landmarks);
         //act
-        using var result = faceSwapPredictService.Predict(sourceAlignFace.Align, targetAlignFace.Align);
+        using var result = _faceSwapPredictService.Predict(sourceAlignFace.Align, targetAlignFace.Align);
         //assert
         string tmpFile = "womanSwappedTmp.jpg";
         CvInvoke.Imwrite(tmpFile, result);

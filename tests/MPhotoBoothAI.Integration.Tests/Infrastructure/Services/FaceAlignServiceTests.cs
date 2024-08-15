@@ -1,26 +1,23 @@
 ﻿using Emgu.CV;
-using Emgu.CV.Dnn;
-using MPhotoBoothAI.Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
+using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Integration.Tests.Infrastructure.Services;
 
-public class FaceAlignServiceTests
+public class FaceAlignServiceTests(DependencyInjectionFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionFixture>
 {
+    private readonly IFaceAlignService _faceAlignService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceAlignService>();
+    private readonly IFaceDetectionService _faceDetectionService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceDetectionService>();
+   
     [Fact]
     public void Align_ShouldReturnExpected()
     {
         //arrange
         using var expected = CvInvoke.Imread("TestData/womanAlign.jpg");
-
-        using var yoloNet = DnnInvoke.ReadNetFromONNX("yolov8n-face.onnx");
-        var faceDetectionService = new FaceDetectionService(yoloNet, new ResizeImageService());
-
         using var sourceFaceFrame = CvInvoke.Imread("TestData/woman.jpg");
-        using var sourceFace = faceDetectionService.Detect(sourceFaceFrame, 0.8f, 0.5f).First();
-
-        var faceAlignService = new FaceAlignService();
+        using var sourceFace = _faceDetectionService.Detect(sourceFaceFrame, 0.8f, 0.5f).First();
         //act
-        using var result = faceAlignService.Align(sourceFaceFrame, sourceFace.Landmarks);
+        using var result = _faceAlignService.Align(sourceFaceFrame, sourceFace.Landmarks);
         //assert
         string tmpFile = "womanAlignTmp.jpg";
         CvInvoke.Imwrite(tmpFile, result.Align);

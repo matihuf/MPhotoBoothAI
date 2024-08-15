@@ -1,16 +1,12 @@
 ﻿using Emgu.CV;
+using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Infrastructure.Services;
 
 namespace MPhotoBoothAI.Integration.Tests.Infrastructure.Services;
 
-public class ResizeImageServiceTests
+public class ResizeImageServiceTests(DependencyInjectionFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionFixture>
 {
-    private readonly ResizeImageService _resizeImageService;
-
-    public ResizeImageServiceTests()
-    {
-        _resizeImageService = new ResizeImageService();
-    }
+    private readonly ResizeImageService _resizeImageService = dependencyInjectionFixture.ServiceProvider.GetService<ResizeImageService>();
 
     [Fact]
     public void Resize_KeepRatio_ShouldBeAsExpected()
