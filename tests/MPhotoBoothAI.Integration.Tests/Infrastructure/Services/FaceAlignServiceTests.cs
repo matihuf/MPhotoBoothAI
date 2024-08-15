@@ -19,7 +19,7 @@ public class FaceAlignServiceTests(DependencyInjectionFixture dependencyInjectio
         //act
         using var result = _faceAlignService.Align(sourceFaceFrame, sourceFace.Landmarks);
         //assert
-        string tmpFile = "womanAlignTmp.jpg";
+        string tmpFile = $"{nameof(FaceAlignServiceTests)}womanAlignTmp.jpg";
         CvInvoke.Imwrite(tmpFile, result.Align);
         using var x = CvInvoke.Imread(tmpFile);
         Assert.True(expected.Equals(x));

@@ -35,7 +35,7 @@ public class FaceMaskServiceTests(DependencyInjectionFixture dependencyInjection
         using var result = _faceMaskService.GetMask(targetAlignFace.Align, predictLandmarks, targetLandmarks);
         using var resultDeNormalized = DeNormalize(result);
         //assert
-        string tmpFile = "maskTmp.jpg";
+        string tmpFile = $"{nameof(FaceMaskServiceTests)}maskTmp.jpg";
         CvInvoke.Imwrite(tmpFile, resultDeNormalized);
         using var x = CvInvoke.Imread(tmpFile);
         Assert.True(expected.Equals(x));

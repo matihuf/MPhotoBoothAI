@@ -26,7 +26,7 @@ public class FaceSwapPredictServiceTests(DependencyInjectionFixture dependencyIn
         //act
         using var result = _faceSwapPredictService.Predict(sourceAlignFace.Align, targetAlignFace.Align);
         //assert
-        string tmpFile = "womanSwappedTmp.jpg";
+        string tmpFile = $"{nameof(FaceSwapPredictServiceTests)}womanSwappedTmp.jpg";
         CvInvoke.Imwrite(tmpFile, result);
         using var x = CvInvoke.Imread(tmpFile);
         Assert.True(expected.Equals(x));

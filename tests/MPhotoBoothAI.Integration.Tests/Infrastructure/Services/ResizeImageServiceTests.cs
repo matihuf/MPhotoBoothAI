@@ -17,7 +17,7 @@ public class ResizeImageServiceTests(DependencyInjectionFixture dependencyInject
         //act
         var result = _resizeImageService.Resize(frame, 640, 640, true);
         //assert
-        string tmpFile = "resizeKeepRatio.jpg";
+        string tmpFile = $"{nameof(ResizeImageServiceTests)}resizeKeepRatio.jpg";
         CvInvoke.Imwrite(tmpFile, result.Image);
         using var x = CvInvoke.Imread(tmpFile);
         Assert.True(expected.Equals(x));
@@ -32,7 +32,7 @@ public class ResizeImageServiceTests(DependencyInjectionFixture dependencyInject
         //act
         var result = _resizeImageService.Resize(frame, 640, 640, false);
         //assert
-        string tmpFile = "resizeDoNotKeepRatio.jpg";
+        string tmpFile = $"{nameof(ResizeImageServiceTests)}resizeDoNotKeepRatio.jpg";
         CvInvoke.Imwrite(tmpFile, result.Image);
         using var x = CvInvoke.Imread(tmpFile);
         Assert.True(expected.Equals(x));
