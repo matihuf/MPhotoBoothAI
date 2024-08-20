@@ -2,7 +2,7 @@ using System;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
-using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Avalonia.ViewModels;
 using MPhotoBoothAI.Avalonia .Views;
 using AvaloniaApplication = Avalonia.Application;
 namespace MPhotoBoothAI.Avalonia;
@@ -26,7 +26,7 @@ public partial class App : AvaloniaApplication
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = ServiceProvider.GetRequiredService<FaceDetectionViewModel>()
+                DataContext = ServiceProvider.GetRequiredService<MainViewModel>()
             };
         }
 

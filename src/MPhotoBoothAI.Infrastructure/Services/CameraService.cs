@@ -34,20 +34,16 @@ public class CameraService(VideoCapture videoCapture) : ICameraService
 
     public void Notify(Mat mat)
     {
-        foreach (var observer in _observers)
+        foreach (var observer in _observers.ToList())
         {
             try
             {
                 if (mat != null && !mat.IsEmpty)
                 {
-                    observer.Notify(mat);
-                }
-                else
-                {
-                    mat?.Dispose();
+                    observer.Notify(mat.Clone());
                 }
             }
-            catch
+            finally
             {
                 mat?.Dispose();
             }

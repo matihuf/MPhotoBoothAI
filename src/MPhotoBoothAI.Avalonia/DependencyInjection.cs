@@ -7,7 +7,9 @@ using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Managers;
 using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
+using MPhotoBoothAI.Avalonia.ViewModels;
 using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Infrastructure.Services.Swap;
 
@@ -22,7 +24,14 @@ public static class DependencyInjection
         AddCamera(services);
         AddAiModels(services);
         AddManagers(services);
+        AddNavigation(services);
         return services;
+    }
+
+    private static void AddNavigation(IServiceCollection services)
+    {
+        services.AddSingleton(s => new HistoryRouter<ViewModelBase>(t => (ViewModelBase)s.GetRequiredService(t)));
+        services.AddSingleton<INavigationService, NavigationService>();
     }
 
     private static void AddManagers(IServiceCollection services)
@@ -45,7 +54,8 @@ public static class DependencyInjection
 
     private static void AddViewModels(IServiceCollection services)
     {
-        services.AddTransient<MainWindowViewModel>();
+        services.AddSingleton<MainViewModel>();
+        services.AddTransient<HomeViewModel>();
         services.AddTransient<FaceDetectionViewModel>();
     }
 
