@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace MPhotoBoothAI.ViewModels;
+namespace MPhotoBoothAI.Application.ViewModels;
 
 public class ViewModelBase : ObservableObject
 {
