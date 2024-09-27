@@ -26,8 +26,8 @@ public class FaceLandmarksService([FromKeyedServices(Consts.AiModels.FaceLandmar
     /// </summary>
     private readonly Matrix<float> _im = new(new float[,]
     {
-            { 1.75f, -0f, -56f },
-            { -0f, 1.75f, -56f }
+        { 1.75f, -0f, -56f },
+        { -0f, 1.75f, -56f }
     });
 
     public float[,] GetLandmarks(Mat frame)
@@ -79,5 +79,20 @@ public class FaceLandmarksService([FromKeyedServices(Consts.AiModels.FaceLandmar
             }
         }
         return result;
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _m.Dispose();
+            _im?.Dispose();
+        }
     }
 }
