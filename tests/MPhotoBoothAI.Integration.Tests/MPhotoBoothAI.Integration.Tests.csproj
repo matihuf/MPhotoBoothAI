@@ -57,7 +57,13 @@
     <None Update="TestData\womanResizedDoNotKeepRatio.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\womanAlign.jpg">
+    <None Update="TestData\womanAlign112.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\womanAlign224.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\womanAlign448.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\womanSwapped.jpg">

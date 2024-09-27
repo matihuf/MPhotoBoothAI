@@ -6,5 +6,5 @@ namespace MPhotoBoothAI.Application.Interfaces;
 
 public interface IFaceAlignService
 {
-    FaceAlign Align(Mat frame, VectorOfPointF landmarks);
+    FaceAlign Align(Mat frame, VectorOfPointF landmarks, int cropSize = 224);
 }
