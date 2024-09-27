@@ -1,6 +1,8 @@
-﻿namespace MPhotoBoothAI.Application.Interfaces;
+﻿using Emgu.CV;
+
+namespace MPhotoBoothAI.Application.Interfaces;
 
 public interface IFaceEnhancerService
 {
-
+    Mat Enhance(Mat faceAlign);
 }

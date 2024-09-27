@@ -45,7 +45,7 @@ public class FaceLandmarksService([FromKeyedServices(Consts.AiModels.FaceLandmar
 
     private static float[,] PostProcess(Mat outPut, Size imageSize)
     {
-        var outPutData = ((float[,])outPut.GetData());
+        var outPutData = (float[,])outPut.GetData();
         int numPoints = outPutData.GetLength(1) / 2;
         var result = new float[numPoints, 3];
         for (int i = 0; i < 106; i++)
