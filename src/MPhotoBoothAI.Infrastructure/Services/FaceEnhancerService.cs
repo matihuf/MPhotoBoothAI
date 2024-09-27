@@ -14,10 +14,10 @@ public class FaceEnhancerService([FromKeyedServices(Consts.AiModels.Gfpgan)] Inf
 {
     private readonly InferenceSession _gfpgan = gfpgan;
 
-    public Mat Enhance(Mat predict)
+    public Mat Enhance(Mat face)
     {
         using var resizedTarget = new Mat();
-        CvInvoke.Resize(predict, resizedTarget, new Size(512, 512));
+        CvInvoke.Resize(face, resizedTarget, new Size(512, 512));
 
         var denseTensor = new DenseTensor<float>(Preproces(resizedTarget), [1, resizedTarget.NumberOfChannels, resizedTarget.Height, resizedTarget.Width]);
         var inputs = new List<NamedOnnxValue>(1) { NamedOnnxValue.CreateFromTensor(_gfpgan.InputMetadata.Keys.First(), denseTensor) };
