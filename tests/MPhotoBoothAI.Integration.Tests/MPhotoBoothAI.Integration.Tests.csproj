@@ -38,7 +38,10 @@
     </Content>
     <Content Include="../../models/face_landmarks.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>        
+    </Content>
+    <Content Include="../../models/gfpgan_1.4.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>          
   </ItemGroup>
 
   <ItemGroup>

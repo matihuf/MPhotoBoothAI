@@ -3,6 +3,7 @@ using System.Reflection;
 using Emgu.CV;
 using Emgu.CV.Dnn;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.ML.OnnxRuntime;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Managers;
@@ -44,13 +45,14 @@ public static class DependencyInjection
     private static void AddAiModels(IServiceCollection services)
     {
         string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        services.AddKeyedSingleton(Consts.AiModels.Yolov8nFace, GetModel(directory, Consts.AiModels.Yolov8nFace));
-        services.AddKeyedSingleton(Consts.AiModels.ArcfaceBackbone, GetModel(directory, Consts.AiModels.ArcfaceBackbone));
-        services.AddKeyedSingleton(Consts.AiModels.Gunet2blocks, GetModel(directory, Consts.AiModels.Gunet2blocks));
-        services.AddKeyedSingleton(Consts.AiModels.FaceLandmarks, GetModel(directory, Consts.AiModels.FaceLandmarks));
+        services.AddKeyedSingleton(Consts.AiModels.Yolov8nFace, GetDnnModel(directory, Consts.AiModels.Yolov8nFace));
+        services.AddKeyedSingleton(Consts.AiModels.ArcfaceBackbone, GetDnnModel(directory, Consts.AiModels.ArcfaceBackbone));
+        services.AddKeyedSingleton(Consts.AiModels.Gunet2blocks, GetDnnModel(directory, Consts.AiModels.Gunet2blocks));
+        services.AddKeyedSingleton(Consts.AiModels.FaceLandmarks, GetDnnModel(directory, Consts.AiModels.FaceLandmarks));
+        services.AddKeyedSingleton(Consts.AiModels.Gfpgan, new InferenceSession($"{directory}/{Consts.AiModels.Gfpgan}.onnx"));
     }
 
-    private static Net GetModel(string directory, string name) => DnnInvoke.ReadNetFromONNX($"{directory}/{name}.onnx");
+    private static Net GetDnnModel(string directory, string name) => DnnInvoke.ReadNetFromONNX($"{directory}/{name}.onnx");
 
     private static void AddViewModels(IServiceCollection services)
     {
@@ -69,6 +71,7 @@ public static class DependencyInjection
         services.AddTransient<IFaceLandmarksService, FaceLandmarksService>();
         services.AddTransient<IFaceMaskService, FaceMaskService>();
         services.AddTransient<IFilePickerService, FilePickerService>();
+        services.AddTransient<IFaceEnhancerService, FaceEnhancerService>();
     }
 
     private static void AddCamera(IServiceCollection services)
