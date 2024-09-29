@@ -2,7 +2,7 @@
 
 namespace MPhotoBoothAI.Application.Interfaces;
 
-public interface IFaceLandmarksService
+public interface IFaceLandmarksService : IDisposable
 {
     float[,] GetLandmarks(Mat frame);
 }

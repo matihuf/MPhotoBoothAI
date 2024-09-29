@@ -38,7 +38,10 @@
     </Content>
     <Content Include="../../models/face_landmarks.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>        
+    </Content>
+    <Content Include="../../models/gfpgan_1.4.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>          
   </ItemGroup>
 
   <ItemGroup>
@@ -54,7 +57,13 @@
     <None Update="TestData\womanResizedDoNotKeepRatio.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\womanAlign.jpg">
+    <None Update="TestData\womanAlign112.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\womanAlign224.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\womanAlign448.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\womanSwapped.jpg">
@@ -64,6 +73,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\swapped.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\swappedLow.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\womanFaceEnhanced.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
