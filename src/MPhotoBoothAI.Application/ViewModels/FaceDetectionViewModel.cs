@@ -16,6 +16,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     private readonly INavigationService _navigationService;
 
     private Mat _target;
+
     [ObservableProperty]
     private Mat _frame;
 
