@@ -9,8 +9,6 @@ namespace MPhotoBoothAI.Infrastructure.Services;
 
 public class FaceAlignService : IFaceAlignService
 {
-    private readonly Size _cropSize = new(224, 224);
-
     /// <summary>
     /// Magic numbers, face profiles
     /// </summary>
@@ -41,7 +39,8 @@ public class FaceAlignService : IFaceAlignService
     private static readonly Dictionary<int, PointF[][]> srcMap = new()
     {
         { 112, _src },
-        { 224, _src.Select(pts => pts.Select(p => new PointF(p.X * 2, p.Y * 2)).ToArray()).ToArray() }
+        { 224, _src.Select(pts => pts.Select(p => new PointF(p.X * 2, p.Y * 2)).ToArray()).ToArray() },
+        { 448, _src.Select(pts => pts.Select(p => new PointF(p.X * 4, p.Y * 4)).ToArray()).ToArray() },
     };
 
     private static readonly PointF[] arcfaceSrc =
@@ -50,12 +49,12 @@ public class FaceAlignService : IFaceAlignService
         new(41.5493f, 92.3655f), new(70.7299f, 92.2041f)
     ];
 
-    public FaceAlign Align(Mat frame, VectorOfPointF landmarks)
+    public FaceAlign Align(Mat frame, VectorOfPointF landmarks, int cropSize = 224)
     {
-        var norm = EstimateNorm(landmarks, _cropSize.Width, string.Empty);
+        var norm = EstimateNorm(landmarks, cropSize, string.Empty);
         using var affinePartial2DFirstRow = norm.Row(0);
         using var dst = new Mat();
-        CvInvoke.WarpAffine(frame, dst, norm, _cropSize);
+        CvInvoke.WarpAffine(frame, dst, norm, new Size(cropSize, cropSize));
         var rgb = new Mat();
         CvInvoke.CvtColor(dst, rgb, ColorConversion.Bgra2Rgb);
         return new FaceAlign(norm, rgb);

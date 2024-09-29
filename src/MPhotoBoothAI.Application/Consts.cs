@@ -8,5 +8,6 @@ public static class Consts
         public const string ArcfaceBackbone = "arcface_backbone";
         public const string Gunet2blocks = "G_unet_2blocks";
         public const string FaceLandmarks = "face_landmarks";
+        public const string Gfpgan = "gfpgan_1.4";
     }
 }

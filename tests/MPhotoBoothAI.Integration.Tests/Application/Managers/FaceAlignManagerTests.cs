@@ -12,7 +12,7 @@ public class FaceAlignManagerTests(DependencyInjectionFixture dependencyInjectio
     public void GetAlign_ShouldReturnExpected()
     {
         //arrange
-        using var expected = CvInvoke.Imread("TestData/womanAlign.jpg");
+        using var expected = CvInvoke.Imread("TestData/womanAlign224.jpg");
         using var sourceFaceFrame = CvInvoke.Imread("TestData/woman.jpg");
         //act
         using var result = _faceAlignManager.GetAlign(sourceFaceFrame);
