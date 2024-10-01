@@ -16,6 +16,5 @@
         <Button Content="SetTarget" Command="{Binding SetTargetCommand}"/>
         <Button Content="Swap" Command="{Binding SwapCommand}"/>
         <Button Content="Reset" Command="{Binding ResetCommand}"/>
-        <Button Content="Back" Command="{Binding BackCommand}"/>
     </StackPanel>
 </UserControl>

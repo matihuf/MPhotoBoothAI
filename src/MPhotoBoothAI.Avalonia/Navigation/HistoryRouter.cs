@@ -13,7 +13,7 @@ public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createView
     public bool HasNext => _history.Count > 0 && _historyIndex < _history.Count - 1;
     public bool HasPrev => _historyIndex > 0;
 
-    public void Push(TViewModelBase item)
+    private void Push(TViewModelBase item)
     {
         if (HasNext)
         {
@@ -39,7 +39,7 @@ public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createView
         {
             return default;
         }
-        ((IDisposable)_currentViewModel)?.Dispose();
+        ClearCurrent();
         _historyIndex = newIndex;
         var viewModel = _history.ElementAt(_historyIndex);
         CurrentViewModel = viewModel;
@@ -52,6 +52,7 @@ public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createView
 
     public override T GoTo<T>()
     {
+        ClearCurrent();
         var destination = InstantiateViewModel<T>();
         CurrentViewModel = destination;
         Push(destination);
@@ -60,8 +61,11 @@ public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createView
 
     public void GoTo(Type type)
     {
+        ClearCurrent();
         var destination = InstantiateViewModel(type);
         CurrentViewModel = destination;
         Push(destination);
     }
+
+    private void ClearCurrent() => (_currentViewModel as IDisposable)?.Dispose();
 }

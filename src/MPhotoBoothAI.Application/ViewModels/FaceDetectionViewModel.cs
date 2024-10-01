@@ -13,7 +13,6 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     private readonly FaceSwapManager _faceSwapManager;
     private readonly IFilePickerService _filePickerService;
     private readonly ICameraService _cameraService;
-    private readonly INavigationService _navigationService;
 
     private Mat _target;
     [ObservableProperty]
@@ -30,16 +29,13 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     private void Reset() => _cameraService.Attach(this);
 
     [RelayCommand]
-    private void Back() => _navigationService.Back();
-
-    [RelayCommand]
     private async Task SetTarget()
     {
         byte[] target = await _filePickerService.PickFile();
         CvInvoke.Imdecode(target, ImreadModes.Color, _target);
     }
 
-    public FaceDetectionViewModel(ICameraService cameraService, FaceSwapManager faceSwapManager, IFilePickerService filePickerService, INavigationService navigationService)
+    public FaceDetectionViewModel(ICameraService cameraService, FaceSwapManager faceSwapManager, IFilePickerService filePickerService)
     {
         _cameraService = cameraService;
         _cameraService.Start();
@@ -47,7 +43,6 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         _faceSwapManager = faceSwapManager;
         _filePickerService = filePickerService;
         _target = new Mat();
-        _navigationService = navigationService;
     }
 
     public void Notify(Mat mat)

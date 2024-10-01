@@ -402,3 +402,6 @@ libcvextern.so
 
 #Ai models
 models/
+
+#Avalonia
+src/MPhotoBoothAI.Avalonia/.avalonia-build-tasks/

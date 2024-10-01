@@ -5,7 +5,7 @@ using MPhotoBoothAI.Avalonia.Navigation;
 
 namespace MPhotoBoothAI.Avalonia.Services;
 
-public class NavigationService(HistoryRouter<ViewModelBase> router)  : INavigationService
+public class NavigationService(HistoryRouter<ViewModelBase> router) : INavigationService
 {
     private readonly HistoryRouter<ViewModelBase> _router = router;
 
