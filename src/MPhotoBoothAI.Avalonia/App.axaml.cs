@@ -3,7 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Avalonia.ViewModels;
-using MPhotoBoothAI.Avalonia .Views;
+using MPhotoBoothAI.Avalonia.Views;
 using AvaloniaApplication = Avalonia.Application;
 namespace MPhotoBoothAI.Avalonia;
 
@@ -16,12 +16,16 @@ public partial class App : AvaloniaApplication
         AvaloniaXamlLoader.Load(this);
     }
 
+    protected virtual IServiceProvider ConfigureServiceProvider()
+    {
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.Configure();
+        return serviceCollection.BuildServiceProvider();
+    }
+
     public override void OnFrameworkInitializationCompleted()
     {
-        IServiceCollection serviceCollection = new ServiceCollection();
-        serviceCollection.Configure();
-        ServiceProvider = serviceCollection.BuildServiceProvider();
-
+        ServiceProvider = ConfigureServiceProvider();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow

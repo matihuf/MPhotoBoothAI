@@ -12,7 +12,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
 {
     private readonly FaceSwapManager _faceSwapManager;
     private readonly IFilePickerService _filePickerService;
-    private readonly ICameraService _cameraService;
+    private readonly ICameraDevice _cameraDevice;
 
     private Mat _target;
     [ObservableProperty]
@@ -21,12 +21,12 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     [RelayCommand]
     private void Swap()
     {
-        _cameraService.Detach(this);
+        _cameraDevice.Detach(this);
         Frame = _faceSwapManager.Swap(Frame, _target);
     }
 
     [RelayCommand]
-    private void Reset() => _cameraService.Attach(this);
+    private void Reset() => _cameraDevice.Attach(this);
 
     [RelayCommand]
     private async Task SetTarget()
@@ -35,11 +35,11 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         CvInvoke.Imdecode(target, ImreadModes.Color, _target);
     }
 
-    public FaceDetectionViewModel(ICameraService cameraService, FaceSwapManager faceSwapManager, IFilePickerService filePickerService)
+    public FaceDetectionViewModel(ICameraDevice cameraService, FaceSwapManager faceSwapManager, IFilePickerService filePickerService)
     {
-        _cameraService = cameraService;
-        _cameraService.Start();
-        _cameraService.Attach(this);
+        _cameraDevice = cameraService;
+        _cameraDevice.Start();
+        _cameraDevice.Attach(this);
         _faceSwapManager = faceSwapManager;
         _filePickerService = filePickerService;
         _target = new Mat();
@@ -61,7 +61,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     {
         if (disposing)
         {
-            _cameraService.Detach(this);
+            _cameraDevice.Detach(this);
             Frame.Dispose();
             _target.Dispose();
         }

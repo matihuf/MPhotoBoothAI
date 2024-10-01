@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Reflection;
-using Emgu.CV;
 using Emgu.CV.Dnn;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML.OnnxRuntime;
@@ -11,6 +10,7 @@ using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
 using MPhotoBoothAI.Avalonia.ViewModels;
+using MPhotoBoothAI.Infrastructure.CameraDevices;
 using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Infrastructure.Services.Swap;
 
@@ -76,7 +76,6 @@ public static class DependencyInjection
 
     private static void AddCamera(IServiceCollection services)
     {
-        services.AddSingleton<ICameraService, CameraService>();
-        services.AddSingleton((src) => new VideoCapture(0));
+        services.AddSingleton<ICameraDevice, WebCameraDevice>();
     }
 }

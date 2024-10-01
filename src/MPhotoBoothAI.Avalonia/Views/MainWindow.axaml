@@ -13,7 +13,7 @@
 
    <SplitView IsPaneOpen="True" DisplayMode="Inline">
         <SplitView.Pane>
-            <ListBox ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}">
+            <ListBox x:Name="ListBoxPage" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:ListItemTemplate}">
                     <StackPanel Orientation="Horizontal" Spacing="10">
@@ -25,7 +25,7 @@
             </ListBox>
         </SplitView.Pane>
         <SplitView.Content>
-            <ContentControl Content="{Binding Content}" Margin="5" />
+            <ContentControl x:Name="Content" Content="{Binding Content}" Margin="5" />
         </SplitView.Content>
     </SplitView>
 </Window>

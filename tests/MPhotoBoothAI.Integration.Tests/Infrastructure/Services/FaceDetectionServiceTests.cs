@@ -1,5 +1,4 @@
 ﻿using Emgu.CV;
-using Emgu.CV.Dnn;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Interfaces;
 
@@ -13,7 +12,6 @@ public class FaceDetectionServiceTests(DependencyInjectionFixture dependencyInje
     public void Detec_ShouldReturnOneFace()
     {
         //arrange
-        using var net = DnnInvoke.ReadNetFromONNX("yolov8n-face.onnx");
         using var frame = CvInvoke.Imread("TestData/woman.jpg");
         //act
         var faces = _faceDetectionService.Detect(frame, 0.8f, 0.5f);
