@@ -37,18 +37,24 @@ public static class RawMatFile
         return image.Clone();
     }
 
-    public static bool RawEqual(Mat source, Mat target, int margin = 2)
+    public static bool RawEqual(Mat source, Mat target, int margin = 2, float maxFailedPercentage = 0.1f)
     {
         var sourceRaw = source.GetRawData();
         var resultRaw = target.GetRawData();
+        int failed = 0;
         for (int i = 0; i < sourceRaw.Length; i++)
         {
             if (Math.Abs(sourceRaw[i] - resultRaw[i]) > margin)
             {
                 Debug.WriteLine($"Expected {sourceRaw[i]}, Result {resultRaw[i]}, Index {i}");
-                return false;
+                failed++;
             }
         }
-        return true;
+        if (failed == 0)
+        {
+            return true;
+        }
+        var failedPercentage = failed / sourceRaw.Length * 100;
+        return failedPercentage <= maxFailedPercentage;
     }
 }

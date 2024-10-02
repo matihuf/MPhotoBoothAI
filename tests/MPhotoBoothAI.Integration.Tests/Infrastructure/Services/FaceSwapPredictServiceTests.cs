@@ -1,34 +1,29 @@
-﻿using Emgu.CV;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Integration.Tests.Infrastructure.Services;
 
 public class FaceSwapPredictServiceTests(DependencyInjectionFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionFixture>
 {
-    private readonly IFaceDetectionService _faceDetectionService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceDetectionService>();
-    private readonly IFaceAlignService _faceAlignService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceAlignService>();
-    private readonly IFaceSwapPredictService _faceSwapPredictService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceSwapPredictService>();
-
     [Fact]
     public void Predict_ShouldReturnExpected()
     {
         //arrange
-        using var expected = CvInvoke.Imread("TestData/womanSwapped.jpg");
-        using var sourceFaceFrame = CvInvoke.Imread("TestData/woman.jpg");
-        using var targetFaceFrame = CvInvoke.Imread("TestData/woman2.jpg");
+        using var expected = RawMatFile.MatFromBase64File("TestData/predict.dat");
+        using var sourceFaceFrame = RawMatFile.MatFromBase64File("TestData/woman.dat");
+        using var targetFaceFrame = RawMatFile.MatFromBase64File("TestData/woman2.dat");
 
-        using var sourceFace = _faceDetectionService.Detect(sourceFaceFrame, 0.8f, 0.5f).First();
-        using var sourceAlignFace = _faceAlignService.Align(sourceFaceFrame, sourceFace.Landmarks);
+        var faceDetectionService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceDetectionService>();
+        using var sourceFace = faceDetectionService.Detect(sourceFaceFrame, 0.8f, 0.5f).First();
+        var faceAlignService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceAlignService>();
+        using var sourceAlignFace = faceAlignService.Align(sourceFaceFrame, sourceFace.Landmarks);
 
-        using var targetFace = _faceDetectionService.Detect(targetFaceFrame, 0.8f, 0.5f).First();
-        using var targetAlignFace = _faceAlignService.Align(targetFaceFrame, targetFace.Landmarks);
+        using var targetFace = faceDetectionService.Detect(targetFaceFrame, 0.8f, 0.5f).First();
+        using var targetAlignFace = faceAlignService.Align(targetFaceFrame, targetFace.Landmarks);
+        var faceSwapPredictService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceSwapPredictService>();
         //act
-        using var result = _faceSwapPredictService.Predict(sourceAlignFace.Align, targetAlignFace.Align);
+        using var result = faceSwapPredictService.Predict(sourceAlignFace.Align, targetAlignFace.Align);
         //assert
-        string tmpFile = $"{nameof(FaceSwapPredictServiceTests)}womanSwappedTmp.jpg";
-        CvInvoke.Imwrite(tmpFile, result);
-        using var x = CvInvoke.Imread(tmpFile);
-        Assert.True(expected.Equals(x));
+        Assert.True(RawMatFile.RawEqual(expected, result));
     }
 }

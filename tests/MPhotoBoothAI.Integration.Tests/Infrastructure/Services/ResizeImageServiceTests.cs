@@ -1,40 +1,38 @@
-﻿using Emgu.CV;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Infrastructure.Services;
 
 namespace MPhotoBoothAI.Integration.Tests.Infrastructure.Services;
 
-public class ResizeImageServiceTests(DependencyInjectionFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionFixture>
+public class ResizeImageServiceTests : IClassFixture<DependencyInjectionFixture>
 {
-    private readonly ResizeImageService _resizeImageService = dependencyInjectionFixture.ServiceProvider.GetService<ResizeImageService>();
+    private readonly ResizeImageService _resizeImageService;
+
+    public ResizeImageServiceTests(DependencyInjectionFixture dependencyInjectionFixture)
+    {
+        _resizeImageService = dependencyInjectionFixture.ServiceProvider.GetService<ResizeImageService>();
+    }
 
     [Fact]
     public void Resize_KeepRatio_ShouldBeAsExpected()
     {
         //arrange
-        using var expected = CvInvoke.Imread("TestData/womanResizedKeepRatio.jpg");
-        using var frame = CvInvoke.Imread("TestData/woman.jpg");
+        using var expected = RawMatFile.MatFromBase64File("TestData/womanResizedKeepRatio.dat");
+        using var frame = RawMatFile.MatFromBase64File("TestData/woman.dat");
         //act
-        var result = _resizeImageService.Resize(frame, 640, 640, true);
+        using var result = _resizeImageService.Resize(frame, 640, 640, true);
         //assert
-        string tmpFile = $"{nameof(ResizeImageServiceTests)}resizeKeepRatio.jpg";
-        CvInvoke.Imwrite(tmpFile, result.Image);
-        using var x = CvInvoke.Imread(tmpFile);
-        Assert.True(expected.Equals(x));
+        Assert.True(RawMatFile.RawEqual(expected, result.Image));
     }
 
     [Fact]
     public void Resize_DoNotKeepRatio_ShouldBeAsExpected()
     {
         //arrange
-        using var expected = CvInvoke.Imread("TestData/womanResizedDoNotKeepRatio.jpg");
-        using var frame = CvInvoke.Imread("TestData/woman.jpg");
+        using var expected = RawMatFile.MatFromBase64File("TestData/womanResizedDoNotKeepRatio.dat");
+        using var frame = RawMatFile.MatFromBase64File("TestData/woman.dat");
         //act
-        var result = _resizeImageService.Resize(frame, 640, 640, false);
+        using var result = _resizeImageService.Resize(frame, 640, 640, false);
         //assert
-        string tmpFile = $"{nameof(ResizeImageServiceTests)}resizeDoNotKeepRatio.jpg";
-        CvInvoke.Imwrite(tmpFile, result.Image);
-        using var x = CvInvoke.Imread(tmpFile);
-        Assert.True(expected.Equals(x));
+        Assert.True(RawMatFile.RawEqual(expected, result.Image));
     }
 }
