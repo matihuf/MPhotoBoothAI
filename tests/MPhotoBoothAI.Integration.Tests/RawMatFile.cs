@@ -1,6 +1,7 @@
-using System.Runtime.InteropServices;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace MPhotoBoothAI.Integration.Tests;
 
@@ -18,8 +19,6 @@ public static class RawMatFile
         outputFile.WriteLine((int)mat.Depth);
         outputFile.WriteLine(mat.NumberOfChannels);
         outputFile.WriteLine(mat.Step);
-        var x = (byte[,,])mat.GetData();
-        var y = mat.GetRawData();
         outputFile.Write(Convert.ToBase64String(mat.GetRawData()));
     }
 
@@ -36,5 +35,20 @@ public static class RawMatFile
         using var image = new Mat(height, width, depthType, numberOfChannels, handle.AddrOfPinnedObject(), step);
         handle.Free();
         return image.Clone();
+    }
+
+    public static bool RawEqual(Mat source, Mat target, int margin = 2)
+    {
+        var sourceRaw = source.GetRawData();
+        var resultRaw = target.GetRawData();
+        for (int i = 0; i < sourceRaw.Length; i++)
+        {
+            if (Math.Abs(sourceRaw[i] - resultRaw[i]) > margin)
+            {
+                Debug.WriteLine($"Expected {sourceRaw[i]}, Result {resultRaw[i]}, Index {i}");
+                return false;
+            }
+        }
+        return true;
     }
 }

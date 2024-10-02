@@ -15,6 +15,6 @@ public class FaceAlignManagerTests(DependencyInjectionFixture dependencyInjectio
         //act
         using var result = faceAlignManager.GetAlign(sourceFaceFrame);
         //assert
-        Assert.True(expected.Equals(result.Align));
+        Assert.True(RawMatFile.RawEqual(expected, result.Align));
     }
 }
