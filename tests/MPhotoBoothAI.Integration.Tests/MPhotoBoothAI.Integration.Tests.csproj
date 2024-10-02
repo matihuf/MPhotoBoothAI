@@ -45,13 +45,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestData\woman.png">
+    <None Update="TestData\woman.ppm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\woman2.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\womanAlign224.png">
+    <None Update="TestData\womanAlign224.ppm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestData\womanResizedKeepRatio.jpg">

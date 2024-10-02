@@ -6,22 +6,16 @@ namespace MPhotoBoothAI.Integration.Tests.Application.Managers;
 
 public class FaceAlignManagerTests(DependencyInjectionFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionFixture>
 {
-    private readonly FaceAlignManager _faceAlignManager = dependencyInjectionFixture.ServiceProvider.GetService<FaceAlignManager>();
-
-    private readonly ImagesReadWriteHelper readWriteData = new();
-
     [Fact]
     public void GetAlign_ShouldReturnExpected()
     {
         //arrange
-        using var expected = CvInvoke.Imread("TestData/womanAlign224.png");
-        using var sourceFaceFrame = CvInvoke.Imread("TestData/woman.png");
+        using var expected = CvInvoke.Imread("TestData/womanAlign224.ppm");
+        using var sourceFaceFrame = CvInvoke.Imread("TestData/woman.ppm");
+        var faceAlignManager = dependencyInjectionFixture.ServiceProvider.GetService<FaceAlignManager>();
         //act
-        using var result = _faceAlignManager.GetAlign(sourceFaceFrame);
+        using var result = faceAlignManager.GetAlign(sourceFaceFrame);
         //assert
-        string tmpFile = $"{nameof(FaceAlignManagerTests)}womanAlignTmp.png";
-        CvInvoke.Imwrite(tmpFile, result.Align, readWriteData.ImageSaveOptions);
-        using var x = CvInvoke.Imread(tmpFile);
-        Assert.True(expected.Equals(x));
+        Assert.True(expected.Equals(result.Align));
     }
 }
