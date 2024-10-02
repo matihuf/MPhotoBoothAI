@@ -1,5 +1,4 @@
-﻿using Emgu.CV;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Managers;
 
 namespace MPhotoBoothAI.Integration.Tests.Application.Managers;
@@ -10,8 +9,8 @@ public class FaceAlignManagerTests(DependencyInjectionFixture dependencyInjectio
     public void GetAlign_ShouldReturnExpected()
     {
         //arrange
-        using var expected = CvInvoke.Imread("TestData/womanAlign224.ppm");
-        using var sourceFaceFrame = CvInvoke.Imread("TestData/woman.ppm");
+        using var expected = RawMatFile.MatFromBase64File("TestData/womanAlign224.dat");
+        using var sourceFaceFrame = RawMatFile.MatFromBase64File("TestData/woman.dat");
         var faceAlignManager = dependencyInjectionFixture.ServiceProvider.GetService<FaceAlignManager>();
         //act
         using var result = faceAlignManager.GetAlign(sourceFaceFrame);
