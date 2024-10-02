@@ -1,6 +1,5 @@
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace MPhotoBoothAI.Integration.Tests;
@@ -37,7 +36,7 @@ public static class RawMatFile
         return image.Clone();
     }
 
-    public static bool RawEqual(Mat source, Mat target, int margin = 2, float maxFailedPercentage = 0.1f)
+    public static bool RawEqual(Mat source, Mat target, int margin = 2, float maxFailedPercentage = 1f)
     {
         var sourceRaw = source.GetRawData();
         var resultRaw = target.GetRawData();
@@ -46,7 +45,6 @@ public static class RawMatFile
         {
             if (Math.Abs(sourceRaw[i] - resultRaw[i]) > margin)
             {
-                Debug.WriteLine($"Expected {sourceRaw[i]}, Result {resultRaw[i]}, Index {i}");
                 failed++;
             }
         }
@@ -54,7 +52,7 @@ public static class RawMatFile
         {
             return true;
         }
-        var failedPercentage = failed / sourceRaw.Length * 100;
+        var failedPercentage = (failed / (float)sourceRaw.Length) * 100f;
         return failedPercentage <= maxFailedPercentage;
     }
 }
