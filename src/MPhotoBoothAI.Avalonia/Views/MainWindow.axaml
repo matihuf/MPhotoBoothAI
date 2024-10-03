@@ -28,12 +28,12 @@
             <Setter Property="Padding" Value="10"/>
             <Setter Property="Margin" Value="5 5 5 0"/>
             <Setter Property="CornerRadius" Value="8"/>
-          </Style>
-          <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="#b4b4db"/>
-          </Style>
-          <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#dfdff5"/>
+            <Style Selector="^:selected /template/ ContentPresenter">
+              <Setter Property="Background" Value="#b4b4db"/>
+            </Style>
+            <Style Selector="^:pointerover /template/ ContentPresenter">
+              <Setter Property="Background" Value="#dfdff5"/>
+            </Style>
           </Style>
         </ListBox.Styles>
         <ListBox.ItemTemplate>
