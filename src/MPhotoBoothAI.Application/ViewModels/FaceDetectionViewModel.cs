@@ -15,8 +15,6 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
 
     private readonly Mat _target;
 
-    private readonly Mat _target;
-
     [ObservableProperty]
     private Mat _frame;
 
