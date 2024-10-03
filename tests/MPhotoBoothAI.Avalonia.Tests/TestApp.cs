@@ -11,8 +11,8 @@ public class TestApp : App
     {
         var serviceCollection = new ServiceCollection();
         serviceCollection.Configure();
-        var descriptor = new ServiceDescriptor(typeof(ICameraDevice), typeof(DummyCameraDevice), ServiceLifetime.Singleton);
-        serviceCollection.Replace(descriptor);
+        var cameraDescriptor = new ServiceDescriptor(typeof(ICameraDevice), typeof(DummyCameraDevice), ServiceLifetime.Singleton);
+        serviceCollection.Replace(cameraDescriptor);
         return serviceCollection.BuildServiceProvider();
     }
 }

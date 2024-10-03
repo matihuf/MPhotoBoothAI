@@ -22,7 +22,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Emgu.CV.runtime.ubuntu-x64" Version="4.8.0.5324" />
   </ItemGroup>
 
   <ItemGroup>

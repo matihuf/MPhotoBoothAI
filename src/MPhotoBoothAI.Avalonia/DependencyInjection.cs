@@ -4,8 +4,8 @@ using Microsoft.ML.OnnxRuntime;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Managers;
-using MPhotoBoothAI.Application.Navigation;
 using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
 using MPhotoBoothAI.Infrastructure.CameraDevices;
 using MPhotoBoothAI.Infrastructure.Services;
@@ -30,8 +30,7 @@ public static class DependencyInjection
 
     private static void AddNavigation(IServiceCollection services)
     {
-        services.AddSingleton<IHistoryRouter<ViewModelBase>>(s => new HistoryRouter<ViewModelBase>(t => (ViewModelBase)s.GetRequiredService(t)));
-        services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<INavigationService<ViewModelBase>>(s => new HistoryRouter<ViewModelBase>(t => (ViewModelBase)s.GetRequiredService(t)));
     }
 
     private static void AddManagers(IServiceCollection services)

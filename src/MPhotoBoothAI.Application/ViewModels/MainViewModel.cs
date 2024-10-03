@@ -13,7 +13,7 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private ListItemTemplate? _selectedPage;
 
-    private readonly IHistoryRouter<ViewModelBase> _router;
+    private readonly INavigationService<ViewModelBase> _navigationService;
 
     public ObservableCollection<ListItemTemplate> Pages { get; }
 
@@ -23,11 +23,11 @@ public partial class MainViewModel : ViewModelBase
         new ListItemTemplate(typeof(FaceDetectionViewModel), "person_swap_regular", "FaceDetection")
     ];
 
-    public MainViewModel(IHistoryRouter<ViewModelBase> router)
+    public MainViewModel(INavigationService<ViewModelBase> navigationService)
     {
         Pages = new ObservableCollection<ListItemTemplate>(_pages);
-        _router = router;
-        _router.CurrentViewModelChanged += viewModel => Content = viewModel;
+        _navigationService = navigationService;
+        _navigationService.CurrentViewModelChanged += viewModel => Content = viewModel;
         SelectedPage = Pages[0];
     }
 
@@ -37,6 +37,6 @@ public partial class MainViewModel : ViewModelBase
         {
             return;
         }
-        _router.GoTo(value.ModelType);
+        _navigationService.GoTo(value.ModelType);
     }
 }
