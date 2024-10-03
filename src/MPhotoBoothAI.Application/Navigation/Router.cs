@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MPhotoBoothAI.Avalonia.Navigation;
+﻿namespace MPhotoBoothAI.Application.Navigation;
 
 public class Router<TViewModelBase>(Func<Type, TViewModelBase> createViewModel) where TViewModelBase : class
 {

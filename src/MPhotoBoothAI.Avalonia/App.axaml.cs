@@ -1,9 +1,9 @@
-using System;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
-using MPhotoBoothAI.Avalonia.ViewModels;
+using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Views;
+using System;
 using AvaloniaApplication = Avalonia.Application;
 namespace MPhotoBoothAI.Avalonia;
 

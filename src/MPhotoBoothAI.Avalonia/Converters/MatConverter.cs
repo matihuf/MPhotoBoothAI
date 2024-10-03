@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Emgu.CV;
+using System;
+using System.Globalization;
 
 namespace MPhotoBoothAI.Avalonia.Converters;
 
@@ -33,13 +33,13 @@ public class MatConverter : IValueConverter
                 mat.ToBitmapParallel(wb);
                 return wb;
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // ignored
                 //        App.TryGetLogger<MatBitmapValueConverter>()?.LogError(e, "Error converting to bitmap");
             }
         }
-        var wbx = new WriteableBitmap(new PixelSize(mat.Width, mat.Height), new Vector(96,96));
+        var wbx = new WriteableBitmap(new PixelSize(mat.Width, mat.Height), new Vector(96, 96));
         mat.ToBitmapParallel(wbx);
         return wbx;
     }

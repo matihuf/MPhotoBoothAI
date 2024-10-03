@@ -4,17 +4,17 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
-using MPhotoBoothAI.Application.Managers;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 
 public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposable
 {
-    private readonly FaceSwapManager _faceSwapManager;
+    private readonly IFaceSwapManager _faceSwapManager;
     private readonly IFilePickerService _filePickerService;
     private readonly ICameraDevice _cameraDevice;
 
-    private Mat _target;
+    private readonly Mat _target;
+
     [ObservableProperty]
     private Mat _frame;
 
@@ -35,7 +35,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         CvInvoke.Imdecode(target, ImreadModes.Color, _target);
     }
 
-    public FaceDetectionViewModel(ICameraDevice cameraService, FaceSwapManager faceSwapManager, IFilePickerService filePickerService)
+    public FaceDetectionViewModel(ICameraDevice cameraService, IFaceSwapManager faceSwapManager, IFilePickerService filePickerService)
     {
         _cameraDevice = cameraService;
         _cameraDevice.Start();
@@ -47,8 +47,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
 
     public void Notify(Mat mat)
     {
-        Frame = mat.Clone();
-        mat.Dispose();
+        Frame = mat;
     }
 
     public void Dispose()

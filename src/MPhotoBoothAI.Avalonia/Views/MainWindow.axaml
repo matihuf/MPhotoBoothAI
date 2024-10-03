@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:MPhotoBoothAI.Avalonia.ViewModels"
+        xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+        xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="using:MPhotoBoothAI.Models.UI"
@@ -11,21 +12,51 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="MPhotoBoothAI">
 
-   <SplitView IsPaneOpen="True" DisplayMode="Inline">
-        <SplitView.Pane>
-            <ListBox x:Name="ListBoxPage" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:ListItemTemplate}">
-                    <StackPanel Orientation="Horizontal" Spacing="10">
-                        <PathIcon Data="{Binding IconKey, Converter={x:Static converters:IconConverters.IconConverter}}" />
-                        <TextBlock Text="{Binding Label}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            </ListBox>
-        </SplitView.Pane>
-        <SplitView.Content>
-            <ContentControl x:Name="Content" Content="{Binding Content}" Margin="5" />
-        </SplitView.Content>
-    </SplitView>
+  <Design.DataContext>
+    <dvm:DesignMainViewModel/>
+  </Design.DataContext>
+
+  <SplitView IsPaneOpen="True" DisplayMode="Inline">
+    <SplitView.Pane>
+      <ListBox x:Name="ListBoxPage" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}">
+        <ListBox.Styles>
+          <Style Selector="ListBox">
+            <Setter Property="Background" Value="White"/>
+          </Style>
+          <Style Selector="ListBoxItem">
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5 5 5 0"/>
+            <Setter Property="CornerRadius" Value="8"/>
+          </Style>
+          <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="#b4b4db"/>
+          </Style>
+          <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#dfdff5"/>
+          </Style>
+        </ListBox.Styles>
+        <ListBox.ItemTemplate>
+          <DataTemplate DataType="{x:Type models:ListItemTemplate}">
+            <StackPanel Orientation="Horizontal" Spacing="15">
+              <PathIcon Data="{Binding IconKey, Converter={x:Static converters:IconConverters.IconConverter}}" />
+              <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </SplitView.Pane>
+    <SplitView.Content>
+      <ContentControl x:Name="Content" Content="{Binding Content}">
+        <ContentControl.Styles>
+          <Style Selector="ContentControl">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="WhiteSmoke"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Padding" Value="20"/>
+          </Style>
+        </ContentControl.Styles>
+      </ContentControl>
+    </SplitView.Content>
+  </SplitView>
 </Window>

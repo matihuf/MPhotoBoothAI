@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using MPhotoBoothAI.Application.Interfaces;
 
-namespace MPhotoBoothAI.Avalonia.Navigation;
+namespace MPhotoBoothAI.Application.Navigation;
 
-public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createViewModel) : Router<TViewModelBase>(createViewModel) where TViewModelBase : class
+public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createViewModel) : Router<TViewModelBase>(createViewModel), IHistoryRouter<TViewModelBase> where TViewModelBase : class
 {
     private int _historyIndex = -1;
     private List<TViewModelBase> _history = [];
@@ -27,7 +25,7 @@ public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createView
         }
     }
 
-    public TViewModelBase? Go(int offset = 0)
+    private TViewModelBase? Go(int offset = 0)
     {
         if (offset == 0)
         {

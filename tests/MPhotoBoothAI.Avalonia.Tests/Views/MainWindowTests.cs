@@ -4,7 +4,6 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Input;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.ViewModels;
-using MPhotoBoothAI.Avalonia.ViewModels;
 using MPhotoBoothAI.Avalonia.Views;
 using MPhotoBoothAI.Models.UI;
 

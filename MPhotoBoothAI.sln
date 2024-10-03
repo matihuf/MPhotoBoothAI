@@ -5,21 +5,23 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9447C35B-2ECF-445C-9BB9-C50D92424A6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Avalonia", "src\MPhotoBoothAI.Avalonia\MPhotoBoothAI.Avalonia.csproj", "{97F9FE03-AC9A-4EB4-AF1D-CC5FD1F18558}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MPhotoBoothAI.Avalonia", "src\MPhotoBoothAI.Avalonia\MPhotoBoothAI.Avalonia.csproj", "{97F9FE03-AC9A-4EB4-AF1D-CC5FD1F18558}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Application", "src\MPhotoBoothAI.Application\MPhotoBoothAI.Application.csproj", "{DF91C96A-1FC9-4670-B228-731981379663}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MPhotoBoothAI.Application", "src\MPhotoBoothAI.Application\MPhotoBoothAI.Application.csproj", "{DF91C96A-1FC9-4670-B228-731981379663}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Infrastructure", "src\MPhotoBoothAI.Infrastructure\MPhotoBoothAI.Infrastructure.csproj", "{1A465149-A066-4277-8A51-C89772D7E1F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MPhotoBoothAI.Infrastructure", "src\MPhotoBoothAI.Infrastructure\MPhotoBoothAI.Infrastructure.csproj", "{1A465149-A066-4277-8A51-C89772D7E1F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Models", "src\MPhotoBoothAI.Models\MPhotoBoothAI.Models.csproj", "{F187A9AE-832E-48A2-9367-5CC604A20CBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MPhotoBoothAI.Models", "src\MPhotoBoothAI.Models\MPhotoBoothAI.Models.csproj", "{F187A9AE-832E-48A2-9367-5CC604A20CBD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A1BE2F1C-BF2F-4294-A397-D188E83A8A76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Integration.Tests", "tests\MPhotoBoothAI.Integration.Tests\MPhotoBoothAI.Integration.Tests.csproj", "{A18CF16B-5501-497A-A319-F126F284D8CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MPhotoBoothAI.Integration.Tests", "tests\MPhotoBoothAI.Integration.Tests\MPhotoBoothAI.Integration.Tests.csproj", "{A18CF16B-5501-497A-A319-F126F284D8CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Avalonia.Tests", "tests\MPhotoBoothAI.Avalonia.Tests\MPhotoBoothAI.Avalonia.Tests.csproj", "{4336BBA6-7A5B-4CFB-9353-C09111676BE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Common.Tests", "tests\MPhotoBoothAI.Common.Tests\MPhotoBoothAI.Common.Tests.csproj", "{9432ACBB-6EF4-4062-8263-A17A154AB838}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Avalonia.Design", "src\MPhotoBoothAI.Avalonia.Design\MPhotoBoothAI.Avalonia.Design.csproj", "{E8FFB661-881B-47B8-B023-9E1EB4DE7891}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{9432ACBB-6EF4-4062-8263-A17A154AB838}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9432ACBB-6EF4-4062-8263-A17A154AB838}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9432ACBB-6EF4-4062-8263-A17A154AB838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8FFB661-881B-47B8-B023-9E1EB4DE7891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8FFB661-881B-47B8-B023-9E1EB4DE7891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8FFB661-881B-47B8-B023-9E1EB4DE7891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8FFB661-881B-47B8-B023-9E1EB4DE7891}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +73,6 @@ Global
 		{A18CF16B-5501-497A-A319-F126F284D8CF} = {A1BE2F1C-BF2F-4294-A397-D188E83A8A76}
 		{4336BBA6-7A5B-4CFB-9353-C09111676BE4} = {A1BE2F1C-BF2F-4294-A397-D188E83A8A76}
 		{9432ACBB-6EF4-4062-8263-A17A154AB838} = {A1BE2F1C-BF2F-4294-A397-D188E83A8A76}
+		{E8FFB661-881B-47B8-B023-9E1EB4DE7891} = {9447C35B-2ECF-445C-9BB9-C50D92424A6D}
 	EndGlobalSection
 EndGlobal

@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
-using MPhotoBoothAI.Application.ViewModels;
-using MPhotoBoothAI.Avalonia.Navigation;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Models.UI;
+using System.Collections.ObjectModel;
 
-namespace MPhotoBoothAI.Avalonia.ViewModels;
+namespace MPhotoBoothAI.Application.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
@@ -15,7 +13,7 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private ListItemTemplate? _selectedPage;
 
-    private readonly HistoryRouter<ViewModelBase> _router;
+    private readonly IHistoryRouter<ViewModelBase> _router;
 
     public ObservableCollection<ListItemTemplate> Pages { get; }
 
@@ -25,7 +23,7 @@ public partial class MainViewModel : ViewModelBase
         new ListItemTemplate(typeof(FaceDetectionViewModel), "person_swap_regular", "FaceDetection")
     ];
 
-    public MainViewModel(HistoryRouter<ViewModelBase> router)
+    public MainViewModel(IHistoryRouter<ViewModelBase> router)
     {
         Pages = new ObservableCollection<ListItemTemplate>(_pages);
         _router = router;

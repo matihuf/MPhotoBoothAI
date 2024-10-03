@@ -1,7 +1,6 @@
-﻿
-namespace MPhotoBoothAI.Application.ViewModels;
+﻿namespace MPhotoBoothAI.Application.ViewModels;
 
 public partial class HomeViewModel : ViewModelBase
 {
-    
+
 }
