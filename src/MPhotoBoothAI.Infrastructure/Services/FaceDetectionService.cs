@@ -22,7 +22,7 @@ public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace
 
     public IEnumerable<FaceDetection> Detect(Mat frame, float confThreshold, float nmsThreshold)
     {
-        var resized = _resizeImageService.Resize(frame);
+        using var resized = _resizeImageService.Resize(frame);
         using var blob = DnnInvoke.BlobFromImage(resized.Image, 1 / 255.0, new Size(_inputWidth, _inputHeight), new MCvScalar(0, 0, 0), true, false);
         resized.Image.Dispose();
         _net.SetInput(blob);

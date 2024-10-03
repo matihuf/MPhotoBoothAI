@@ -1,25 +1,20 @@
-﻿using Emgu.CV;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Managers;
 
 namespace MPhotoBoothAI.Integration.Tests.Application.Managers;
 
 public class FaceAlignManagerTests(DependencyInjectionFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionFixture>
 {
-    private readonly FaceAlignManager _faceAlignManager = dependencyInjectionFixture.ServiceProvider.GetService<FaceAlignManager>();
-   
     [Fact]
     public void GetAlign_ShouldReturnExpected()
     {
         //arrange
-        using var expected = CvInvoke.Imread("TestData/womanAlign224.jpg");
-        using var sourceFaceFrame = CvInvoke.Imread("TestData/woman.jpg");
+        using var expected = RawMatFile.MatFromBase64File("TestData/womanAlign224.dat");
+        using var sourceFaceFrame = RawMatFile.MatFromBase64File("TestData/woman.dat");
+        var faceAlignManager = dependencyInjectionFixture.ServiceProvider.GetService<FaceAlignManager>();
         //act
-        using var result = _faceAlignManager.GetAlign(sourceFaceFrame);
+        using var result = faceAlignManager.GetAlign(sourceFaceFrame);
         //assert
-        string tmpFile = $"{nameof(FaceAlignManagerTests)}womanAlignTmp.jpg";
-        CvInvoke.Imwrite(tmpFile, result.Align);
-        using var x = CvInvoke.Imread(tmpFile);
-        Assert.True(expected.Equals(x));
+        Assert.True(RawMatFile.RawEqual(expected, result.Align));
     }
 }
