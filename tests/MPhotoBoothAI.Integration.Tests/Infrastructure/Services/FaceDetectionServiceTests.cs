@@ -1,20 +1,18 @@
-﻿using Emgu.CV;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Integration.Tests.Infrastructure.Services;
 
 public class FaceDetectionServiceTests(DependencyInjectionFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionFixture>
 {
-    private readonly IFaceDetectionService _faceDetectionService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceDetectionService>();
-
     [Fact]
     public void Detec_ShouldReturnOneFace()
     {
         //arrange
-        using var frame = CvInvoke.Imread("TestData/woman.jpg");
+        using var frame = RawMatFile.MatFromBase64File("TestData/woman.dat");
+        var faceDetectionService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceDetectionService>();
         //act
-        var faces = _faceDetectionService.Detect(frame, 0.8f, 0.5f);
+        var faces = faceDetectionService.Detect(frame, 0.8f, 0.5f);
         //assert
         Assert.Single(faces);
         faces.ElementAt(0).Dispose();
