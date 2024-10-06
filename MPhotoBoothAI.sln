@@ -17,11 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A1BE2F1C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MPhotoBoothAI.Integration.Tests", "tests\MPhotoBoothAI.Integration.Tests\MPhotoBoothAI.Integration.Tests.csproj", "{A18CF16B-5501-497A-A319-F126F284D8CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Avalonia.Tests", "tests\MPhotoBoothAI.Avalonia.Tests\MPhotoBoothAI.Avalonia.Tests.csproj", "{4336BBA6-7A5B-4CFB-9353-C09111676BE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MPhotoBoothAI.Avalonia.Tests", "tests\MPhotoBoothAI.Avalonia.Tests\MPhotoBoothAI.Avalonia.Tests.csproj", "{4336BBA6-7A5B-4CFB-9353-C09111676BE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Common.Tests", "tests\MPhotoBoothAI.Common.Tests\MPhotoBoothAI.Common.Tests.csproj", "{9432ACBB-6EF4-4062-8263-A17A154AB838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MPhotoBoothAI.Common.Tests", "tests\MPhotoBoothAI.Common.Tests\MPhotoBoothAI.Common.Tests.csproj", "{9432ACBB-6EF4-4062-8263-A17A154AB838}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Avalonia.Design", "src\MPhotoBoothAI.Avalonia.Design\MPhotoBoothAI.Avalonia.Design.csproj", "{E8FFB661-881B-47B8-B023-9E1EB4DE7891}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MPhotoBoothAI.Avalonia.Design", "src\MPhotoBoothAI.Avalonia.Design\MPhotoBoothAI.Avalonia.Design.csproj", "{E8FFB661-881B-47B8-B023-9E1EB4DE7891}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPhotoBoothAI.Camera.Canon", "MPhotoBoothAI.Camera.Canon\MPhotoBoothAI.Camera.Canon.csproj", "{CCACD91F-73EF-49CD-B34D-6587F2305D0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{E8FFB661-881B-47B8-B023-9E1EB4DE7891}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8FFB661-881B-47B8-B023-9E1EB4DE7891}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8FFB661-881B-47B8-B023-9E1EB4DE7891}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCACD91F-73EF-49CD-B34D-6587F2305D0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCACD91F-73EF-49CD-B34D-6587F2305D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCACD91F-73EF-49CD-B34D-6587F2305D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCACD91F-73EF-49CD-B34D-6587F2305D0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,5 +80,9 @@ Global
 		{4336BBA6-7A5B-4CFB-9353-C09111676BE4} = {A1BE2F1C-BF2F-4294-A397-D188E83A8A76}
 		{9432ACBB-6EF4-4062-8263-A17A154AB838} = {A1BE2F1C-BF2F-4294-A397-D188E83A8A76}
 		{E8FFB661-881B-47B8-B023-9E1EB4DE7891} = {9447C35B-2ECF-445C-9BB9-C50D92424A6D}
+		{CCACD91F-73EF-49CD-B34D-6587F2305D0B} = {9447C35B-2ECF-445C-9BB9-C50D92424A6D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0FFF3D76-9569-44AC-8CA9-F94E255C05D8}
 	EndGlobalSection
 EndGlobal
