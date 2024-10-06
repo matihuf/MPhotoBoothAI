@@ -20,7 +20,8 @@ public partial class MainViewModel : ViewModelBase
     private readonly List<ListItemTemplate> _pages =
     [
         new ListItemTemplate(typeof(HomeViewModel), "home_regular", "Home"),
-        new ListItemTemplate(typeof(FaceDetectionViewModel), "person_swap_regular", "FaceDetection")
+        new ListItemTemplate(typeof(CameraSettingsViewModel), "person_swap_regular", "CameraSettings"),
+        new ListItemTemplate(typeof(FaceDetectionViewModel), "person_swap_regular", "FaceDetection"),
     ];
 
     public MainViewModel(INavigationService<ViewModelBase> navigationService)

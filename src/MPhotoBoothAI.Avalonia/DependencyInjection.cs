@@ -57,6 +57,7 @@ public static class DependencyInjection
         services.AddSingleton<MainViewModel>();
         services.AddTransient<HomeViewModel>();
         services.AddTransient<FaceDetectionViewModel>();
+        services.AddSingleton<CameraSettingsViewModel>();
     }
 
     private static void AddServices(IServiceCollection services)
