@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Emgu.CV;
+using System;
+using System.Threading.Tasks;
 
 namespace MPhotoBoothAI.Avalonia;
 
@@ -64,12 +64,6 @@ public static class MatExtensions
                             for (var x = 0; x < width; x++) spanBitmap[x] = (uint)(spanMat[pixel++] | (spanMat[pixel++] << 8) | (spanMat[pixel++] << 16) | (spanMat[pixel++] << 24));
                         });
                     }
-                    // else if (mat.Depth == Emgu.CV.CvEnum.DepthType.Cv32S)
-                    // {
-                    //     var dataCount = width * height;
-                    //     mat.GetRawData().CopyTo(new Span<uint>(lockBuffer.Address.ToPointer(), dataCount));
-                    // }
-
                     break;
             }
         }

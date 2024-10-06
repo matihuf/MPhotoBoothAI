@@ -4,18 +4,16 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
-using MPhotoBoothAI.Application.Managers;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 
 public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposable
 {
-    private readonly FaceSwapManager _faceSwapManager;
+    private readonly IFaceSwapManager _faceSwapManager;
     private readonly IFilePickerService _filePickerService;
-    private readonly ICameraService _cameraService;
-    private readonly INavigationService _navigationService;
+    private readonly ICameraDevice _cameraDevice;
 
-    private Mat _target;
+    private readonly Mat _target;
 
     [ObservableProperty]
     private Mat _frame;
@@ -23,15 +21,12 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     [RelayCommand]
     private void Swap()
     {
-        _cameraService.Detach(this);
+        _cameraDevice.Detach(this);
         Frame = _faceSwapManager.Swap(Frame, _target);
     }
 
     [RelayCommand]
-    private void Reset() => _cameraService.Attach(this);
-
-    [RelayCommand]
-    private void Back() => _navigationService.Back();
+    private void Reset() => _cameraDevice.Attach(this);
 
     [RelayCommand]
     private async Task SetTarget()
@@ -40,21 +35,19 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         CvInvoke.Imdecode(target, ImreadModes.Color, _target);
     }
 
-    public FaceDetectionViewModel(ICameraService cameraService, FaceSwapManager faceSwapManager, IFilePickerService filePickerService, INavigationService navigationService)
+    public FaceDetectionViewModel(ICameraDevice cameraService, IFaceSwapManager faceSwapManager, IFilePickerService filePickerService)
     {
-        _cameraService = cameraService;
-        _cameraService.Start();
-        _cameraService.Attach(this);
+        _cameraDevice = cameraService;
+        _cameraDevice.Start();
+        _cameraDevice.Attach(this);
         _faceSwapManager = faceSwapManager;
         _filePickerService = filePickerService;
         _target = new Mat();
-        _navigationService = navigationService;
     }
 
     public void Notify(Mat mat)
     {
-        Frame = mat.Clone();
-        mat.Dispose();
+        Frame = mat;
     }
 
     public void Dispose()
@@ -67,7 +60,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     {
         if (disposing)
         {
-            _cameraService.Detach(this);
+            _cameraDevice.Detach(this);
             Frame.Dispose();
             _target.Dispose();
         }

@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
+    <Folder Include="Styles/" />
   </ItemGroup>
 
    <ItemGroup>
@@ -48,6 +48,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MPhotoBoothAI.Application\MPhotoBoothAI.Application.csproj" />
+    <ProjectReference Include="..\MPhotoBoothAI.Avalonia.Design\MPhotoBoothAI.Avalonia.Design.csproj" />
     <ProjectReference Include="..\MPhotoBoothAI.Infrastructure\MPhotoBoothAI.Infrastructure.csproj" />
+    <ProjectReference Include="..\MPhotoBoothAI.Models\MPhotoBoothAI.Models.csproj" />
   </ItemGroup>
 </Project>

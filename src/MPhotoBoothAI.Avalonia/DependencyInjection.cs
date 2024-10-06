@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Reflection;
-using Emgu.CV;
-using Emgu.CV.Dnn;
+﻿using Emgu.CV.Dnn;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML.OnnxRuntime;
 using MPhotoBoothAI.Application;
@@ -10,9 +7,11 @@ using MPhotoBoothAI.Application.Managers;
 using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
-using MPhotoBoothAI.Avalonia.ViewModels;
+using MPhotoBoothAI.Infrastructure.CameraDevices;
 using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Infrastructure.Services.Swap;
+using System.IO;
+using System.Reflection;
 
 namespace MPhotoBoothAI.Avalonia;
 
@@ -31,15 +30,14 @@ public static class DependencyInjection
 
     private static void AddNavigation(IServiceCollection services)
     {
-        services.AddSingleton(s => new HistoryRouter<ViewModelBase>(t => (ViewModelBase)s.GetRequiredService(t)));
-        services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<INavigationService<ViewModelBase>>(s => new HistoryRouter<ViewModelBase>(t => (ViewModelBase)s.GetRequiredService(t)));
     }
 
     private static void AddManagers(IServiceCollection services)
     {
         services.AddTransient<FaceAlignManager>();
         services.AddTransient<FaceMaskManager>();
-        services.AddTransient<FaceSwapManager>();
+        services.AddTransient<IFaceSwapManager, FaceSwapManager>();
     }
 
     private static void AddAiModels(IServiceCollection services)
@@ -76,7 +74,6 @@ public static class DependencyInjection
 
     private static void AddCamera(IServiceCollection services)
     {
-        services.AddSingleton<ICameraService, CameraService>();
-        services.AddSingleton((src) => new VideoCapture(0));
+        services.AddSingleton<ICameraDevice, WebCameraDevice>();
     }
 }

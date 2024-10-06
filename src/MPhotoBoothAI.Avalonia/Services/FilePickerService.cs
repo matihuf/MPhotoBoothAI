@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using Avalonia.Controls.ApplicationLifetimes;
+﻿using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using MPhotoBoothAI.Application.Interfaces;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using AvaloniaApplication = Avalonia.Application;
 
 namespace MPhotoBoothAI.Avalonia.Services;
@@ -17,7 +17,7 @@ public class FilePickerService : IFilePickerService
         {
             await using var readStream = await file.OpenReadAsync();
             using var ms = new MemoryStream();
-            readStream.CopyTo(ms);
+            await readStream.CopyToAsync(ms);
             return ms.ToArray();
         }
         return [];
@@ -33,7 +33,7 @@ public class FilePickerService : IFilePickerService
         return string.Empty;
     }
 
-    private async Task<IStorageFile?> PickFileInternal()
+    private static async Task<IStorageFile?> PickFileInternal()
     {
         if (AvaloniaApplication.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop || desktop.MainWindow?.StorageProvider is not { } provider)
         {

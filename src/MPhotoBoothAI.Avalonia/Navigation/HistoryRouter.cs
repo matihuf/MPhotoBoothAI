@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MPhotoBoothAI.Application.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MPhotoBoothAI.Avalonia.Navigation;
 
-public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createViewModel) : Router<TViewModelBase>(createViewModel) where TViewModelBase : class
+public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createViewModel) : Router<TViewModelBase>(createViewModel), INavigationService<TViewModelBase> where TViewModelBase : class
 {
     private int _historyIndex = -1;
     private List<TViewModelBase> _history = [];
@@ -13,7 +14,7 @@ public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createView
     public bool HasNext => _history.Count > 0 && _historyIndex < _history.Count - 1;
     public bool HasPrev => _historyIndex > 0;
 
-    public void Push(TViewModelBase item)
+    private void Push(TViewModelBase item)
     {
         if (HasNext)
         {
@@ -27,31 +28,43 @@ public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createView
         }
     }
 
-    public TViewModelBase? Go(int offset = 0)
+    private void Go(int offset = 0)
     {
         if (offset == 0)
         {
-            return default;
+            return;
         }
 
         var newIndex = _historyIndex + offset;
         if (newIndex < 0 || newIndex > _history.Count - 1)
         {
-            return default;
+            return;
         }
-        ((IDisposable)_currentViewModel)?.Dispose();
+        ClearCurrent();
         _historyIndex = newIndex;
-        var viewModel = _history.ElementAt(_historyIndex);
+        var viewModel = _history[_historyIndex];
         CurrentViewModel = viewModel;
-        return viewModel;
     }
 
-    public TViewModelBase? Back() => HasPrev ? Go(-1) : default;
+    public void Back()
+    {
+        if (HasPrev)
+        {
+            Go(-1);
+        }
+    }
 
-    public TViewModelBase? Forward() => HasNext ? Go(1) : default;
+    public void Forward()
+    {
+        if (HasPrev)
+        {
+            Go(1);
+        }
+    }
 
     public override T GoTo<T>()
     {
+        ClearCurrent();
         var destination = InstantiateViewModel<T>();
         CurrentViewModel = destination;
         Push(destination);
@@ -60,8 +73,11 @@ public class HistoryRouter<TViewModelBase>(Func<Type, TViewModelBase> createView
 
     public void GoTo(Type type)
     {
+        ClearCurrent();
         var destination = InstantiateViewModel(type);
         CurrentViewModel = destination;
         Push(destination);
     }
+
+    private void ClearCurrent() => (_currentViewModel as IDisposable)?.Dispose();
 }

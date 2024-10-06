@@ -1,10 +1,9 @@
-﻿using MPhotoBoothAI.Application.ViewModels;
+﻿namespace MPhotoBoothAI.Application.Interfaces;
 
-namespace MPhotoBoothAI.Application.Interfaces;
-
-public interface INavigationService
+public interface INavigationService<TViewModelBase>
 {
-    T GoTo<T>() where T : ViewModelBase;
+    event Action<TViewModelBase>? CurrentViewModelChanged;
+    T GoTo<T>() where T : TViewModelBase;
     void GoTo(Type type);
     void Forward();
     void Back();

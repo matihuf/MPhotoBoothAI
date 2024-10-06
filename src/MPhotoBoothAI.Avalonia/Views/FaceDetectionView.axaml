@@ -2,20 +2,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+             xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
              xmlns:con="using:MPhotoBoothAI.Avalonia.Converters"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              x:Class="MPhotoBoothAI.Avalonia.Views.FaceDetectionView"
              x:DataType="vm:FaceDetectionViewModel">
-    <UserControl.Resources>
-        <con:MatConverter x:Key="matConverter"/>
-    </UserControl.Resources>
-    
-    <StackPanel>
-        <Image Width="640" Height="640" Source="{Binding Frame, Converter={StaticResource matConverter}}" />
-        <Button Content="SetTarget" Command="{Binding SetTargetCommand}"/>
-        <Button Content="Swap" Command="{Binding SwapCommand}"/>
-        <Button Content="Reset" Command="{Binding ResetCommand}"/>
-        <Button Content="Back" Command="{Binding BackCommand}"/>
-    </StackPanel>
+
+  <Design.DataContext>
+    <dvm:DesignFaceDetectionViewModel/>
+  </Design.DataContext>
+
+  <UserControl.Resources>
+    <con:MatConverter x:Key="matConverter"/>
+  </UserControl.Resources>
+
+  <StackPanel>
+    <Image Width="640" Height="640" Source="{Binding Frame, Converter={StaticResource matConverter}}" />
+    <Button Content="SetTarget" Command="{Binding SetTargetCommand}"/>
+    <Button Content="Swap" Command="{Binding SwapCommand}"/>
+    <Button Content="Reset" Command="{Binding ResetCommand}"/>
+  </StackPanel>
 </UserControl>

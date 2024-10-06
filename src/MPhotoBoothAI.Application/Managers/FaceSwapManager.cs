@@ -5,7 +5,7 @@ using MPhotoBoothAI.Application.Interfaces;
 namespace MPhotoBoothAI.Application.Managers;
 
 public class FaceSwapManager(FaceAlignManager faceAlignManager, FaceMaskManager faceMaskManager, IFaceSwapPredictService faceSwapPredictService,
- IFaceSwapService faceSwapService, IFaceEnhancerService faceEnhancerService)
+ IFaceSwapService faceSwapService, IFaceEnhancerService faceEnhancerService) : IFaceSwapManager
 {
     private readonly FaceAlignManager _faceAlignManager = faceAlignManager;
     private readonly FaceMaskManager _faceMaskManager = faceMaskManager;
