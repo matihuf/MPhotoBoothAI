@@ -18,6 +18,8 @@
   </UserControl.Resources>
 
   <StackPanel>
+    <TextBlock Text="{Binding Gender}" VerticalAlignment="Center" />
+    <TextBlock Text="{Binding GenderVgg}" VerticalAlignment="Center" />
     <Image Width="640" Height="640" Source="{Binding Frame, Converter={StaticResource matConverter}}" />
     <Button Content="SetTarget" Command="{Binding SetTargetCommand}"/>
     <Button Content="Swap" Command="{Binding SwapCommand}"/>
