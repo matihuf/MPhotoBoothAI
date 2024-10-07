@@ -1,22 +1,18 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using MPhotoBoothAI.Application.Interfaces;
-using MPhotoBoothAI.Avalonia;
 using MPhotoBoothAI.Common.Tests;
 
 namespace MPhotoBoothAI.Integration.Tests;
 
 public class DependencyInjectionFixture : IDisposable
 {
-    public ServiceProvider ServiceProvider { get; private set; }
+    private readonly TestDependencyInjection _testDependencyInjection;
+
+    public ServiceProvider ServiceProvider => _testDependencyInjection.ServiceProvider;
 
     public DependencyInjectionFixture()
     {
-        var services = new ServiceCollection();
-        services.Configure();
-        var descriptor = new ServiceDescriptor(typeof(ICameraDevice), typeof(DummyCameraDevice), ServiceLifetime.Singleton);
-        services.Replace(descriptor);
-        ServiceProvider = services.BuildServiceProvider();
+        _testDependencyInjection = new TestDependencyInjection();
+        _testDependencyInjection.Configure();
     }
 
     public void Dispose()
@@ -29,7 +25,7 @@ public class DependencyInjectionFixture : IDisposable
     {
         if (disposing)
         {
-            ServiceProvider.Dispose();
+            _testDependencyInjection.Dispose();
         }
     }
 }
