@@ -72,4 +72,6 @@ public static class MatExtensions
       => new(IntPtr.Add(mat.DataPointer, y * mat.GetRealStep() + offset).ToPointer(), length <= 0 ? mat.GetRealStep() : length);
     public static int GetRealStep(this Mat mat)
       => mat.Width * mat.NumberOfChannels;
+
+
 }

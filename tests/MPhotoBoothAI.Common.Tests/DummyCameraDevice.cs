@@ -1,6 +1,6 @@
-﻿using Emgu.CV;
-using MPhotoBoothAI.Application.Interfaces;
+﻿using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
+using SkiaSharp;
 
 namespace MPhotoBoothAI.Common.Tests;
 
@@ -16,7 +16,7 @@ public class DummyCameraDevice : ICameraDevice
         //no need to start camera for tests
     }
 
-    public void Notify(Mat mat)
+    public void Notify(SKBitmap bitmap)
     {
         //no need to start camera for tests
     }

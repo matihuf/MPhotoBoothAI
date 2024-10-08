@@ -1,4 +1,5 @@
 using Emgu.CV;
+using MPhotoBoothAI.Application.Extensions;
 using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Infrastructure.CameraDevices;
@@ -25,8 +26,8 @@ public class WebCameraDevice : BaseCameraDevice, ICameraDevice, IDisposable
 
     private void CaptureDevice_ImageGrabbed(object? sender, EventArgs e)
     {
-        var mat = _videoCapture.QueryFrame();
-        Notify(mat);
+        var bitmap = _videoCapture.QueryFrame().ToSKBitmap();
+        Notify(bitmap);
     }
 
     public void Dispose()

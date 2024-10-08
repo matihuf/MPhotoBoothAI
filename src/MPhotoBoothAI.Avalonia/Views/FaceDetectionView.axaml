@@ -14,11 +14,11 @@
   </Design.DataContext>
 
   <UserControl.Resources>
-    <con:MatConverter x:Key="matConverter"/>
+    <con:SkBitmapToIImageConverter x:Key="skConverter"/>
   </UserControl.Resources>
 
   <StackPanel>
-    <Image Width="640" Height="640" Source="{Binding Frame, Converter={StaticResource matConverter}}" />
+    <Image Width="640" Height="640" Source="{Binding Frame, Converter={StaticResource skConverter}}" />
     <Button Content="SetTarget" Command="{Binding SetTargetCommand}"/>
     <Button Content="Swap" Command="{Binding SwapCommand}"/>
     <Button Content="Reset" Command="{Binding ResetCommand}"/>

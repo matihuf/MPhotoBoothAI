@@ -1,4 +1,4 @@
-﻿using Emgu.CV;
+﻿using SkiaSharp;
 
 namespace MPhotoBoothAI.Application.Interfaces.Observers;
 
@@ -8,5 +8,5 @@ public interface IObserver
     /// Remeber to dispose Mat
     /// </summary>
     /// <param name="mat"></param>
-    void Notify(Mat mat);
+    void Notify(SKBitmap bitmap);
 }

@@ -1,5 +1,5 @@
-﻿using Emgu.CV;
-using MPhotoBoothAI.Application.Interfaces.Observers;
+﻿using MPhotoBoothAI.Application.Interfaces.Observers;
+using SkiaSharp;
 
 namespace MPhotoBoothAI.Infrastructure.CameraDevices;
 
@@ -11,20 +11,20 @@ public abstract class BaseCameraDevice()
 
     public void Detach(IObserver observer) => _observers.Remove(observer);
 
-    public void Notify(Mat mat)
+    public void Notify(SKBitmap bitmap)
     {
         foreach (var observer in _observers.ToList())
         {
             try
             {
-                if (mat != null && !mat.IsEmpty)
+                if (bitmap != null && !bitmap.IsEmpty)
                 {
-                    observer.Notify(mat.Clone());
+                    observer.Notify(bitmap.Copy());
                 }
             }
             finally
             {
-                mat?.Dispose();
+                bitmap?.Dispose();
             }
         }
     }
