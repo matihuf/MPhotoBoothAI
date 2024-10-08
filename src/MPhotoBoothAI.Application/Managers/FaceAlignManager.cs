@@ -9,7 +9,7 @@ public class FaceAlignManager(IFaceDetectionService faceDetectionService, IFaceA
     private readonly IFaceDetectionService _faceDetectionService = faceDetectionService;
     private readonly IFaceAlignService _faceAlignService = faceAlignService;
 
-    public FaceAlign GetAlign(Mat frame)
+    public FaceAlign? GetAlign(Mat frame)
     {
         using var face = _faceDetectionService.Detect(frame, 0.8f, 0.5f).FirstOrDefault();
         if (face == null)

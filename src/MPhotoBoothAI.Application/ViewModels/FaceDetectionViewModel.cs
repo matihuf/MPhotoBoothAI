@@ -23,9 +23,6 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     [ObservableProperty]
     private string _gender;
 
-    [ObservableProperty]
-    private string _genderVgg;
-
     [RelayCommand]
     private void Swap()
     {
@@ -63,7 +60,6 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         if (align != null)
         {
             Gender = _faceGenderService.Get(align.Align).ToString();
-            GenderVgg = _faceGenderService.GetVgg(align.Align).ToString();
         }
     }
 

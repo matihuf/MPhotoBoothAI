@@ -5,5 +5,5 @@ namespace MPhotoBoothAI.Application.Interfaces;
 
 public interface IFaceAlignManager
 {
-    FaceAlign GetAlign(Mat frame);
+    FaceAlign? GetAlign(Mat frame);
 }

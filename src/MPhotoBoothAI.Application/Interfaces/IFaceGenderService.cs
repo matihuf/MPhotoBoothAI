@@ -6,5 +6,4 @@ namespace MPhotoBoothAI.Application.Interfaces;
 public interface IFaceGenderService
 {
     Gender Get(Mat face);
-    Gender GetVgg(Mat face);
 }

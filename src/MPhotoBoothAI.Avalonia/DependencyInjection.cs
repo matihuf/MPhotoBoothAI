@@ -46,7 +46,6 @@ public static class DependencyInjection
         services.AddKeyedSingleton(Consts.AiModels.ArcfaceBackbone, GetDnnModel(Consts.AiModels.ArcfaceBackbone));
         services.AddKeyedSingleton(Consts.AiModels.Gunet2blocks, GetDnnModel(Consts.AiModels.Gunet2blocks));
         services.AddKeyedSingleton(Consts.AiModels.FaceLandmarks, GetDnnModel( Consts.AiModels.FaceLandmarks));
-        services.AddKeyedSingleton(Consts.AiModels.GoogleGender, GetDnnModel( Consts.AiModels.GoogleGender));
         services.AddKeyedSingleton(Consts.AiModels.VggGender, GetDnnModel( Consts.AiModels.VggGender));
         services.AddKeyedSingleton(Consts.AiModels.Gfpgan, new InferenceSession(GetModelPath(Consts.AiModels.Gfpgan)));
     }
