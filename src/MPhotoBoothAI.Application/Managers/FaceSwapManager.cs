@@ -19,14 +19,8 @@ public class FaceSwapManager(IFaceAlignManager faceAlignManager, FaceMaskManager
         using var targetAlign = _faceAlignManager.GetAlign(target);
         using var predict = _faceSwapPredictService.Predict(sourceAlign.Align, targetAlign.Align);
         using var enhanced = _faceEnhancerService.Enhance(predict);
-
-        using var resizedEnhanced = new Mat();
-        CvInvoke.Resize(enhanced, resizedEnhanced, predict.Size);
-        var rgb = new Mat();
-        CvInvoke.CvtColor(resizedEnhanced, rgb, ColorConversion.Bgra2Rgb);
-
-        using var mask = _faceMaskManager.GetMask(targetAlign.Align, rgb);
-        var swapped = _faceSwapService.Swap(mask, rgb, targetAlign.Norm, target);
+        using var mask = _faceMaskManager.GetMask(targetAlign.Align, enhanced);
+        var swapped = _faceSwapService.Swap(mask, enhanced, targetAlign.Norm, target);
         return swapped;
     }
 }
