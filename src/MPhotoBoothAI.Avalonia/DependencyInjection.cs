@@ -12,6 +12,7 @@ using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Infrastructure.Services.Swap;
 using System.IO;
 using System.Reflection;
+using Serilog;
 
 namespace MPhotoBoothAI.Avalonia;
 
@@ -25,6 +26,7 @@ public static class DependencyInjection
         AddAiModels(services);
         AddManagers(services);
         AddNavigation(services);
+        services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
         return services;
     }
 
