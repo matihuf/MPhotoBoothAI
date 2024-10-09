@@ -15,22 +15,8 @@
     <Folder Include="Styles/" />
   </ItemGroup>
 
-   <ItemGroup>
-    <Content Include="../../models/yolov8n-face.onnx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="../../models/arcface_backbone.onnx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="../../models/G_unet_2blocks.onnx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="../../models/face_landmarks.onnx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="../../models/gfpgan_1.4.onnx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>    
+  <ItemGroup>
+    <Content Include="../../models/**" CopyToOutputDirectory="PreserveNewest" LinkBase="models\"/>
   </ItemGroup>
 
   <ItemGroup>
