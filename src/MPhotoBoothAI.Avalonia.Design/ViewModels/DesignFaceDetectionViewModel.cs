@@ -1,8 +1,9 @@
 ﻿using Avalonia.Platform;
+using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Moq;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.ViewModels;
-using SkiaSharp;
 
 namespace MPhotoBoothAI.Avalonia.Design.ViewModels;
 
@@ -12,7 +13,8 @@ public class DesignFaceDetectionViewModel : FaceDetectionViewModel
         new Mock<IFaceAlignManager>().Object, new Mock<IFaceGenderService>().Object)
     {
         byte[] rawFrame = ReadFully(AssetLoader.Open(new Uri("avares://MPhotoBoothAI.Avalonia.Design/Assets/nocamera.png")));
-        var frame = SKBitmap.Decode(rawFrame);
+        var frame = new Mat();
+        CvInvoke.Imdecode(rawFrame, ImreadModes.Unchanged, frame);
         Frame = frame;
         Gender = Application.Models.Gender.Male.ToString();
     }

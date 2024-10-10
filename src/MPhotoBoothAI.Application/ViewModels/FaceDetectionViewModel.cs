@@ -2,10 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-using MPhotoBoothAI.Application.Extensions;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
-using SkiaSharp;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 
@@ -20,7 +18,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     private readonly Mat _target;
 
     [ObservableProperty]
-    private SKBitmap _frame;
+    private Mat _frame;
 
     [ObservableProperty]
     private string _gender;
@@ -29,7 +27,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     private void Swap()
     {
         _cameraDevice.Detach(this);
-        Frame = _faceSwapManager.Swap(Frame.ToMat(), _target).ToSKBitmap();
+        Frame = _faceSwapManager.Swap(Frame, _target);
     }
 
     [RelayCommand]
@@ -55,7 +53,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         _target = new Mat();
     }
 
-    public void Notify(SKBitmap bitmap)
+    public void Notify(Mat mat)
     {
         Frame = mat;
         using var align = _faceAlignManager.GetAlign(Frame);

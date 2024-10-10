@@ -14,7 +14,7 @@
   </Design.DataContext>
 
   <UserControl.Resources>
-    <con:SkBitmapToIImageConverter x:Key="skConverter"/>
+    <con:MatConverter x:Key="matConverter"/>
   </UserControl.Resources>
 
   <StackPanel>
