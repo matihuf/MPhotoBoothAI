@@ -12,6 +12,7 @@ using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Infrastructure.Services.Swap;
 using System.IO;
 using System.Reflection;
+using Serilog;
 
 namespace MPhotoBoothAI.Avalonia;
 
@@ -25,6 +26,7 @@ public static class DependencyInjection
         AddAiModels(services);
         AddManagers(services);
         AddNavigation(services);
+        services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
         return services;
     }
 
@@ -35,22 +37,23 @@ public static class DependencyInjection
 
     private static void AddManagers(IServiceCollection services)
     {
-        services.AddTransient<FaceAlignManager>();
+        services.AddTransient<IFaceAlignManager, FaceAlignManager>();
         services.AddTransient<FaceMaskManager>();
         services.AddTransient<IFaceSwapManager, FaceSwapManager>();
     }
 
     private static void AddAiModels(IServiceCollection services)
     {
-        string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        services.AddKeyedSingleton(Consts.AiModels.Yolov8nFace, GetDnnModel(directory, Consts.AiModels.Yolov8nFace));
-        services.AddKeyedSingleton(Consts.AiModels.ArcfaceBackbone, GetDnnModel(directory, Consts.AiModels.ArcfaceBackbone));
-        services.AddKeyedSingleton(Consts.AiModels.Gunet2blocks, GetDnnModel(directory, Consts.AiModels.Gunet2blocks));
-        services.AddKeyedSingleton(Consts.AiModels.FaceLandmarks, GetDnnModel(directory, Consts.AiModels.FaceLandmarks));
-        services.AddKeyedSingleton(Consts.AiModels.Gfpgan, new InferenceSession($"{directory}/{Consts.AiModels.Gfpgan}.onnx"));
+        services.AddKeyedSingleton(Consts.AiModels.Yolov8nFace, GetDnnModel(Consts.AiModels.Yolov8nFace));
+        services.AddKeyedSingleton(Consts.AiModels.ArcfaceBackbone, GetDnnModel(Consts.AiModels.ArcfaceBackbone));
+        services.AddKeyedSingleton(Consts.AiModels.Gunet2blocks, GetDnnModel(Consts.AiModels.Gunet2blocks));
+        services.AddKeyedSingleton(Consts.AiModels.FaceLandmarks, GetDnnModel( Consts.AiModels.FaceLandmarks));
+        services.AddKeyedSingleton(Consts.AiModels.VggGender, GetDnnModel( Consts.AiModels.VggGender));
+        services.AddKeyedSingleton(Consts.AiModels.Gfpgan, new InferenceSession(GetModelPath(Consts.AiModels.Gfpgan)));
     }
 
-    private static Net GetDnnModel(string directory, string name) => DnnInvoke.ReadNetFromONNX($"{directory}/{name}.onnx");
+    private static Net GetDnnModel(string name) => DnnInvoke.ReadNetFromONNX(GetModelPath(name));
+    private static string GetModelPath(string name) => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "models", $"{name}.onnx");
 
     private static void AddViewModels(IServiceCollection services)
     {
@@ -71,6 +74,7 @@ public static class DependencyInjection
         services.AddTransient<IFaceMaskService, FaceMaskService>();
         services.AddTransient<IFilePickerService, FilePickerService>();
         services.AddTransient<IFaceEnhancerService, FaceEnhancerService>();
+        services.AddTransient<IFaceGenderService, FaceGenderService>();
     }
 
     private static void AddCamera(IServiceCollection services)

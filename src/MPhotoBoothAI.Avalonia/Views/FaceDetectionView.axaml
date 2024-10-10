@@ -18,7 +18,8 @@
   </UserControl.Resources>
 
   <StackPanel>
-    <Image Width="640" Height="640" Source="{Binding Frame, Converter={StaticResource skConverter}}" />
+    <TextBlock Text="{Binding Gender}" />
+    <Image Width="640" Height="640" Source="{Binding Frame, Converter={StaticResource matConverter}}" />
     <Button Content="SetTarget" Command="{Binding SetTargetCommand}"/>
     <Button Content="Swap" Command="{Binding SwapCommand}"/>
     <Button Content="Reset" Command="{Binding ResetCommand}"/>

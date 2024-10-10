@@ -13,12 +13,17 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
 {
     private readonly IFaceSwapManager _faceSwapManager;
     private readonly IFilePickerService _filePickerService;
+    private readonly IFaceAlignManager _faceAlignManager;
+    private readonly IFaceGenderService _faceGenderService;
     private readonly ICameraDevice _cameraDevice;
 
     private readonly Mat _target;
 
     [ObservableProperty]
     private SKBitmap _frame;
+
+    [ObservableProperty]
+    private string _gender;
 
     [RelayCommand]
     private void Swap()
@@ -37,19 +42,27 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         CvInvoke.Imdecode(target, ImreadModes.Color, _target);
     }
 
-    public FaceDetectionViewModel(ICameraDevice cameraService, IFaceSwapManager faceSwapManager, IFilePickerService filePickerService)
+    public FaceDetectionViewModel(ICameraDevice cameraDevice, IFaceSwapManager faceSwapManager, IFilePickerService filePickerService, IFaceAlignManager faceAlignManager,
+        IFaceGenderService faceGenderService)
     {
-        _cameraDevice = cameraService;
+        _cameraDevice = cameraDevice;
         _cameraDevice.Start();
         _cameraDevice.Attach(this);
         _faceSwapManager = faceSwapManager;
         _filePickerService = filePickerService;
+        _faceAlignManager = faceAlignManager;
+        _faceGenderService = faceGenderService;
         _target = new Mat();
     }
 
     public void Notify(SKBitmap bitmap)
     {
-        Frame = bitmap;
+        Frame = mat;
+        using var align = _faceAlignManager.GetAlign(Frame);
+        if (align != null)
+        {
+            Gender = _faceGenderService.Get(align.Align).ToString();
+        }
     }
 
     public void Dispose()
