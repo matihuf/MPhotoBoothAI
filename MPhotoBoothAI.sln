@@ -27,8 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{3625
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDSDK.NET", "modules\EDSDK.NET\EDSDK.NET\EDSDK.NET.csproj", "{7E3D042F-BF4F-4DA2-A1A7-6ED7F5F97EFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MPhotoBoothAI.Camera.Canon", "src\MPhotoBoothAI.Camera.Canon\MPhotoBoothAI.Camera.Canon.csproj", "{5A28609D-5526-41DC-84F7-5A403E99567C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,10 +69,6 @@ Global
 		{7E3D042F-BF4F-4DA2-A1A7-6ED7F5F97EFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E3D042F-BF4F-4DA2-A1A7-6ED7F5F97EFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E3D042F-BF4F-4DA2-A1A7-6ED7F5F97EFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A28609D-5526-41DC-84F7-5A403E99567C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A28609D-5526-41DC-84F7-5A403E99567C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A28609D-5526-41DC-84F7-5A403E99567C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A28609D-5526-41DC-84F7-5A403E99567C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,7 +83,6 @@ Global
 		{9432ACBB-6EF4-4062-8263-A17A154AB838} = {A1BE2F1C-BF2F-4294-A397-D188E83A8A76}
 		{E8FFB661-881B-47B8-B023-9E1EB4DE7891} = {9447C35B-2ECF-445C-9BB9-C50D92424A6D}
 		{7E3D042F-BF4F-4DA2-A1A7-6ED7F5F97EFD} = {3625E423-759F-4885-A0B5-BE6D93610ED1}
-		{5A28609D-5526-41DC-84F7-5A403E99567C} = {9447C35B-2ECF-445C-9BB9-C50D92424A6D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0FFF3D76-9569-44AC-8CA9-F94E255C05D8}

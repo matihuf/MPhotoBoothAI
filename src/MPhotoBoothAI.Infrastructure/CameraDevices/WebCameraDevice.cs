@@ -1,19 +1,22 @@
 using Emgu.CV;
+using MPhotoBoothAI.Application.Enums;
 using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Infrastructure.CameraDevices;
 
-public class WebCameraDevice : BaseCameraDevice, ICameraDevice, IDisposable
+public class WebCameraDevice : BaseCameraDevice, ICameraDevice
 {
     private readonly VideoCapture _videoCapture;
     private bool _started = false;
+
+    public ECameraType CameraType => ECameraType.Usb;
 
     public WebCameraDevice()
     {
         _videoCapture = new VideoCapture(0);
     }
 
-    public void Start()
+    public void StartLiveView()
     {
         if (!_started)
         {
@@ -43,5 +46,20 @@ public class WebCameraDevice : BaseCameraDevice, ICameraDevice, IDisposable
             _videoCapture.Stop();
             _videoCapture.Dispose();
         }
+    }
+
+    public void StopLiveView()
+    {
+        _videoCapture?.Stop();
+    }
+
+    public Task TakePhotoAsync(bool autoFocus = false)
+    {
+        return Task.CompletedTask;
+    }
+
+    public bool Connect()
+    {
+        return true;
     }
 }

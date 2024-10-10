@@ -1,5 +1,4 @@
 ﻿using Emgu.CV;
-using SkiaSharp;
 
 namespace MPhotoBoothAI.Application.Interfaces.Observers;
 

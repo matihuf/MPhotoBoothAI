@@ -44,7 +44,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         IFaceGenderService faceGenderService)
     {
         _cameraDevice = cameraDevice;
-        _cameraDevice.Start();
+        _cameraDevice.StartLiveView();
         _cameraDevice.Attach(this);
         _faceSwapManager = faceSwapManager;
         _filePickerService = filePickerService;

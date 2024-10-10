@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\EDSDK.NET\EDSDK.NET\EDSDK.NET.csproj" />
     <ProjectReference Include="..\MPhotoBoothAI.Application\MPhotoBoothAI.Application.csproj" />
   </ItemGroup>
 

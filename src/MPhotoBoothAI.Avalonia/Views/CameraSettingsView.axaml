@@ -1,8 +1,31 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="MPhotoBoothAI.Avalonia.Views.CameraSettingsView">
-  Welcome to Avalonia!
+             xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MPhotoBoothAI.Avalonia.Views.CameraSettingsView"
+			 x:DataType="vm:CameraSettingsViewModel">
+	
+	<Design.DataContext>
+		<vm:CameraSettingsViewModel/>
+	</Design.DataContext>
+	<UserControl.Resources>
+		<converters:MatConverter x:Key="matConverter"/>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="3*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Image Source="{Binding Frame, Converter={StaticResource matConverter}}"
+			   VerticalAlignment="Stretch"
+			   HorizontalAlignment="Left"
+			   Stretch="UniformToFill"
+			   Grid.Row="0"/>
+		<ComboBox ItemsSource="{Binding CameraDevices}"
+				 SelectedItem="{Binding CurrentCameraDevice}"
+				 Grid.Row="1"/>
+	</Grid>
 </UserControl>
