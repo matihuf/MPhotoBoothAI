@@ -15,12 +15,21 @@ public class FaceSwapManager(IFaceAlignManager faceAlignManager, FaceMaskManager
 
     public Mat Swap(Mat source, Mat target)
     {
-        using var sourceAlign = _faceAlignManager.GetAlign(source);
-        using var targetAlign = _faceAlignManager.GetAlign(target);
-        using var predict = _faceSwapPredictService.Predict(sourceAlign.Align, targetAlign.Align);
-        using var enhanced = _faceEnhancerService.Enhance(predict);
-        using var mask = _faceMaskManager.GetMask(targetAlign.Align, enhanced);
-        var swapped = _faceSwapService.Swap(mask, enhanced, targetAlign.Norm, target);
+        var swapped = target.Clone();
+        var sourceAligns = _faceAlignManager.GetAligns(source);
+        var targetAligns = _faceAlignManager.GetAligns(target);
+        foreach (var targetAlign in targetAligns)
+        {
+            using var sourceAlign = sourceAligns.FirstOrDefault(x => x.Gender == targetAlign.Gender);
+            if (sourceAlign != null)
+            {
+                using var predict = _faceSwapPredictService.Predict(sourceAlign.Align, targetAlign.Align);
+                using var enhanced = _faceEnhancerService.Enhance(predict);
+                using var mask = _faceMaskManager.GetMask(targetAlign.Align, enhanced);
+                swapped = _faceSwapService.Swap(mask, enhanced, targetAlign.Norm, swapped);
+            }
+            targetAlign.Dispose();
+        }
         return swapped;
     }
 }

@@ -19,4 +19,15 @@ public class FaceAlignManager(IFaceDetectionService faceDetectionService, IFaceA
         var alignFace = _faceAlignService.Align(frame, face.Landmarks);
         return alignFace;
     }
+
+    public IEnumerable<FaceAlignDetails> GetAligns(Mat frame)
+    {
+        foreach (var face in _faceDetectionService.Detect(frame, 0.8f, 0.5f))
+        {
+            var faceAlign = _faceAlignService.Align(frame, face.Landmarks);
+            face.Dispose();
+            var gender = Gender.Male;
+            yield return new FaceAlignDetails(faceAlign.Norm, faceAlign.Align, gender);
+        }
+    }
 }
