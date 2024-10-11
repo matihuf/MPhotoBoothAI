@@ -30,13 +30,7 @@ public class Router<TViewModelBase>(Func<Type, TViewModelBase> createViewModel) 
         return viewModel;
     }
 
-    protected T InstantiateViewModel<T>() where T : TViewModelBase
-    {
-        return (T)Convert.ChangeType(CreateViewModel(typeof(T)), typeof(T));
-    }
+    protected T InstantiateViewModel<T>() where T : TViewModelBase => (T)CreateViewModel(typeof(T));
 
-    protected TViewModelBase InstantiateViewModel(Type type)
-    {
-        return (TViewModelBase)Convert.ChangeType(CreateViewModel(type), type);
-    }
+    protected TViewModelBase InstantiateViewModel(Type type) => CreateViewModel(type);
 }

@@ -18,7 +18,6 @@ public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace
     private readonly int _inputWidth = 640;
     private readonly int _numClass = 1;
     private readonly int _regMax = 16;
-    private float confThreshold;
 
     public IEnumerable<FaceDetection> Detect(Mat frame, float confThreshold, float nmsThreshold)
     {
@@ -34,10 +33,9 @@ public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace
         List<Rectangle> boxes = [];
         List<float> confidences = [];
         VectorOfVectorOfPointF landmarks = new();
-        this.confThreshold = confThreshold;
-        GenerateProposal(outs[0], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw);
-        GenerateProposal(outs[1], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw);
-        GenerateProposal(outs[2], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw);
+        GenerateProposal(outs[0], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw, confThreshold);
+        GenerateProposal(outs[1], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw, confThreshold);
+        GenerateProposal(outs[2], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw, confThreshold);
 
         var indices = DnnInvoke.NMSBoxes(boxes.ToArray(), [.. confidences], confThreshold, nmsThreshold);
         for (int i = 0; i < indices.Length; ++i)
@@ -48,7 +46,7 @@ public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace
     }
 
     public void GenerateProposal(Mat outMat, List<Rectangle> boxes, List<float> confidences, VectorOfVectorOfPointF landmarks,
-             int imgh, int imgw, float ratioh, float ratiow, int padh, int padw)
+             int imgh, int imgw, float ratioh, float ratiow, int padh, int padw, float confThreshold)
     {
         int[] sizes = outMat.SizeOfDimension;
         int feat_h = sizes[2];
