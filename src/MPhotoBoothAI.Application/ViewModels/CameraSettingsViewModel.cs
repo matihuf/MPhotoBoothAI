@@ -33,6 +33,7 @@ namespace MPhotoBoothAI.Application.ViewModels
             oldValue?.StopLiveView();
             oldValue?.Detach(this);
             newValue?.Attach(this);
+            _cameraManager.Current = newValue;
         }
 
         public void Dispose()

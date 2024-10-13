@@ -13,7 +13,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     private readonly IFilePickerService _filePickerService;
     private readonly IFaceAlignManager _faceAlignManager;
     private readonly IFaceGenderService _faceGenderService;
-    private readonly ICameraDevice _cameraDevice;
+    private readonly ICameraManager _cameraManager;
 
     private readonly Mat _target;
 
@@ -26,12 +26,12 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     [RelayCommand]
     private void Swap()
     {
-        _cameraDevice.Detach(this);
+        _cameraManager.Current.Detach(this);
         Frame = _faceSwapManager.Swap(Frame, _target);
     }
 
     [RelayCommand]
-    private void Reset() => _cameraDevice.Attach(this);
+    private void Reset() => _cameraManager.Current.Attach(this);
 
     [RelayCommand]
     private async Task SetTarget()
@@ -40,12 +40,12 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         CvInvoke.Imdecode(target, ImreadModes.Color, _target);
     }
 
-    public FaceDetectionViewModel(ICameraDevice cameraDevice, IFaceSwapManager faceSwapManager, IFilePickerService filePickerService, IFaceAlignManager faceAlignManager,
+    public FaceDetectionViewModel(ICameraManager camerManager, IFaceSwapManager faceSwapManager, IFilePickerService filePickerService, IFaceAlignManager faceAlignManager,
         IFaceGenderService faceGenderService)
     {
-        _cameraDevice = cameraDevice;
-        _cameraDevice.StartLiveView();
-        _cameraDevice.Attach(this);
+        _cameraManager = camerManager;
+        _cameraManager.Current.Attach(this);
+        _cameraManager.Current.StartLiveView();
         _faceSwapManager = faceSwapManager;
         _filePickerService = filePickerService;
         _faceAlignManager = faceAlignManager;
@@ -73,7 +73,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     {
         if (disposing)
         {
-            _cameraDevice.Detach(this);
+            _cameraManager.Current.Detach(this);
             Frame.Dispose();
             _target.Dispose();
         }

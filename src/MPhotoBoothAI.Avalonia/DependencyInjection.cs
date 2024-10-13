@@ -40,7 +40,7 @@ public static class DependencyInjection
         services.AddTransient<IFaceAlignManager, FaceAlignManager>();
         services.AddTransient<FaceMaskManager>();
         services.AddTransient<IFaceSwapManager, FaceSwapManager>();
-        services.AddTransient<ICameraManager, CameraManager>();
+        services.AddSingleton<ICameraManager, CameraManager>();
     }
 
     private static void AddAiModels(IServiceCollection services)

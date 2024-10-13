@@ -22,6 +22,8 @@ namespace MPhotoBoothAI.Infrastructure.Services
 
         public IEnumerable<ICameraDevice> Availables => _cameras != null ? _cameras.Where(x => x.IsAvailable) : [];
 
+        public ICameraDevice Current { get; set; }
+
         public void Dispose()
         {
             Dispose(true);
