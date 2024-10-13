@@ -6,8 +6,12 @@ namespace MPhotoBoothAI.Application.Interfaces;
 public interface ICameraDevice : ISubject, IDisposable
 {
     ECameraType CameraType { get; }
+    bool IsAvailable { get; }
+
+    event EventHandler Connected;
+    event EventHandler Disconnected;
+
     void StartLiveView();
     void StopLiveView();
-    bool Connect();
-    Task TakePhotoAsync(bool autoFocus = false);
+    void TakePhoto(bool autoFocus = false);
 }

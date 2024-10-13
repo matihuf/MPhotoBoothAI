@@ -28,6 +28,7 @@ public partial class App : AvaloniaApplication
         ServiceProvider = ConfigureServiceProvider();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            desktop.Exit += OnExit;
             desktop.MainWindow = new MainWindow
             {
                 DataContext = ServiceProvider.GetRequiredService<MainViewModel>()
@@ -35,5 +36,14 @@ public partial class App : AvaloniaApplication
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void OnExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+    {
+        (ServiceProvider as IDisposable)?.Dispose();
+        if (sender is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.Exit -= OnExit;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Emgu.CV;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
@@ -11,31 +12,27 @@ namespace MPhotoBoothAI.Application.ViewModels
         private Mat _frame;
 
         [ObservableProperty]
-        private ICameraDevice _currentCameraDevice;
+        private ICameraDevice? _currentCameraDevice;
 
         [ObservableProperty]
-        private List<ICameraDevice> _cameraDevices;
+        private ICameraManager _cameraManager;
 
-        public CameraSettingsViewModel(IEnumerable<ICameraDevice> cameraDevices)
+        public CameraSettingsViewModel(ICameraManager cameraManager)
         {
-            _cameraDevices = new(cameraDevices);
+            _cameraManager = cameraManager;
+            CurrentCameraDevice = _cameraManager.Availables.FirstOrDefault();
         }
 
         public void Notify(Mat mat)
         {
-            if (mat != null)
-            {
-                Frame = mat;
-            }
+            Frame = mat;
         }
 
-        partial void OnCurrentCameraDeviceChanged(ICameraDevice? oldValue, ICameraDevice newValue)
+        partial void OnCurrentCameraDeviceChanged(ICameraDevice? oldValue, ICameraDevice? newValue)
         {
             oldValue?.StopLiveView();
             oldValue?.Detach(this);
             newValue?.Attach(this);
-            newValue?.Connect();
-            newValue?.TakePhotoAsync();
         }
 
         public void Dispose()
@@ -48,13 +45,15 @@ namespace MPhotoBoothAI.Application.ViewModels
         {
             if (disposing)
             {
-                foreach (var cameraDevice in _cameraDevices)
-                {
-                    cameraDevice?.Detach(this);
-                    cameraDevice?.Dispose();
-                }
-                Frame.Dispose();
+                CurrentCameraDevice?.Detach(this);
+                Frame?.Dispose();
             }
         }
+
+        [RelayCommand]
+        private void TakePhoto() => CurrentCameraDevice?.TakePhoto();
+
+        [RelayCommand]
+        private void StartLiveView() => CurrentCameraDevice?.StartLiveView();
     }
 }

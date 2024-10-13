@@ -1,5 +1,4 @@
-﻿using EDSDK.NET;
-using Emgu.CV.Dnn;
+﻿using Emgu.CV.Dnn;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML.OnnxRuntime;
 using MPhotoBoothAI.Application;
@@ -41,6 +40,7 @@ public static class DependencyInjection
         services.AddTransient<IFaceAlignManager, FaceAlignManager>();
         services.AddTransient<FaceMaskManager>();
         services.AddTransient<IFaceSwapManager, FaceSwapManager>();
+        services.AddTransient<ICameraManager, CameraManager>();
     }
 
     private static void AddAiModels(IServiceCollection services)
@@ -61,7 +61,7 @@ public static class DependencyInjection
         services.AddSingleton<MainViewModel>();
         services.AddTransient<HomeViewModel>();
         services.AddTransient<FaceDetectionViewModel>();
-        services.AddSingleton<CameraSettingsViewModel>();
+        services.AddTransient<CameraSettingsViewModel>();
     }
 
     private static void AddServices(IServiceCollection services)
@@ -76,13 +76,11 @@ public static class DependencyInjection
         services.AddTransient<IFilePickerService, FilePickerService>();
         services.AddTransient<IFaceEnhancerService, FaceEnhancerService>();
         services.AddTransient<IFaceGenderService, FaceGenderService>();
-        services.AddTransient<IDiskInfoService, DiskInfoService>();
     }
 
     private static void AddCamera(IServiceCollection services)
     {
         services.AddSingleton<ICameraDevice, WebCameraDevice>();
         services.AddSingleton<ICameraDevice, CanonCameraDevice>();
-        services.AddSingleton<SDKHandler>();
     }
 }

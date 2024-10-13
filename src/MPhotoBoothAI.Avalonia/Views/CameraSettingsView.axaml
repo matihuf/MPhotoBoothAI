@@ -24,8 +24,22 @@
 			   HorizontalAlignment="Left"
 			   Stretch="UniformToFill"
 			   Grid.Row="0"/>
-		<ComboBox ItemsSource="{Binding CameraDevices}"
-				 SelectedItem="{Binding CurrentCameraDevice}"
-				 Grid.Row="1"/>
+		<Grid Grid.Row="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			<ComboBox	ItemsSource="{Binding CameraManager.Availables, Mode=OneWay}"
+						SelectedItem="{Binding CurrentCameraDevice}"
+						Width="300"
+						Grid.Row="0"/>
+			<Button Command="{Binding TakePhotoCommand}" 
+					Content="TakePhoto" 
+					Grid.Row="1"/>
+			<Button Command="{Binding StartLiveViewCommand}"
+					Content="Start Live View"
+					Grid.Row="2"/>
+		</Grid>
 	</Grid>
 </UserControl>

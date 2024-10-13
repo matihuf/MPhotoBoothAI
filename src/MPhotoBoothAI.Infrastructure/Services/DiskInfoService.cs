@@ -19,14 +19,7 @@ namespace MPhotoBoothAI.Infrastructure.Services
             uint sectorsPerCluster, bytesPerSector, numberOfFreeClusters, totalNumberOfClusters;
             string drive = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System));
             bool success = GetDiskFreeSpace(drive, out sectorsPerCluster, out bytesPerSector, out numberOfFreeClusters, out totalNumberOfClusters);
-            if (success)
-            {
-                return ((int)bytesPerSector, (int)numberOfFreeClusters);
-            }
-            else
-            {
-                return (null, null);
-            }
+            return success ? ((int)bytesPerSector, (int)numberOfFreeClusters) : (null, null);
         }
     }
 }

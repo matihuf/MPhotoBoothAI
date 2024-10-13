@@ -9,11 +9,17 @@ public class WebCameraDevice : BaseCameraDevice, ICameraDevice
     private readonly VideoCapture _videoCapture;
     private bool _started = false;
 
+    public event EventHandler Connected;
+    public event EventHandler Disconnected;
+
     public ECameraType CameraType => ECameraType.Usb;
+    public bool IsAvailable { get; private set; } = false;
 
     public WebCameraDevice()
     {
-        _videoCapture = new VideoCapture(0);
+        _videoCapture = new VideoCapture(0, VideoCapture.API.DShow);
+        _videoCapture.ImageGrabbed += CaptureDevice_ImageGrabbed;
+        IsAvailable = _videoCapture.IsOpened;
     }
 
     public void StartLiveView()
@@ -22,7 +28,6 @@ public class WebCameraDevice : BaseCameraDevice, ICameraDevice
         {
             _started = true;
             _videoCapture.Start();
-            _videoCapture.ImageGrabbed += CaptureDevice_ImageGrabbed;
         }
     }
 
@@ -50,16 +55,13 @@ public class WebCameraDevice : BaseCameraDevice, ICameraDevice
 
     public void StopLiveView()
     {
-        _videoCapture?.Stop();
+        _videoCapture.Stop();
+        _started = false;
     }
 
-    public Task TakePhotoAsync(bool autoFocus = false)
+    public void TakePhoto(bool autoFocus = false)
     {
-        return Task.CompletedTask;
-    }
-
-    public bool Connect()
-    {
-        return true;
+        StartLiveView();
+        StopLiveView();
     }
 }

@@ -23,13 +23,16 @@ sealed class Program
                 .WriteTo.File(configuration["Serilog:FilePath"], fileSizeLimitBytes: 2000000, rollOnFileSizeLimit: true)
                 .CreateLogger();
             Log.Information("Application started, Version {version}", typeof(Program)?.Assembly?.GetName()?.Version?.ToString());
-            
+
             BuildAvaloniaApp()
                .StartWithClassicDesktopLifetime(args);
         }
         catch (Exception e)
         {
             Log.Fatal(e, "Something very bad happened");
+#if DEBUG
+            throw;
+#endif
         }
         finally
         {
