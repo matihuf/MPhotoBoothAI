@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="$(SolutionDir)models\**" CopyToOutputDirectory="PreserveNewest" LinkBase="models\"/>        
+    <Content Include="$(SolutionDir)models\**" CopyToOutputDirectory="PreserveNewest" LinkBase="models\" />        
   </ItemGroup>
 
 </Project>
