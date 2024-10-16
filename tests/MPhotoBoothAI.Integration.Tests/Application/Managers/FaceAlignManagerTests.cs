@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MPhotoBoothAI.Application.Managers;
+using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Integration.Tests.Application.Managers;
 
@@ -11,7 +11,7 @@ public class FaceAlignManagerTests(DependencyInjectionFixture dependencyInjectio
         //arrange
         using var expected = RawMatFile.MatFromBase64File("TestData/womanAlign224.dat");
         using var sourceFaceFrame = RawMatFile.MatFromBase64File("TestData/woman.dat");
-        var faceAlignManager = dependencyInjectionFixture.ServiceProvider.GetService<FaceAlignManager>();
+        var faceAlignManager = dependencyInjectionFixture.ServiceProvider.GetService<IFaceAlignManager>();
         //act
         using var result = faceAlignManager.GetAlign(sourceFaceFrame);
         //assert

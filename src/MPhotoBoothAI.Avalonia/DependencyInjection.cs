@@ -10,9 +10,9 @@ using MPhotoBoothAI.Avalonia.Services;
 using MPhotoBoothAI.Infrastructure.CameraDevices;
 using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Infrastructure.Services.Swap;
+using Serilog;
 using System.IO;
 using System.Reflection;
-using Serilog;
 
 namespace MPhotoBoothAI.Avalonia;
 
@@ -44,12 +44,12 @@ public static class DependencyInjection
 
     private static void AddAiModels(IServiceCollection services)
     {
-        services.AddKeyedSingleton(Consts.AiModels.Yolov8nFace, GetDnnModel(Consts.AiModels.Yolov8nFace));
-        services.AddKeyedSingleton(Consts.AiModels.ArcfaceBackbone, GetDnnModel(Consts.AiModels.ArcfaceBackbone));
-        services.AddKeyedSingleton(Consts.AiModels.Gunet2blocks, GetDnnModel(Consts.AiModels.Gunet2blocks));
-        services.AddKeyedSingleton(Consts.AiModels.FaceLandmarks, GetDnnModel( Consts.AiModels.FaceLandmarks));
-        services.AddKeyedSingleton(Consts.AiModels.VggGender, GetDnnModel( Consts.AiModels.VggGender));
-        services.AddKeyedSingleton(Consts.AiModels.Gfpgan, new InferenceSession(GetModelPath(Consts.AiModels.Gfpgan)));
+        services.AddKeyedSingleton(Consts.AiModels.Yolov8nFace, delegate { return new LazyDisposal<Net>(() => GetDnnModel(Consts.AiModels.Yolov8nFace)); });
+        services.AddKeyedSingleton(Consts.AiModels.ArcfaceBackbone, delegate { return new LazyDisposal<Net>(() => GetDnnModel(Consts.AiModels.ArcfaceBackbone)); });
+        services.AddKeyedSingleton(Consts.AiModels.Gunet2blocks, delegate { return new LazyDisposal<Net>(() => GetDnnModel(Consts.AiModels.Gunet2blocks)); });
+        services.AddKeyedSingleton(Consts.AiModels.FaceLandmarks, delegate { return new LazyDisposal<Net>(() => GetDnnModel(Consts.AiModels.FaceLandmarks)); });
+        services.AddKeyedSingleton(Consts.AiModels.VggGender, delegate { return new LazyDisposal<Net>(() => GetDnnModel(Consts.AiModels.VggGender)); });
+        services.AddKeyedSingleton(Consts.AiModels.Gfpgan, delegate { return new LazyDisposal<InferenceSession>(() => new InferenceSession(GetModelPath(Consts.AiModels.Gfpgan))); });
     }
 
     private static Net GetDnnModel(string name) => DnnInvoke.ReadNetFromONNX(GetModelPath(name));
