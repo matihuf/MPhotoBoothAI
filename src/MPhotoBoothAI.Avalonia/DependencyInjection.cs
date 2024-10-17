@@ -39,8 +39,9 @@ public static class DependencyInjection
     private static void AddManagers(IServiceCollection services)
     {
         services.AddTransient<IFaceAlignManager, FaceAlignManager>();
-        services.AddTransient<FaceMaskManager>();
+        services.AddTransient<IFaceMaskManager, FaceMaskManager>();
         services.AddTransient<IFaceSwapManager, FaceSwapManager>();
+        services.AddTransient<IFaceMultiSwapManager, FaceMultiSwapManager>();
     }
 
     private static void AddAiModels(IServiceCollection services)

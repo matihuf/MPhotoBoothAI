@@ -26,7 +26,7 @@ public class FaceMaskManagerTests(DependencyInjectionFixture dependencyInjection
 
         var faceSwapPredictService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceSwapPredictService>();
         using var predictResult = faceSwapPredictService.Predict(sourceAlignFace.Align, targetAlignFace.Align);
-        var faceMaskManager = dependencyInjectionFixture.ServiceProvider.GetService<FaceMaskManager>();
+        var faceMaskManager = dependencyInjectionFixture.ServiceProvider.GetService<IFaceMaskManager>();
         //act
         using var result = faceMaskManager.GetMask(targetAlignFace.Align, predictResult);
         using var resultDeNormalized = DeNormalize(result);

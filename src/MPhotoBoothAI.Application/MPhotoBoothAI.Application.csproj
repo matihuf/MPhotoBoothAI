@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Emgu.CV" Version="4.8.0.5324" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

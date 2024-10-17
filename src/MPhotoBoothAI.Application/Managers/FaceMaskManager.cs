@@ -3,7 +3,7 @@ using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Application.Managers;
 
-public class FaceMaskManager(IFaceLandmarksService faceLandmarksService, IFaceMaskService faceMaskService)
+public class FaceMaskManager(IFaceLandmarksService faceLandmarksService, IFaceMaskService faceMaskService) : IFaceMaskManager
 {
     private readonly IFaceLandmarksService _faceLandmarksService = faceLandmarksService;
     private readonly IFaceMaskService _faceMaskService = faceMaskService;
