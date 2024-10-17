@@ -28,7 +28,6 @@ public static class DependencyInjection
         AddManagers(services);
         AddNavigation(services);
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
-        services.AddSingleton<IUserSettings>(UserSettings.Instance);
         return services;
     }
 
@@ -78,6 +77,8 @@ public static class DependencyInjection
         services.AddTransient<IFaceEnhancerService, FaceEnhancerService>();
         services.AddTransient<IFaceGenderService, FaceGenderService>();
         services.AddTransient<IAppRestarterService, AppRestarterService>();
+        services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
+        services.AddSingleton<IUserSettingsService, UserSettingsService>();
     }
 
     private static void AddCamera(IServiceCollection services)

@@ -19,22 +19,22 @@ public partial class LanguageViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isRestartVisible;
 
-    private readonly IUserSettings _userSettings;
+    private readonly IUserSettingsService _userSettings;
     private readonly IAppRestarterService _appRestarterService;
     private readonly string _default;
 
-    public LanguageViewModel(IUserSettings userSettings, IAppRestarterService appRestarterService)
+    public LanguageViewModel(IUserSettingsService userSettings, IAppRestarterService appRestarterService)
     {
         _userSettings = userSettings;
         _appRestarterService = appRestarterService;
-        SelectedCultureInfo = Cultures.FirstOrDefault(x => x.Name == userSettings.CultureInfoName) ?? Cultures.First();
+        SelectedCultureInfo = Cultures.FirstOrDefault(x => x.Name == userSettings.Value.CultureInfoName) ?? Cultures.First();
         _default = SelectedCultureInfo.Name;
         IsRestartVisible = false;
     }
 
     partial void OnSelectedCultureInfoChanged(CultureInfo value)
     {
-        _userSettings.CultureInfoName = value.Name;
+        _userSettings.Value.CultureInfoName = value.Name;
         IsRestartVisible = value.Name != _default;
     }
 

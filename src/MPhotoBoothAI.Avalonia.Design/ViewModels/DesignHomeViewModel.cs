@@ -6,7 +6,7 @@ namespace MPhotoBoothAI.Avalonia.Design.ViewModels;
 
 public class DesignHomeViewModel : HomeViewModel
 {
-    public DesignHomeViewModel() : base(new LanguageViewModel(new Mock<IUserSettings>().Object, new Mock<IAppRestarterService>().Object))
+    public DesignHomeViewModel() : base(new LanguageViewModel(new Mock<IUserSettingsService>().Object, new Mock<IAppRestarterService>().Object))
     {
     }
 }

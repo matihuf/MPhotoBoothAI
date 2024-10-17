@@ -29,7 +29,7 @@ public partial class App : AvaloniaApplication
     public override void OnFrameworkInitializationCompleted()
     {
         ServiceProvider = ConfigureServiceProvider();
-        SetApplicationLanguage(ServiceProvider.GetRequiredService<IUserSettings>());
+        SetApplicationLanguage(ServiceProvider.GetRequiredService<IUserSettingsService>());
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
@@ -41,12 +41,12 @@ public partial class App : AvaloniaApplication
         base.OnFrameworkInitializationCompleted();
     }
 
-    private static void SetApplicationLanguage(IUserSettings userSettings)
+    private static void SetApplicationLanguage(IUserSettingsService userSettings)
     {
-        if (string.IsNullOrEmpty(userSettings.CultureInfoName))
+        if (string.IsNullOrEmpty(userSettings.Value.CultureInfoName))
         {
-            userSettings.CultureInfoName = Thread.CurrentThread.CurrentUICulture.Name;
+            userSettings.Value.CultureInfoName = Thread.CurrentThread.CurrentUICulture.Name;
         }
-        Thread.CurrentThread.CurrentUICulture = new CultureInfo(userSettings.CultureInfoName);
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo(userSettings.Value.CultureInfoName);
     }
 }
