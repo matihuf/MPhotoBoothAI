@@ -22,7 +22,10 @@ public class FaceEnhancerService([FromKeyedServices(Consts.AiModels.Gfpgan)] Inf
         var denseTensor = new DenseTensor<float>(Preproces(resizedTarget), [1, resizedTarget.NumberOfChannels, resizedTarget.Height, resizedTarget.Width]);
         var inputs = new List<NamedOnnxValue>(1) { NamedOnnxValue.CreateFromTensor(_gfpgan.InputMetadata.Keys.First(), denseTensor) };
         using var results = _gfpgan.Run(inputs);
-        return Postprocess(results.First().AsTensor<float>().ToArray(), resizedTarget.Height, resizedTarget.Width, resizedTarget.NumberOfChannels);
+        using var postprocess = Postprocess(results.First().AsTensor<float>().ToArray(), resizedTarget.Height, resizedTarget.Width, resizedTarget.NumberOfChannels);
+        var resizedEnhanced = new Mat();
+        CvInvoke.Resize(postprocess, resizedEnhanced, face.Size);
+        return resizedEnhanced;
     }
 
     public static Mat Postprocess(float[] img, int height, int width, int channels)
@@ -51,9 +54,9 @@ public class FaceEnhancerService([FromKeyedServices(Consts.AiModels.Gfpgan)] Inf
                 byte g = (byte)Math.Max(0, Math.Min(255, transposedImg[gIndex]));
                 byte b = (byte)Math.Max(0, Math.Min(255, transposedImg[bIndex]));
 
-                processedImg[rIndex] = b;
+                processedImg[rIndex] = r;
                 processedImg[gIndex] = g;
-                processedImg[bIndex] = r;
+                processedImg[bIndex] = b;
             }
         }
         return processedImg;

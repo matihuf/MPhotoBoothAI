@@ -9,10 +9,8 @@ namespace MPhotoBoothAI.Application.ViewModels;
 
 public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposable
 {
-    private readonly IFaceSwapManager _faceSwapManager;
+    private readonly IFaceMultiSwapManager _faceMultiSwapManager;
     private readonly IFilePickerService _filePickerService;
-    private readonly IFaceAlignManager _faceAlignManager;
-    private readonly IFaceGenderService _faceGenderService;
     private readonly ICameraDevice _cameraDevice;
 
     private readonly Mat _target;
@@ -20,14 +18,11 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     [ObservableProperty]
     private Mat _frame;
 
-    [ObservableProperty]
-    private string _gender;
-
     [RelayCommand]
     private void Swap()
     {
         _cameraDevice.Detach(this);
-        Frame = _faceSwapManager.Swap(Frame, _target);
+        Frame = _faceMultiSwapManager.Swap(Frame, _target);
     }
 
     [RelayCommand]
@@ -40,27 +35,20 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         CvInvoke.Imdecode(target, ImreadModes.Color, _target);
     }
 
-    public FaceDetectionViewModel(ICameraDevice cameraDevice, IFaceSwapManager faceSwapManager, IFilePickerService filePickerService, IFaceAlignManager faceAlignManager,
-        IFaceGenderService faceGenderService)
+    public FaceDetectionViewModel(ICameraDevice cameraDevice, IFaceMultiSwapManager faceMultiSwapManager, IFilePickerService filePickerService)
     {
         _cameraDevice = cameraDevice;
         _cameraDevice.Start();
         _cameraDevice.Attach(this);
-        _faceSwapManager = faceSwapManager;
+        _faceMultiSwapManager = faceMultiSwapManager;
         _filePickerService = filePickerService;
-        _faceAlignManager = faceAlignManager;
-        _faceGenderService = faceGenderService;
         _target = new Mat();
+        Frame = new Mat();
     }
 
     public void Notify(Mat mat)
     {
         Frame = mat;
-        using var align = _faceAlignManager.GetAlign(Frame);
-        if (align != null)
-        {
-            Gender = _faceGenderService.Get(align.Align).ToString();
-        }
     }
 
     public void Dispose()

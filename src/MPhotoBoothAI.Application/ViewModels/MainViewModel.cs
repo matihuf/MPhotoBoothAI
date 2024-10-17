@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 
-public partial class MainViewModel : ViewModelBase
+public partial class MainViewModel : ViewModelBase, IDisposable
 {
     [ObservableProperty]
     private ViewModelBase _content = default!;
@@ -27,8 +27,13 @@ public partial class MainViewModel : ViewModelBase
     {
         Pages = new ObservableCollection<ListItemTemplate>(_pages);
         _navigationService = navigationService;
-        _navigationService.CurrentViewModelChanged += viewModel => Content = viewModel;
+        _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;
         SelectedPage = Pages[0];
+    }
+
+    private void OnCurrentViewModelChanged(ViewModelBase viewModel)
+    {
+        Content = viewModel;
     }
 
     partial void OnSelectedPageChanged(ListItemTemplate? value)
@@ -38,5 +43,19 @@ public partial class MainViewModel : ViewModelBase
             return;
         }
         _navigationService.GoTo(value.ModelType);
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _navigationService.CurrentViewModelChanged -= OnCurrentViewModelChanged;
+        }
     }
 }
