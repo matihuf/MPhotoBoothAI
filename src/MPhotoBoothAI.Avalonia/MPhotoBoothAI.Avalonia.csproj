@@ -8,6 +8,8 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <UseRidGraph>true</UseRidGraph>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Company>Motiony</Company>
+    <Product>MPhotoBooth</Product>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="../../models/**" CopyToOutputDirectory="PreserveNewest" LinkBase="models\"/>
+    <Content Include="../../models/**" CopyToOutputDirectory="PreserveNewest" LinkBase="models\" />
   </ItemGroup>
 
   <ItemGroup>

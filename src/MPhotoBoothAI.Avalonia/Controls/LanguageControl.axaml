@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+             xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:con="using:MPhotoBoothAI.Avalonia.Converters"
+             xmlns:assets="using:MPhotoBoothAI.Application.Assets"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
+             x:DataType="vm:LanguageViewModel"
+             x:Class="MPhotoBoothAI.Avalonia.Controls.LanguageControl">
+
+  <Design.DataContext>
+    <dvm:DesignLanguageViewModel/>
+  </Design.DataContext>
+
+  <UserControl.Resources>
+    <con:TranslateConverter x:Key="translateConverter"/>
+  </UserControl.Resources>
+
+  <StackPanel Spacing="5">
+    <TextBlock Text="{x:Static assets:UI.language}"/>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <TextBlock Grid.Column="0" Text="{x:Static assets:UI.restartRequired}" VerticalAlignment="Center"/>
+      <ComboBox x:Name="cultureComboBox" Grid.Column="1" ItemsSource="{Binding Cultures}" SelectedItem="{Binding SelectedCultureInfo}">
+        <ComboBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding Name, Converter={StaticResource translateConverter}}" />
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+    </Grid>
+    <Button IsVisible="{Binding IsRestartVisible}" Content="{x:Static assets:UI.restart}" HorizontalAlignment="Center" Margin="0 5 0 0" Command="{Binding RestartApplicationCommandCommand}" />
+  </StackPanel>
+</UserControl>
