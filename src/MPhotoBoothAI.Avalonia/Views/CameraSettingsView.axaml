@@ -2,44 +2,65 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+			 xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
-			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			 xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+			 xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
+			 mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="MPhotoBoothAI.Avalonia.Views.CameraSettingsView"
 			 x:DataType="vm:CameraSettingsViewModel">
-	
+
 	<Design.DataContext>
-		<vm:CameraSettingsViewModel/>
+		<dvm:DesignCameraSettingsViewModel />
 	</Design.DataContext>
 	<UserControl.Resources>
-		<converters:MatConverter x:Key="matConverter"/>
+		<converters:MatConverter x:Key="matConverter" />
+		<converters:NullToVisibility x:Key="nullToVisibilityConverter" />
 	</UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="3*"/>
-			<RowDefinition Height="*"/>
+			<RowDefinition Height="1.5*" />
+			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 		<Image Source="{Binding Frame, Converter={StaticResource matConverter}}"
 			   VerticalAlignment="Stretch"
 			   HorizontalAlignment="Left"
-			   Stretch="UniformToFill"
-			   Grid.Row="0"/>
+			   Stretch="Uniform"
+			   StretchDirection="Both"
+			   Grid.Row="0" />
 		<Grid Grid.Row="1">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
-			<ComboBox	ItemsSource="{Binding CameraManager.Availables, Mode=OneWay}"
-						SelectedItem="{Binding CurrentCameraDevice}"
-						Width="300"
-						Grid.Row="0"/>
-			<Button Command="{Binding TakePhotoCommand}" 
-					Content="TakePhoto" 
-					Grid.Row="1"/>
-			<Button Command="{Binding StartLiveViewCommand}"
-					Content="Start Live View"
-					Grid.Row="2"/>
+			<StackPanel Grid.Row="0">
+				<TextBlock Text="Camera name" />
+				<ComboBox	ItemsSource="{Binding Availables, Mode=OneWay}"
+							SelectedItem="{Binding CurrentCameraDevice}"
+							Width="300" />
+			</StackPanel>
+			<WrapPanel Grid.Row="1"
+					   IsVisible="{Binding IsoSettings, Converter={StaticResource nullToVisibilityConverter}}">
+				<StackPanel>
+					<TextBlock Text="CameraProgram" />
+					<ComboBox ItemsSource="{Binding IsoSettings.AvailableValues, Mode=OneWay}"
+							  SelectedItem="{Binding IsoSettings.Current, Mode=TwoWay}">
+						<i:Interaction.Behaviors>
+							<ia:EventTriggerBehavior EventName="SelectionChanged">
+								<ia:InvokeCommandAction Command="{Binding IsoCurrentChangeCommand}"/>
+							</ia:EventTriggerBehavior>
+						</i:Interaction.Behaviors>
+					</ComboBox>
+				</StackPanel>
+			</WrapPanel>
+			<StackPanel Grid.Row="2" Orientation="Horizontal">
+				<Button Command="{Binding TakePhotoCommand}"
+						Content="TakePhoto" />
+				<Button Command="{Binding StartLiveViewCommand}"
+						Content="Start Live View" />
+			</StackPanel>
 		</Grid>
 	</Grid>
 </UserControl>

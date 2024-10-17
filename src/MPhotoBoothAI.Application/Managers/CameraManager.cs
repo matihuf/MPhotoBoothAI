@@ -1,4 +1,5 @@
 ﻿using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Models.Camera;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -22,13 +23,36 @@ namespace MPhotoBoothAI.Infrastructure.Services
 
         public IEnumerable<ICameraDevice> Availables => _cameras != null ? _cameras.Where(x => x.IsAvailable) : [];
 
-        public ICameraDevice Current { get; set; }
+        public ICameraDevice? Current { get; set; }
+
+        private ICameraDeviceSettings? CurrentSettings => Current as ICameraDeviceSettings;
 
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        public CameraSetting? GetAperture() => CurrentSettings?.GetAperture();
+
+        public CameraSetting? GetIsoSettings() => CurrentSettings?.GetIsoSetting();
+
+        public CameraSetting? GetProgram() => CurrentSettings?.GetProgram();
+
+        public CameraSetting? GetShutterSpeed() => CurrentSettings?.GetShutterSpeed();
+
+        public CameraSetting? GetWhiteBalance() => CurrentSettings?.GetWhiteBalance();
+
+        public void SetAperture(string apertureValue) => CurrentSettings?.SetAperture(apertureValue);
+
+        public void SetIso(string isoValue) => CurrentSettings?.SetIso(isoValue);
+
+
+        public void SetProgram(string programValue) => CurrentSettings?.SetProgram(programValue);
+
+        public void SetShutterSpeed(string shutterSpeedValue) => CurrentSettings?.SetShutterSpeed(shutterSpeedValue);
+
+        public void SetWhiteBalance(string whiteBalanceValue) => CurrentSettings?.SetWhiteBalance(whiteBalanceValue);
 
         protected virtual void Dispose(bool disposing)
         {

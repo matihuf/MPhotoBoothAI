@@ -3,11 +3,14 @@ using CommunityToolkit.Mvvm.Input;
 using Emgu.CV;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
+using MPhotoBoothAI.Models.Camera;
 
 namespace MPhotoBoothAI.Application.ViewModels
 {
     public partial class CameraSettingsViewModel : ViewModelBase, IObserver, IDisposable
     {
+        private readonly ICameraManager _cameraManager;
+
         [ObservableProperty]
         private Mat _frame;
 
@@ -15,18 +18,20 @@ namespace MPhotoBoothAI.Application.ViewModels
         private ICameraDevice? _currentCameraDevice;
 
         [ObservableProperty]
-        private ICameraManager _cameraManager;
+        private IEnumerable<ICameraDevice> _availables;
+
+        [ObservableProperty]
+        private CameraSetting? _isoSettings;
 
         public CameraSettingsViewModel(ICameraManager cameraManager)
         {
             _cameraManager = cameraManager;
-            CurrentCameraDevice = _cameraManager.Availables.FirstOrDefault();
+            _availables = _cameraManager.Availables;
+            Frame = new Mat();
+            IsoSettings = new CameraSetting();
         }
 
-        public void Notify(Mat mat)
-        {
-            Frame = mat;
-        }
+        public void Notify(Mat mat) => Frame = mat;
 
         partial void OnCurrentCameraDeviceChanged(ICameraDevice? oldValue, ICameraDevice? newValue)
         {
@@ -34,6 +39,7 @@ namespace MPhotoBoothAI.Application.ViewModels
             oldValue?.Detach(this);
             newValue?.Attach(this);
             _cameraManager.Current = newValue;
+            IsoSettings = _cameraManager.GetIsoSettings();
         }
 
         public void Dispose()
@@ -56,5 +62,14 @@ namespace MPhotoBoothAI.Application.ViewModels
 
         [RelayCommand]
         private void StartLiveView() => CurrentCameraDevice?.StartLiveView();
+
+        [RelayCommand]
+        private void IsoCurrentChange()
+        {
+            if (!string.IsNullOrEmpty(IsoSettings?.Current))
+            {
+                _cameraManager.SetIso(IsoSettings.Current);
+            }
+        }
     }
 }
