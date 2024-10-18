@@ -1,9 +1,8 @@
 using Avalonia.Controls;
-using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
-using Avalonia.Input;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Avalonia.Tests.Extensions;
 using MPhotoBoothAI.Avalonia.Views;
 using MPhotoBoothAI.Models.UI;
 
@@ -26,21 +25,22 @@ public class MainWindowTests
     }
 
     [AvaloniaFact]
-    public void MainWindow_MenuClickRandomListBoxItem_ContentShouldBeAsExpected()
+    public void MainWindow_MenuClickListBoxPageItem_ContentShouldBeAsExpected()
     {
         //arrange
         var window = new MainWindow { DataContext = App.ServiceProvider.GetRequiredService<MainViewModel>() };
         window.Show();
         var listBoxPage = window.FindControl<ListBox>("ListBoxPage");
-        var random = new Random();
-        int randomIndex = random.Next(0, listBoxPage.Items.Count);
-        var expectedViewModel = (listBoxPage.Items[randomIndex] as ListItemTemplate).ModelType;
-        var listBoxItem = listBoxPage.ContainerFromIndex(randomIndex) as ListBoxItem;
-        window.MouseDown(listBoxItem.Bounds.Center, MouseButton.Left);
-        //act
-        var content = window.FindControl<ContentControl>("Content");
-        //assert
+        for (int i = 0; i < listBoxPage.Items.Count; i++)
+        {
+            var expectedViewModel = (listBoxPage.Items[i] as ListItemTemplate).ModelType;
+            var listBoxItem = listBoxPage.ContainerFromIndex(i) as ListBoxItem;
+            window.MouseClick(listBoxItem.Bounds.Center);
+            //act
+            var contentType = window.FindControl<ContentControl>("Content").Content.GetType();
+            //assert
+            Assert.True(contentType == expectedViewModel, $"Expected {expectedViewModel} - Result {contentType}");
+        }
         window.Close();
-        Assert.True(content.Content.GetType() == expectedViewModel);
     }
 }

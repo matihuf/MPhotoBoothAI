@@ -25,6 +25,7 @@ public class MatConverter : IValueConverter
             _ => null,
         };
         if (mat == null) return new BindingNotification(new NotSupportedException(), BindingErrorType.Error);
+        if (mat.IsEmpty) return null;
         if (parameter is WriteableBitmap wb)
         {
             try

@@ -7,6 +7,7 @@ using MPhotoBoothAI.Application.Managers;
 using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
+using MPhotoBoothAI.Infrastructure;
 using MPhotoBoothAI.Infrastructure.CameraDevices;
 using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Infrastructure.Services.Swap;
@@ -38,8 +39,9 @@ public static class DependencyInjection
     private static void AddManagers(IServiceCollection services)
     {
         services.AddTransient<IFaceAlignManager, FaceAlignManager>();
-        services.AddTransient<FaceMaskManager>();
+        services.AddTransient<IFaceMaskManager, FaceMaskManager>();
         services.AddTransient<IFaceSwapManager, FaceSwapManager>();
+        services.AddTransient<IFaceMultiSwapManager, FaceMultiSwapManager>();
     }
 
     private static void AddAiModels(IServiceCollection services)
@@ -60,6 +62,7 @@ public static class DependencyInjection
         services.AddSingleton<MainViewModel>();
         services.AddTransient<HomeViewModel>();
         services.AddTransient<FaceDetectionViewModel>();
+        services.AddTransient<LanguageViewModel>();
     }
 
     private static void AddServices(IServiceCollection services)
@@ -74,6 +77,9 @@ public static class DependencyInjection
         services.AddTransient<IFilePickerService, FilePickerService>();
         services.AddTransient<IFaceEnhancerService, FaceEnhancerService>();
         services.AddTransient<IFaceGenderService, FaceGenderService>();
+        services.AddTransient<IAppRestarterService, AppRestarterService>();
+        services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
+        services.AddSingleton<IUserSettingsService, UserSettingsService>();
     }
 
     private static void AddCamera(IServiceCollection services)

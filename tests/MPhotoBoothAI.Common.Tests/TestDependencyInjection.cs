@@ -14,8 +14,7 @@ public class TestDependencyInjection : IDisposable
     {
         var serviceCollection = new ServiceCollection();
         serviceCollection.Configure();
-        var cameraDescriptor = new ServiceDescriptor(typeof(ICameraDevice), new Mock<ICameraDevice>().Object.GetType(), ServiceLifetime.Singleton);
-        serviceCollection.Replace(cameraDescriptor);
+        serviceCollection.Replace(ServiceDescriptor.Singleton(s => new Mock<ICameraDevice>().Object));
         ServiceProvider = serviceCollection.BuildServiceProvider();
     }
 

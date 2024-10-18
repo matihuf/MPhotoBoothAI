@@ -9,14 +9,12 @@ namespace MPhotoBoothAI.Avalonia.Design.ViewModels;
 
 public class DesignFaceDetectionViewModel : FaceDetectionViewModel
 {
-    public DesignFaceDetectionViewModel() : base(new Mock<ICameraDevice>().Object, new Mock<IFaceSwapManager>().Object, new Mock<IFilePickerService>().Object,
-        new Mock<IFaceAlignManager>().Object, new Mock<IFaceGenderService>().Object)
+    public DesignFaceDetectionViewModel() : base(new Mock<ICameraDevice>().Object, new Mock<IFaceMultiSwapManager>().Object, new Mock<IFilePickerService>().Object)
     {
         byte[] rawFrame = ReadFully(AssetLoader.Open(new Uri("avares://MPhotoBoothAI.Avalonia.Design/Assets/nocamera.png")));
         var frame = new Mat();
         CvInvoke.Imdecode(rawFrame, ImreadModes.Unchanged, frame);
         Frame = frame;
-        Gender = Application.Models.Gender.Male.ToString();
     }
 
     private static byte[] ReadFully(Stream input)
