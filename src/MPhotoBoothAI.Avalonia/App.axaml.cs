@@ -36,6 +36,7 @@ public partial class App : AvaloniaApplication
             {
                 DataContext = ServiceProvider.GetRequiredService<MainViewModel>()
             };
+            desktop.Exit += Desktop_Exit;
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -48,5 +49,14 @@ public partial class App : AvaloniaApplication
             userSettings.Value.CultureInfoName = Thread.CurrentThread.CurrentUICulture.Name;
         }
         Thread.CurrentThread.CurrentUICulture = new CultureInfo(userSettings.Value.CultureInfoName);
+    }
+
+    private void Desktop_Exit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.Exit -= Desktop_Exit;
+        }
+        (ServiceProvider as IDisposable)?.Dispose();
     }
 }

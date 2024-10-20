@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Emgu.CV;
+﻿using Emgu.CV;
 using Emgu.CV.Dnn;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -7,12 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
+using System.Drawing;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace)] Net net, ResizeImageService resizeImageService) : IFaceDetectionService
+public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace)] LazyDisposal<Net> net, ResizeImageService resizeImageService) : IFaceDetectionService
 {
-    private readonly Net _net = net;
+    private readonly LazyDisposal<Net> _net = net;
     private readonly ResizeImageService _resizeImageService = resizeImageService;
     private readonly int _inputHeight = 640;
     private readonly int _inputWidth = 640;
@@ -24,9 +24,9 @@ public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace
         using var resized = _resizeImageService.Resize(frame);
         using var blob = DnnInvoke.BlobFromImage(resized.Image, 1 / 255.0, new Size(_inputWidth, _inputHeight), new MCvScalar(0, 0, 0), true, false);
         resized.Image.Dispose();
-        _net.SetInput(blob);
+        _net.Value.SetInput(blob);
         using var outs = new VectorOfMat();
-        _net.Forward(outs, _net.UnconnectedOutLayersNames);
+        _net.Value.Forward(outs, _net.Value.UnconnectedOutLayersNames);
 
         float ratioh = (float)frame.Rows / resized.Newh, ratiow = (float)frame.Cols / resized.Neww;
 

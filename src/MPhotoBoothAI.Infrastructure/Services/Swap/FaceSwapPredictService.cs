@@ -1,36 +1,36 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
-using Emgu.CV;
+﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Util;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace MPhotoBoothAI.Infrastructure.Services.Swap;
 
-public class FaceSwapPredictService([FromKeyedServices(Consts.AiModels.ArcfaceBackbone)] Net arfaceNet, [FromKeyedServices(Consts.AiModels.Gunet2blocks)] Net gNet) : IFaceSwapPredictService
+public class FaceSwapPredictService([FromKeyedServices(Consts.AiModels.ArcfaceBackbone)] LazyDisposal<Net> arfaceNet, [FromKeyedServices(Consts.AiModels.Gunet2blocks)] LazyDisposal<Net> gNet) : IFaceSwapPredictService
 {
-    private readonly Net _arfaceNet = arfaceNet;
-    private readonly Net _gNet = gNet;
+    private readonly LazyDisposal<Net> _arfaceNet = arfaceNet;
+    private readonly LazyDisposal<Net> _gNet = gNet;
     private const float _normalizeFactor = 127.5f;
 
     public Mat Predict(Mat sourceFace, Mat targetFace)
     {
         using var sourceFaceHalf = HalfSize(sourceFace);
         using var sourceBlob = Preprocess(sourceFaceHalf);
-        _arfaceNet.SetInput(sourceBlob, "img");
+        _arfaceNet.Value.SetInput(sourceBlob, "img");
         using var arfaceNetOuts = new VectorOfMat();
-        _arfaceNet.Forward(arfaceNetOuts, _arfaceNet.UnconnectedOutLayersNames);
+        _arfaceNet.Value.Forward(arfaceNetOuts, _arfaceNet.Value.UnconnectedOutLayersNames);
 
         using var resizedTarget = new Mat();
         CvInvoke.Resize(targetFace, resizedTarget, new Size(256, 256));
         using var targetBlob = Preprocess(resizedTarget);
-        _gNet.SetInput(arfaceNetOuts[0], "source_emb");
-        _gNet.SetInput(targetBlob, "target");
+        _gNet.Value.SetInput(arfaceNetOuts[0], "source_emb");
+        _gNet.Value.SetInput(targetBlob, "target");
         using var gOuts = new VectorOfMat();
-        _gNet.Forward(gOuts, _gNet.UnconnectedOutLayersNames);
+        _gNet.Value.Forward(gOuts, _gNet.Value.UnconnectedOutLayersNames);
         using var image = ConvertToImage(gOuts[0]);
         var originalImageSize = new Mat();
         CvInvoke.Resize(image, originalImageSize, sourceFace.Size);
