@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
         xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+        xmlns:c="using:MPhotoBoothAI.Avalonia.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MPhotoBoothAI.Avalonia.Views.HomeView"
         x:DataType="vm:HomeViewModel">
@@ -12,5 +13,5 @@
     <dvm:DesignHomeViewModel/>
   </Design.DataContext>
 
-  <TextBlock>Home</TextBlock>
+  <c:LanguageControl DataContext="{Binding Language}"/>
 </UserControl>

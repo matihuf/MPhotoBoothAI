@@ -1,18 +1,18 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
-using Emgu.CV;
+﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class FaceEnhancerService([FromKeyedServices(Consts.AiModels.Gfpgan)] InferenceSession gfpgan) : IFaceEnhancerService
+public class FaceEnhancerService([FromKeyedServices(Consts.AiModels.Gfpgan)] LazyDisposal<InferenceSession> gfpgan) : IFaceEnhancerService
 {
-    private readonly InferenceSession _gfpgan = gfpgan;
+    private readonly LazyDisposal<InferenceSession> _gfpgan = gfpgan;
 
     public Mat Enhance(Mat face)
     {
@@ -20,9 +20,12 @@ public class FaceEnhancerService([FromKeyedServices(Consts.AiModels.Gfpgan)] Inf
         CvInvoke.Resize(face, resizedTarget, new Size(512, 512));
 
         var denseTensor = new DenseTensor<float>(Preproces(resizedTarget), [1, resizedTarget.NumberOfChannels, resizedTarget.Height, resizedTarget.Width]);
-        var inputs = new List<NamedOnnxValue>(1) { NamedOnnxValue.CreateFromTensor(_gfpgan.InputMetadata.Keys.First(), denseTensor) };
-        using var results = _gfpgan.Run(inputs);
-        return Postprocess(results.First().AsTensor<float>().ToArray(), resizedTarget.Height, resizedTarget.Width, resizedTarget.NumberOfChannels);
+        var inputs = new List<NamedOnnxValue>(1) { NamedOnnxValue.CreateFromTensor(_gfpgan.Value.InputMetadata.Keys.First(), denseTensor) };
+        using var results = _gfpgan.Value.Run(inputs);
+        using var postprocess = Postprocess(results.First().AsTensor<float>().ToArray(), resizedTarget.Height, resizedTarget.Width, resizedTarget.NumberOfChannels);
+        var resizedEnhanced = new Mat();
+        CvInvoke.Resize(postprocess, resizedEnhanced, face.Size);
+        return resizedEnhanced;
     }
 
     public static Mat Postprocess(float[] img, int height, int width, int channels)
@@ -51,9 +54,9 @@ public class FaceEnhancerService([FromKeyedServices(Consts.AiModels.Gfpgan)] Inf
                 byte g = (byte)Math.Max(0, Math.Min(255, transposedImg[gIndex]));
                 byte b = (byte)Math.Max(0, Math.Min(255, transposedImg[bIndex]));
 
-                processedImg[rIndex] = b;
+                processedImg[rIndex] = r;
                 processedImg[gIndex] = g;
-                processedImg[bIndex] = r;
+                processedImg[bIndex] = b;
             }
         }
         return processedImg;

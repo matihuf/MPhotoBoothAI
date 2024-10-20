@@ -1,9 +1,12 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
+using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Views;
 using System;
+using System.Globalization;
+using System.Threading;
 using AvaloniaApplication = Avalonia.Application;
 namespace MPhotoBoothAI.Avalonia;
 
@@ -26,24 +29,35 @@ public partial class App : AvaloniaApplication
     public override void OnFrameworkInitializationCompleted()
     {
         ServiceProvider = ConfigureServiceProvider();
+        SetApplicationLanguage(ServiceProvider.GetRequiredService<IUserSettingsService>());
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.Exit += OnExit;
+            desktop.Exit += Desktop_Exit;
             desktop.MainWindow = new MainWindow
             {
                 DataContext = ServiceProvider.GetRequiredService<MainViewModel>()
             };
+            desktop.Exit += Desktop_Exit;
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void OnExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+    private static void SetApplicationLanguage(IUserSettingsService userSettings)
     {
-        (ServiceProvider as IDisposable)?.Dispose();
-        if (sender is IClassicDesktopStyleApplicationLifetime desktop)
+        if (string.IsNullOrEmpty(userSettings.Value.CultureInfoName))
         {
-            desktop.Exit -= OnExit;
+            userSettings.Value.CultureInfoName = Thread.CurrentThread.CurrentUICulture.Name;
         }
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo(userSettings.Value.CultureInfoName);
+    }
+
+    private void Desktop_Exit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.Exit -= Desktop_Exit;
+        }
+        (ServiceProvider as IDisposable)?.Dispose();
     }
 }

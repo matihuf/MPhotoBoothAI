@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Emgu.CV;
+﻿using Emgu.CV;
 using Emgu.CV.Dnn;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -7,37 +6,36 @@ using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
+using System.Drawing;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace)] Net net, ResizeImageService resizeImageService) : IFaceDetectionService
+public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace)] LazyDisposal<Net> net, ResizeImageService resizeImageService) : IFaceDetectionService
 {
-    private readonly Net _net = net;
+    private readonly LazyDisposal<Net> _net = net;
     private readonly ResizeImageService _resizeImageService = resizeImageService;
     private readonly int _inputHeight = 640;
     private readonly int _inputWidth = 640;
     private readonly int _numClass = 1;
     private readonly int _regMax = 16;
-    private float confThreshold;
 
     public IEnumerable<FaceDetection> Detect(Mat frame, float confThreshold, float nmsThreshold)
     {
         using var resized = _resizeImageService.Resize(frame);
         using var blob = DnnInvoke.BlobFromImage(resized.Image, 1 / 255.0, new Size(_inputWidth, _inputHeight), new MCvScalar(0, 0, 0), true, false);
         resized.Image.Dispose();
-        _net.SetInput(blob);
+        _net.Value.SetInput(blob);
         using var outs = new VectorOfMat();
-        _net.Forward(outs, _net.UnconnectedOutLayersNames);
+        _net.Value.Forward(outs, _net.Value.UnconnectedOutLayersNames);
 
         float ratioh = (float)frame.Rows / resized.Newh, ratiow = (float)frame.Cols / resized.Neww;
 
         List<Rectangle> boxes = [];
         List<float> confidences = [];
         VectorOfVectorOfPointF landmarks = new();
-        this.confThreshold = confThreshold;
-        GenerateProposal(outs[0], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw);
-        GenerateProposal(outs[1], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw);
-        GenerateProposal(outs[2], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw);
+        GenerateProposal(outs[0], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw, confThreshold);
+        GenerateProposal(outs[1], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw, confThreshold);
+        GenerateProposal(outs[2], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw, confThreshold);
 
         var indices = DnnInvoke.NMSBoxes(boxes.ToArray(), [.. confidences], confThreshold, nmsThreshold);
         for (int i = 0; i < indices.Length; ++i)
@@ -48,7 +46,7 @@ public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace
     }
 
     public void GenerateProposal(Mat outMat, List<Rectangle> boxes, List<float> confidences, VectorOfVectorOfPointF landmarks,
-             int imgh, int imgw, float ratioh, float ratiow, int padh, int padw)
+             int imgh, int imgw, float ratioh, float ratiow, int padh, int padw, float confThreshold)
     {
         int[] sizes = outMat.SizeOfDimension;
         int feat_h = sizes[2];

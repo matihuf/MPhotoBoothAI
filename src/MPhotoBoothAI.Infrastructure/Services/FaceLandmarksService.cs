@@ -1,16 +1,16 @@
-﻿using System.Drawing;
-using Emgu.CV;
+﻿using Emgu.CV;
 using Emgu.CV.Dnn;
 using Emgu.CV.Util;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
+using System.Drawing;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class FaceLandmarksService([FromKeyedServices(Consts.AiModels.FaceLandmarks)] Net lNet) : IFaceLandmarksService
+public class FaceLandmarksService([FromKeyedServices(Consts.AiModels.FaceLandmarks)] LazyDisposal<Net> lNet) : IFaceLandmarksService
 {
-    private readonly Net _lNet = lNet;
+    private readonly LazyDisposal<Net> _lNet = lNet;
 
     /// <summary>
     /// Magic numbers
@@ -36,9 +36,9 @@ public class FaceLandmarksService([FromKeyedServices(Consts.AiModels.FaceLandmar
         using var rimg = new Mat();
         CvInvoke.WarpAffine(frame, rimg, _m, imageSize);
         using var blob = DnnInvoke.BlobFromImage(rimg, 1, rimg.Size);
-        _lNet.SetInput(blob, "data");
+        _lNet.Value.SetInput(blob, "data");
         using var gOuts = new VectorOfMat();
-        _lNet.Forward(gOuts, _lNet.UnconnectedOutLayersNames);
+        _lNet.Value.Forward(gOuts, _lNet.Value.UnconnectedOutLayersNames);
         var postProcessed = PostProcess(gOuts[0], imageSize);
         return MultiplyMatrixAndVector(_im, postProcessed);
     }
