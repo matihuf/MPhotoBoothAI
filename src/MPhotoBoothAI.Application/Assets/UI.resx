@@ -132,8 +132,14 @@
   <data name="iso" xml:space="preserve">
     <value>Iso</value>
   </data>
+  <data name="groups" xml:space="preserve">
+    <value>Grupy</value>
+  </data>
   <data name="language" xml:space="preserve">
     <value>Język</value>
+  </data>
+  <data name="newGroup" xml:space="preserve">
+    <value>Nowa grupa</value>
   </data>
   <data name="pl-PL" xml:space="preserve">
     <value>Polski</value>

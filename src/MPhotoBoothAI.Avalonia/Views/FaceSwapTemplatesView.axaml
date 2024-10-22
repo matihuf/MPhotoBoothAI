@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
+             xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+             x:DataType="vm:FaceSwapTemplatesViewModel"
+             xmlns:models="using:MPhotoBoothAI.Models.UI"
+             xmlns:c="using:MPhotoBoothAI.Avalonia.Controls"
+             xmlns:assets="using:MPhotoBoothAI.Application.Assets"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MPhotoBoothAI.Avalonia.Views.FaceSwapTemplatesView">
+  <Design.DataContext>
+    <dvm:DesignFaceSwapTemplatesViewModel/>
+  </Design.DataContext>
+
+  <SplitView IsPaneOpen="True" DisplayMode="Inline">
+    <SplitView.Pane>
+      <Panel Margin="0,0,10,0">
+        <c:CrudListBoxTemplatedControl Title="{x:Static assets:UI.groups}"
+                                       ItemsSource="{Binding Groups}"
+                                       AddCommand="{Binding AddGroupCommand}"
+                                       DeleteCommand="{Binding DeleteGroupCommand}"
+                                       SelectedItem="{Binding SelectedGroup, Mode=TwoWay}"/>
+      </Panel>
+    </SplitView.Pane>
+    <SplitView.Content>
+      <Border Background="White" CornerRadius="20" Padding="10">
+        <StackPanel Spacing="15">
+          <Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+              <TextBlock Text="Grupy"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+              <Button>
+                <PathIcon Data="{StaticResource add_circle_regular}" />
+              </Button>
+            </StackPanel>
+          </Grid>
+          <WrapPanel>
+            <WrapPanel.Styles>
+              <Style Selector="ContentControl">
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="Background" Value="Red"/>
+              </Style>
+            </WrapPanel.Styles>
+            <Rectangle Fill="Navy" Width="100" Height="100" Margin="20"/>
+            <Rectangle Fill="Yellow" Width="100" Height="100" Margin="20"/>
+            <Rectangle Fill="Green" Width="100" Height="100" Margin="20"/>
+            <Rectangle Fill="Red" Width="100" Height="100" Margin="20"/>
+            <Rectangle Fill="Purple" Width="100" Height="100" Margin="20"/>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+    </SplitView.Content>
+  </SplitView>
+</UserControl>

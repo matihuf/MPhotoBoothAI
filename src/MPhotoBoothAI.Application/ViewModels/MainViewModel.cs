@@ -21,7 +21,8 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     [
         new ListItemTemplate(typeof(HomeViewModel), "home_regular", "Home"),
         new ListItemTemplate(typeof(CameraSettingsViewModel), "camera_regular", "cameraSettings"),
-        new ListItemTemplate(typeof(FaceDetectionViewModel), "person_swap_regular", "FaceDetection"),
+        new ListItemTemplate(typeof(FaceSwapTemplatesViewModel), "home_regular", "FaceSwapTemplatesViewModel"),
+        new ListItemTemplate(typeof(FaceDetectionViewModel), "person_swap_regular", "FaceDetection")
     ];
 
     public MainViewModel(INavigationService<ViewModelBase> navigationService)

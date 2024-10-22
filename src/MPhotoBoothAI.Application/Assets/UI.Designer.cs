@@ -106,11 +106,29 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grupy.
+        /// </summary>
+        public static string groups {
+            get {
+                return ResourceManager.GetString("groups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Język.
         /// </summary>
         public static string language {
             get {
                 return ResourceManager.GetString("language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nowa grupa.
+        /// </summary>
+        public static string newGroup {
+            get {
+                return ResourceManager.GetString("newGroup", resourceCulture);
             }
         }
         
