@@ -1,5 +1,5 @@
 ﻿namespace MPhotoBoothAI.Application;
-public class LazyDisposal<T> : Lazy<T>, IDisposable
+public class LazyDisposal<T> : Lazy<T>, IDisposable where T : IDisposable
 {
     public LazyDisposal(Func<T> valueFactory) : base(valueFactory)
     {
@@ -19,9 +19,9 @@ public class LazyDisposal<T> : Lazy<T>, IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing)
+        if (disposing && IsValueCreated)
         {
-            (Value as IDisposable)?.Dispose();
+            Value.Dispose();
         }
     }
 }
