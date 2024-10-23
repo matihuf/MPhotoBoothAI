@@ -1,45 +1,38 @@
-﻿using MPhotoBoothAI.Application.Interfaces;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Models;
-using System.ComponentModel;
-using System.Text.Json;
 
 namespace MPhotoBoothAI.Infrastructure;
 public class UserSettingsService : IUserSettingsService
 {
-    private readonly IApplicationInfoService _applicationInfoService;
-    private static string _file => "settings.json";
+    private readonly IDatabaseContext _databaseContext;
+    private readonly IMapper _mapper;
 
     public UserSettings Value { get; }
 
-    public UserSettingsService(IApplicationInfoService applicationInfoService)
+    public UserSettingsService(IDatabaseContext databaseContext, IMapper mapper)
     {
-        _applicationInfoService = applicationInfoService;
+        _databaseContext = databaseContext;
+        _mapper = mapper;
         Value = Load();
         Value.PropertyChanged += UserSettings_PropertyChanged;
     }
 
-    private void UserSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e) => Save();
+    private void UserSettings_PropertyChanged(object? sender, PropertyChangedValueEventArgs e)
+    {
+        if (e.NewValue != null)
+        {
+            var sql = $"UPDATE [UserSettings] SET [{e.PropertyName}] = @p0";
+            _databaseContext.Database.ExecuteSqlRaw(sql, e.NewValue);
+        }
+    }
 
     private UserSettings Load()
     {
-        var path = _applicationInfoService.UserProfilePath;
-        var fullPath = Path.Combine(path, _file);
-        if (!Directory.Exists(path) || !File.Exists(fullPath))
-        {
-            return new UserSettings();
-        }
-        var userSettings = JsonSerializer.Deserialize<UserSettings>(File.ReadAllText(fullPath));
+        var userSettings = _databaseContext.UserSettings.ProjectTo<UserSettings>(_mapper.ConfigurationProvider).FirstOrDefault();
         return userSettings ?? new UserSettings();
-    }
-
-    private void Save()
-    {
-        var path = _applicationInfoService.UserProfilePath;
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
-        File.WriteAllText(Path.Combine(path, _file), JsonSerializer.Serialize(Value));
     }
 
     public void Dispose()

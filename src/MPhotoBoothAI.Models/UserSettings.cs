@@ -1,8 +1,7 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 namespace MPhotoBoothAI.Models;
-public class UserSettings : INotifyPropertyChanged
+public class UserSettings
 {
     private string _cultureInfoName = string.Empty;
     public string CultureInfoName
@@ -11,10 +10,13 @@ public class UserSettings : INotifyPropertyChanged
         set
         {
             _cultureInfoName = value;
-            NotifyPropertyChanged();
+            NotifyPropertyChanged(value);
         }
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-    private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    public delegate void PropertyChangedValueEventHandler(object? sender, PropertyChangedValueEventArgs e);
+    public event PropertyChangedValueEventHandler? PropertyChanged;
+
+    private void NotifyPropertyChanged(object newValue, [CallerMemberName] string propertyName = "")
+        => PropertyChanged?.Invoke(this, new PropertyChangedValueEventArgs(propertyName, newValue));
 }

@@ -1,20 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Models.Entities;
 
 namespace MPhotoBoothAI.Infrastructure.Persistence;
 public class DatabaseContext : DbContext, IDatabaseContext
 {
+    public DbSet<UserSettingsEntity> UserSettings { get; set; }
+
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
     }
 
-    public void Migrate() => Database.Migrate();
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.HasDefaultSchema(Consts.Db.Schema);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
+        modelBuilder.Entity<UserSettingsEntity>().HasData(new UserSettingsEntity { Id = 1, CultureInfoName = Thread.CurrentThread.CurrentUICulture.Name });
     }
 }

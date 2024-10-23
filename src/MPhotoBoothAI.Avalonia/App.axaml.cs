@@ -1,5 +1,6 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.ViewModels;
@@ -29,7 +30,7 @@ public partial class App : AvaloniaApplication
     public override void OnFrameworkInitializationCompleted()
     {
         ServiceProvider = ConfigureServiceProvider();
-        ServiceProvider.GetRequiredService<IDatabaseContext>().Migrate();
+        ServiceProvider.GetRequiredService<IDatabaseContext>().Database.Migrate();
         SetApplicationLanguage(ServiceProvider.GetRequiredService<IUserSettingsService>());
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -45,10 +46,6 @@ public partial class App : AvaloniaApplication
 
     private static void SetApplicationLanguage(IUserSettingsService userSettings)
     {
-        if (string.IsNullOrEmpty(userSettings.Value.CultureInfoName))
-        {
-            userSettings.Value.CultureInfoName = Thread.CurrentThread.CurrentUICulture.Name;
-        }
         Thread.CurrentThread.CurrentUICulture = new CultureInfo(userSettings.Value.CultureInfoName);
     }
 
