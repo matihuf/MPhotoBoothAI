@@ -1,4 +1,6 @@
 ﻿using Emgu.CV.Dnn;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML.OnnxRuntime;
 using MPhotoBoothAI.Application;
@@ -9,6 +11,7 @@ using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
 using MPhotoBoothAI.Infrastructure;
 using MPhotoBoothAI.Infrastructure.CameraDevices;
+using MPhotoBoothAI.Infrastructure.Persistence;
 using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Infrastructure.Services.Swap;
 using Serilog;
@@ -28,7 +31,21 @@ public static class DependencyInjection
         AddManagers(services);
         AddNavigation(services);
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
+        AddDatabase(services);
         return services;
+    }
+
+    private static void AddDatabase(IServiceCollection services)
+    {
+        services.AddDbContext<DatabaseContext>((s, o) =>
+        {
+            var applicationInfoService = s.GetRequiredService<IApplicationInfoService>();
+            o.UseSqlite($"Data Source={Path.Combine(applicationInfoService.UserProfilePath, $"{applicationInfoService.Product}.db")}", sql =>
+            {
+                sql.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Consts.Db.Schema);
+            });
+        });
+        services.AddScoped<IDatabaseContext, DatabaseContext>(s => s.GetRequiredService<DatabaseContext>());
     }
 
     private static void AddNavigation(IServiceCollection services)

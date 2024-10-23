@@ -29,6 +29,7 @@ public partial class App : AvaloniaApplication
     public override void OnFrameworkInitializationCompleted()
     {
         ServiceProvider = ConfigureServiceProvider();
+        ServiceProvider.GetRequiredService<IDatabaseContext>().Migrate();
         SetApplicationLanguage(ServiceProvider.GetRequiredService<IUserSettingsService>());
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
