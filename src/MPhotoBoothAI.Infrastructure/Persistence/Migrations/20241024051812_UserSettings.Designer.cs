@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241023134355_UserSettings")]
+    [Migration("20241024051812_UserSettings")]
     partial class UserSettings
     {
         /// <inheritdoc />
@@ -38,7 +38,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CultureInfoName = "pl-PL"
+                            CultureInfoName = ""
                         });
                 });
 #pragma warning restore 612, 618

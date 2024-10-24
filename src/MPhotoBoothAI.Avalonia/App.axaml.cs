@@ -46,6 +46,10 @@ public partial class App : AvaloniaApplication
 
     private static void SetApplicationLanguage(IUserSettingsService userSettings)
     {
+        if (string.IsNullOrEmpty(userSettings.Value.CultureInfoName))
+        {
+            userSettings.Value.CultureInfoName = Thread.CurrentThread.CurrentUICulture.Name;
+        }
         Thread.CurrentThread.CurrentUICulture = new CultureInfo(userSettings.Value.CultureInfoName);
     }
 

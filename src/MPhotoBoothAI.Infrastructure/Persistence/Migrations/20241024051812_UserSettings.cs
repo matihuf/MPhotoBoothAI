@@ -26,7 +26,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
             migrationBuilder.InsertData(
                 table: "UserSettings",
                 columns: new[] { "Id", "CultureInfoName" },
-                values: new object[] { 1, "pl-PL" });
+                values: new object[] { 1, "" });
         }
 
         /// <inheritdoc />

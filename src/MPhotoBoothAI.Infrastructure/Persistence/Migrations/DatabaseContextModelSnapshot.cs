@@ -35,7 +35,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CultureInfoName = "pl-PL"
+                            CultureInfoName = ""
                         });
                 });
 #pragma warning restore 612, 618

@@ -15,6 +15,6 @@ public class DatabaseContext : DbContext, IDatabaseContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
-        modelBuilder.Entity<UserSettingsEntity>().HasData(new UserSettingsEntity { Id = 1, CultureInfoName = Thread.CurrentThread.CurrentUICulture.Name });
+        modelBuilder.Entity<UserSettingsEntity>().HasData(new UserSettingsEntity { Id = 1, CultureInfoName = string.Empty });
     }
 }
