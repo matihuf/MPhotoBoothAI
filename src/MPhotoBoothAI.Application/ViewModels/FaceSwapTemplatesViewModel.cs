@@ -15,9 +15,13 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     [ObservableProperty]
     private string? _title;
 
+    [ObservableProperty]
+    private bool _isGroupInEdit;
+
     public FaceSwapTemplatesViewModel()
     {
         SelectedGroup = Groups.FirstOrDefault();
+        IsGroupInEdit = false;
     }
 
     [RelayCommand]
@@ -47,4 +51,7 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     {
         Templates.Add(new CrudListItem(string.Empty, true));
     }
+
+    [RelayCommand]
+    private void EditGroup() => IsGroupInEdit = !IsGroupInEdit;
 }

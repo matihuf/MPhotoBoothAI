@@ -59,7 +59,7 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                       <Button Command="{Binding $parent[controls:CrudListBoxTemplatedControl].DeleteCommand}"
                               CommandParameter="{Binding}">
-                        <PathIcon Data="{StaticResource remove_regular}" />
+                        <PathIcon Data="{StaticResource delete_regular}" />
                       </Button>
                     </StackPanel>
                   </Panel>

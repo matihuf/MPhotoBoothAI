@@ -33,7 +33,21 @@
           </Grid.RowDefinitions>
           <Panel Grid.Row="0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-              <TextBlock Text="{Binding Title}"/>
+              <TextBox Text="{Binding Title}" IsVisible="{Binding IsGroupInEdit}" VerticalAlignment="Center"/>
+              <TextBlock Text="{Binding Title}" IsVisible="{Binding !IsGroupInEdit}" VerticalAlignment="Center"/>
+              <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
+                <PathIcon Data="{StaticResource edit_regular}" />
+              </Button>
+              <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
+                <PathIcon Data="{StaticResource save_regular}" />
+              </Button>
+              <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
+                <PathIcon Data="{StaticResource dismiss_regular}" />
+              </Button>
+              <Button>
+                <PathIcon Data="{StaticResource delete_regular}" />
+              </Button>
+              <CheckBox IsChecked="True" Content="Enabled"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
               <Button Command="{Binding AddTemplateCommand}">
