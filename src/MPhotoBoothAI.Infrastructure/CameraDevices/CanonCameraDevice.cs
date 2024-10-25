@@ -1,6 +1,5 @@
 ﻿using EDSDK.NET;
 using Emgu.CV;
-using MPhotoBoothAI.Application.Enums;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Models.Camera;
@@ -11,7 +10,17 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
     public class CanonCameraDevice : BaseCameraDevice, ICameraDevice, ICameraDeviceSettings
     {
         private readonly IDiskInfoService _diskInfoService;
+
         private readonly SDKHandler _sdkHandler;
+
+        public event EventHandler Connected;
+
+        public event EventHandler Disconnected;
+
+        public bool IsAvailable { get; private set; } = false;
+
+        public string CameraName { get; private set; }
+
         public CanonCameraDevice()
         {
             _diskInfoService = new DiskInfoService();
@@ -22,11 +31,6 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             _sdkHandler.CameraHasShutdown += CameraHasShutdown;
         }
 
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
-
-        public ECameraType CameraType => ECameraType.Canon;
-        public bool IsAvailable { get; private set; } = false;
         public void Dispose()
         {
             Dispose(true);
@@ -35,71 +39,83 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         public CameraSetting GetAperture()
         {
-            throw new NotImplementedException();
-        }
-
-        public CameraSetting GetIsoSetting()
-        {
-            var isoSettings = new List<string>();
-            foreach (var iso in _sdkHandler.GetSettingsList(PropID_ISOSpeed))
+            var apertureSettings = new List<string>();
+            foreach (var aperture in _sdkHandler.GetSettingsList(PropID_Av))
             {
-                isoSettings.Add(CameraValues.ISO(iso));
-            }
-            _ = GetProgram();
-            return new CameraSetting
-            {
-                AvailableValues = isoSettings,
-                Current = CameraValues.ISO((int)_sdkHandler.GetSetting(PropID_ISOSpeed))
-            };
-        }
-
-        public CameraSetting GetProgram()
-        {
-            var programSettings = new List<string>();
-            foreach (var program in _sdkHandler.GetSettingsList(PropID_AEMode))
-            {
-                //isoSettings.Add(CameraValues.ISO(iso));
+                if (CameraValues.AvValues.TryGetValue((uint)aperture, out string? dictApertureValue))
+                {
+                    apertureSettings.Add(dictApertureValue);
+                }
             }
             return new CameraSetting
             {
-                //AvailableValues = isoSettings,
-                Current = CameraValues.ISO((int)_sdkHandler.GetSetting(PropID_ISOSpeed))
+                AvailableValues = apertureSettings,
+                Current = CameraValues.AvValues.TryGetValue(_sdkHandler.GetSetting(PropID_Av), out string? apertureValue) ? apertureValue : string.Empty
             };
-        }
-
-        public CameraSetting GetShutterSpeed()
-        {
-            return new CameraSetting();
-            //throw new NotImplementedException();
-        }
-
-        public CameraSetting GetWhiteBalance()
-        {
-            return new CameraSetting();
-
-            //throw new NotImplementedException();
         }
 
         public void SetAperture(string aperatureValue)
         {
-            //throw new NotImplementedException();
+            _sdkHandler.SetSetting(PropID_Av, CameraValues.AvValues.FirstOrDefault(v => v.Value == aperatureValue).Key);
         }
 
-        public void SetIso(string isoValue) => _sdkHandler.SetSetting(PropID_ISOSpeed, CameraValues.ISO(isoValue));
-
-        public void SetProgram(string programValue)
+        public CameraSetting GetIso()
         {
-            //throw new NotImplementedException();
+            var isoSettings = new List<string>();
+            foreach (var iso in _sdkHandler.GetSettingsList(PropID_ISOSpeed))
+            {
+                if (CameraValues.IsoValues.TryGetValue((uint)iso, out string? dictIsoValue))
+                {
+                    isoSettings.Add(dictIsoValue);
+                }
+            }
+            return new CameraSetting
+            {
+                AvailableValues = isoSettings,
+                Current = CameraValues.IsoValues.TryGetValue(_sdkHandler.GetSetting(PropID_ISOSpeed), out string? isoValue) ? isoValue : string.Empty
+            };
+        }
+
+        public void SetIso(string isoValue)
+        {
+            _sdkHandler.SetSetting(PropID_ISOSpeed, CameraValues.IsoValues.FirstOrDefault(v => v.Value == isoValue).Key);
+        }
+
+        public CameraSetting GetShutterSpeed()
+        {
+            var shutterSpeed = new List<string>();
+            foreach (var shutter in _sdkHandler.GetSettingsList(PropID_Tv))
+            {
+                if (CameraValues.TvValues.TryGetValue((uint)shutter, out string? dictShutterSpeed))
+                {
+                    shutterSpeed.Add(dictShutterSpeed);
+                }
+            }
+            return new CameraSetting
+            {
+                AvailableValues = shutterSpeed,
+                Current = CameraValues.TvValues.TryGetValue(_sdkHandler.GetSetting(PropID_Tv), out string? shutterSpeedValue) ? shutterSpeedValue : string.Empty
+            };
         }
 
         public void SetShutterSpeed(string shutterSpeedValue)
         {
-            //throw new NotImplementedException();
+            _sdkHandler.SetSetting(PropID_Tv, CameraValues.TvValues.FirstOrDefault(v => v.Value == shutterSpeedValue).Key);
+        }
+
+        public CameraSetting GetWhiteBalance()
+        {
+            var whiteBalance = CameraValues.WhiteBalanceValues.Select(w => w.Value);
+            return new CameraSetting
+            {
+                AvailableValues = whiteBalance,
+                Current = CameraValues.WhiteBalanceValues.TryGetValue(_sdkHandler.GetSetting(PropID_WhiteBalance), out string? whiteBalanceValue) ? whiteBalanceValue : string.Empty
+            };
         }
 
         public void SetWhiteBalance(string whiteBalanceValue)
         {
-            //throw new NotImplementedException();
+            _sdkHandler.SetSetting(PropID_WhiteBalance, CameraValues.WhiteBalanceValues.FirstOrDefault(v => v.Value == whiteBalanceValue).Key);
         }
 
         public void StartLiveView() => _sdkHandler?.StartLiveView();
@@ -119,7 +135,6 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
         {
             if (disposing && _sdkHandler != null)
             {
-
                 _sdkHandler.CloseSession();
                 _sdkHandler.ImageDownloaded -= ImageDownloaded;
                 _sdkHandler.CameraAdded -= CameraAdded;
@@ -142,6 +157,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 Disconnected?.Invoke(this, EventArgs.Empty);
             }
         }
+
         private void ImageDownloaded(Mat mat) => Notify(mat);
 
         private void Reconnect()
@@ -158,6 +174,8 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                     _sdkHandler.SetCapacity(bytesPerSector.Value, numberOfFreeClusters.Value);
                 }
                 _sdkHandler.SetSetting(PropID_SaveTo, (uint)EdsSaveTo.Host);
+                _sdkHandler.SetSetting(PropID_AEModeSelect, AEMode_Manual);
+                var wb = _sdkHandler.GetSetting(PropID_WhiteBalance);
             }
         }
     }

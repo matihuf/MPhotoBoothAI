@@ -4,17 +4,13 @@ namespace MPhotoBoothAI.Application.Interfaces
 {
     public interface ICameraDeviceSettings
     {
-        CameraSetting GetIsoSetting();
+        CameraSetting GetIso();
 
         void SetIso(string isoValue);
 
         CameraSetting GetShutterSpeed();
 
         void SetShutterSpeed(string shutterSpeedValue);
-
-        CameraSetting GetProgram();
-
-        void SetProgram(string programValue);
 
         CameraSetting GetWhiteBalance();
 

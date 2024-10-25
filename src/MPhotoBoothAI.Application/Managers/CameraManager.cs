@@ -35,9 +35,7 @@ namespace MPhotoBoothAI.Infrastructure.Services
 
         public CameraSetting? GetAperture() => CurrentSettings?.GetAperture();
 
-        public CameraSetting? GetIsoSettings() => CurrentSettings?.GetIsoSetting();
-
-        public CameraSetting? GetProgram() => CurrentSettings?.GetProgram();
+        public CameraSetting? GetIso() => CurrentSettings?.GetIso();
 
         public CameraSetting? GetShutterSpeed() => CurrentSettings?.GetShutterSpeed();
 
@@ -46,9 +44,6 @@ namespace MPhotoBoothAI.Infrastructure.Services
         public void SetAperture(string apertureValue) => CurrentSettings?.SetAperture(apertureValue);
 
         public void SetIso(string isoValue) => CurrentSettings?.SetIso(isoValue);
-
-
-        public void SetProgram(string programValue) => CurrentSettings?.SetProgram(programValue);
 
         public void SetShutterSpeed(string shutterSpeedValue) => CurrentSettings?.SetShutterSpeed(shutterSpeedValue);
 

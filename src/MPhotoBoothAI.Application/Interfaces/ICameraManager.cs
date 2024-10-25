@@ -5,13 +5,10 @@ namespace MPhotoBoothAI.Application.Interfaces
     public interface ICameraManager : IDisposable
     {
         IEnumerable<ICameraDevice> Availables { get; }
+
         ICameraDevice? Current { get; set; }
 
-        CameraSetting? GetProgram();
-
-        void SetProgram(string programValue);
-
-        CameraSetting? GetIsoSettings();
+        CameraSetting? GetIso();
 
         void SetIso(string isoValue);
 

@@ -9,6 +9,8 @@ namespace MPhotoBoothAI.Application.ViewModels
 {
     public partial class CameraSettingsViewModel : ViewModelBase, IObserver, IDisposable
     {
+        private readonly Dictionary<string, Action> _setSettingByString = [];
+
         private readonly ICameraManager _cameraManager;
 
         [ObservableProperty]
@@ -21,14 +23,29 @@ namespace MPhotoBoothAI.Application.ViewModels
         private IEnumerable<ICameraDevice> _availables;
 
         [ObservableProperty]
-        private CameraSetting? _isoSettings;
+        private CameraSetting? _isoSettings = new();
+
+        [ObservableProperty]
+        private CameraSetting? _shutterSettings = new();
+
+        [ObservableProperty]
+        private CameraSetting? _apertureSettings = new();
+
+        [ObservableProperty]
+        private CameraSetting? _whiteBalanceSettings = new();
 
         public CameraSettingsViewModel(ICameraManager cameraManager)
         {
             _cameraManager = cameraManager;
             _availables = _cameraManager.Availables;
             Frame = new Mat();
-            IsoSettings = new CameraSetting();
+            _setSettingByString = new Dictionary<string, Action>()
+            {
+                {"Iso", SetIso },
+                {"ShutterSpeed", SetShutterSpeed },
+                {"Aperture", SetAperture },
+                {"WhiteBalance", SetWhiteBalance },
+            };
         }
 
         public void Notify(Mat mat) => Frame = mat;
@@ -39,7 +56,15 @@ namespace MPhotoBoothAI.Application.ViewModels
             oldValue?.Detach(this);
             newValue?.Attach(this);
             _cameraManager.Current = newValue;
-            IsoSettings = _cameraManager.GetIsoSettings();
+            GetCameraSettings();
+        }
+
+        private void GetCameraSettings()
+        {
+            IsoSettings = _cameraManager.GetIso();
+            ApertureSettings = _cameraManager.GetAperture();
+            ShutterSettings = _cameraManager.GetShutterSpeed();
+            WhiteBalanceSettings = _cameraManager.GetWhiteBalance();
         }
 
         public void Dispose()
@@ -64,7 +89,39 @@ namespace MPhotoBoothAI.Application.ViewModels
         private void StartLiveView() => CurrentCameraDevice?.StartLiveView();
 
         [RelayCommand]
-        private void IsoCurrentChange()
+        private void CameraSettingsChanged(string parameter)
+        {
+            if (_setSettingByString.ContainsKey(parameter))
+            {
+                _setSettingByString[parameter].Invoke();
+            }
+        }
+
+        private void SetWhiteBalance()
+        {
+            if (!string.IsNullOrEmpty(WhiteBalanceSettings?.Current))
+            {
+                _cameraManager.SetWhiteBalance(WhiteBalanceSettings.Current);
+            }
+        }
+
+        private void SetAperture()
+        {
+            if (!string.IsNullOrEmpty(ApertureSettings?.Current))
+            {
+                _cameraManager.SetAperture(ApertureSettings.Current);
+            }
+        }
+
+        private void SetShutterSpeed()
+        {
+            if (!string.IsNullOrEmpty(ShutterSettings?.Current))
+            {
+                _cameraManager.SetShutterSpeed(ShutterSettings.Current);
+            }
+        }
+
+        private void SetIso()
         {
             if (!string.IsNullOrEmpty(IsoSettings?.Current))
             {
