@@ -8,5 +8,6 @@ public class EntitiesProfiles : Profile
     public EntitiesProfiles()
     {
         CreateMap<UserSettingsEntity, UserSettings>();
+        CreateMap<CameraSettingsEntity, CameraSettings>();
     }
 }

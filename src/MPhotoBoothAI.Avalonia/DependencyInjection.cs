@@ -9,7 +9,6 @@ using MPhotoBoothAI.Application.Profiles;
 using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
-using MPhotoBoothAI.Infrastructure;
 using MPhotoBoothAI.Infrastructure.CameraDevices;
 using MPhotoBoothAI.Infrastructure.Persistence;
 using MPhotoBoothAI.Infrastructure.Services;
@@ -67,6 +66,7 @@ public static class DependencyInjection
     }
 
     private static Net GetDnnModel(string name) => DnnInvoke.ReadNetFromONNX(GetModelPath(name));
+
     private static string GetModelPath(string name) => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "models", $"{name}.onnx");
 
     private static void AddViewModels(IServiceCollection services)
@@ -93,6 +93,7 @@ public static class DependencyInjection
         services.AddTransient<IAppRestarterService, AppRestarterService>();
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
         services.AddSingleton<IUserSettingsService, UserSettingsService>();
+        services.AddSingleton<ICameraSettingsService, CameraSettingsService>();
     }
 
     private static void AddCamera(IServiceCollection services)

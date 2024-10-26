@@ -7,13 +7,16 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices;
 public class WebCameraDevice : BaseCameraDevice, ICameraDevice
 {
     private readonly VideoCapture _videoCapture;
+
     private bool _started = false;
 
     public event EventHandler Connected;
+
     public event EventHandler Disconnected;
 
-    public ECameraType CameraType => ECameraType.Usb;
     public bool IsAvailable { get; private set; } = false;
+
+    public string CameraName => _videoCapture.BackendName;
 
     public WebCameraDevice()
     {
