@@ -6,6 +6,8 @@ namespace MPhotoBoothAI.Infrastructure.Persistence;
 public class DatabaseContext : DbContext, IDatabaseContext
 {
     public DbSet<UserSettingsEntity> UserSettings { get; set; }
+    public DbSet<FaceSwapTemplateGroupEntity> FaceSwapTemplateGroups { get; set; }
+    public DbSet<FaceSwapTemplateEntity> FaceSwapTemplates { get; set; }
 
     public DbSet<CameraSettingsEntity> CameraSettings { get; set; }
 

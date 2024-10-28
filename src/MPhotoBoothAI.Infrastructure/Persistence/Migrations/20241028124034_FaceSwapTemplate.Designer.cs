@@ -2,6 +2,7 @@
 using MPhotoBoothAI.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,48 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241028124034_FaceSwapTemplate")]
+    partial class FaceSwapTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
-
-            modelBuilder.Entity("MPhotoBoothAI.Models.Entities.CameraSettingsEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Aperture")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("NVARCHAR");
-
-                    b.Property<string>("Camera")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR");
-
-                    b.Property<string>("Iso")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("NVARCHAR");
-
-                    b.Property<string>("ShutterSpeed")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("NVARCHAR");
-
-                    b.Property<string>("WhiteBalance")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("NVARCHAR");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CameraSettings");
-                });
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
             modelBuilder.Entity("MPhotoBoothAI.Models.Entities.FaceSwapTemplateEntity", b =>
                 {
@@ -109,6 +76,13 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserSettings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CultureInfoName = ""
+                        });
                 });
 
             modelBuilder.Entity("MPhotoBoothAI.Models.Entities.FaceSwapTemplateEntity", b =>
