@@ -5,8 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Views;
+using MPhotoBoothAI.Models.Entities;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using AvaloniaApplication = Avalonia.Application;
 namespace MPhotoBoothAI.Avalonia;
@@ -31,7 +33,7 @@ public partial class App : AvaloniaApplication
     {
         ServiceProvider = ConfigureServiceProvider();
         ServiceProvider.GetRequiredService<IDatabaseContext>().Database.Migrate();
-        SetApplicationLanguage(ServiceProvider.GetRequiredService<IUserSettingsService>());
+        SetApplicationLanguage(ServiceProvider.GetRequiredService<IDatabaseContext>());
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
@@ -44,13 +46,16 @@ public partial class App : AvaloniaApplication
         base.OnFrameworkInitializationCompleted();
     }
 
-    private static void SetApplicationLanguage(IUserSettingsService userSettings)
+    private static void SetApplicationLanguage(IDatabaseContext databaseContext)
     {
-        if (string.IsNullOrEmpty(userSettings.Value.CultureInfoName))
+        var userSettingsEntity = databaseContext.UserSettings.FirstOrDefault();
+        if (userSettingsEntity == null)
         {
-            userSettings.Value.CultureInfoName = Thread.CurrentThread.CurrentUICulture.Name;
+            userSettingsEntity = new UserSettingsEntity { CultureInfoName = Thread.CurrentThread.CurrentUICulture.Name };
+            databaseContext.UserSettings.Add(userSettingsEntity);
+            databaseContext.SaveChangesAsync();
         }
-        Thread.CurrentThread.CurrentUICulture = new CultureInfo(userSettings.Value.CultureInfoName);
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo(userSettingsEntity.CultureInfoName);
     }
 
     private void Desktop_Exit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
