@@ -5,6 +5,5 @@ public class DesignFaceSwapTemplatesViewModel : FaceSwapTemplatesViewModel
 {
     public DesignFaceSwapTemplatesViewModel() : base()
     {
-        Groups = DesignTimeData.CrudListItems;
     }
 }

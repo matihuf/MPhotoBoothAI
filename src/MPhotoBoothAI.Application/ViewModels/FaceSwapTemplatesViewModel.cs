@@ -1,16 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MPhotoBoothAI.Models.UI;
+using MPhotoBoothAI.Models.Entities;
 using System.Collections.ObjectModel;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 public partial class FaceSwapTemplatesViewModel : ViewModelBase
 {
-    public ObservableCollection<CrudListItem> Groups { get; set; } = [];
-    public ObservableCollection<CrudListItem> Templates { get; set; } = [];
+    public ObservableCollection<FaceSwapTemplateGroupEntity> Groups { get; set; } = [];
+    public ObservableCollection<FaceSwapTemplateEntity> Templates { get; set; } = [];
 
     [ObservableProperty]
-    private CrudListItem? _selectedGroup;
+    private FaceSwapTemplateGroupEntity? _selectedGroup;
 
     [ObservableProperty]
     private string? _title;
@@ -27,29 +27,26 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     [RelayCommand]
     private void AddGroup()
     {
-        var newItemsCount = Groups.Count(x => x.IsNew);
-        string label = newItemsCount == 0 ? Assets.UI.newGroup : $"{Assets.UI.newGroup} ({newItemsCount})";
-        var newEntry = new CrudListItem(label, true);
-        Groups.Add(newEntry);
-        SelectedGroup = newEntry;
+        // Groups.Add(newEntry);
+        //  SelectedGroup = newEntry;
     }
 
     [RelayCommand]
-    private void DeleteGroup(CrudListItem crudListItem)
+    private void DeleteGroup(FaceSwapTemplateGroupEntity faceSwapTemplateGroupEntity)
     {
-        Groups.Remove(crudListItem);
+        Groups.Remove(faceSwapTemplateGroupEntity);
         SelectedGroup = Groups.FirstOrDefault();
     }
 
-    partial void OnSelectedGroupChanged(CrudListItem? value)
+    partial void OnSelectedGroupChanged(FaceSwapTemplateGroupEntity? value)
     {
-        Title = value?.Label ?? string.Empty;
+        Title = value?.Name ?? string.Empty;
     }
 
     [RelayCommand]
     private void AddTemplate()
     {
-        Templates.Add(new CrudListItem(string.Empty, true));
+        Templates.Add(new FaceSwapTemplateEntity());
     }
 
     [RelayCommand]
