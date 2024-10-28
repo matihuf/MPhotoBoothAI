@@ -58,10 +58,10 @@ namespace MPhotoBoothAI.Application.ViewModels
         {
             if (value is not null)
             {
-                _cameraSettingsService.Value.Iso = value.Iso.Current;
-                _cameraSettingsService.Value.Aperture = value.Aperture.Current;
-                _cameraSettingsService.Value.ShutterSpeed = value.ShutterSpeed.Current;
-                _cameraSettingsService.Value.WhiteBalance = value.WhiteBalance.Current;
+                _cameraSettingsService.Value.Iso = value.Iso?.Current ?? string.Empty;
+                _cameraSettingsService.Value.Aperture = value.Aperture?.Current ?? string.Empty;
+                _cameraSettingsService.Value.ShutterSpeed = value.ShutterSpeed?.Current ?? string.Empty;
+                _cameraSettingsService.Value.WhiteBalance = value.WhiteBalance?.Current ?? string.Empty;
                 _cameraManager.SetCurrentCameraSettings(value);
             }
         }
@@ -69,11 +69,14 @@ namespace MPhotoBoothAI.Application.ViewModels
         private void LoadSettingsFromDatabase()
         {
             var cameraSettings = _cameraManager.GetCurrentCameraSettings();
-            cameraSettings.Iso.Current = _cameraSettingsService.Value.Iso;
-            cameraSettings.Aperture.Current = _cameraSettingsService.Value.Aperture;
-            cameraSettings.ShutterSpeed.Current = _cameraSettingsService.Value.ShutterSpeed;
-            cameraSettings.WhiteBalance.Current = _cameraSettingsService.Value.WhiteBalance;
-            CurrentCameraSettings = cameraSettings;
+            if (cameraSettings is not null)
+            {
+                cameraSettings.Iso.Current = _cameraSettingsService.Value.Iso;
+                cameraSettings.Aperture.Current = _cameraSettingsService.Value.Aperture;
+                cameraSettings.ShutterSpeed.Current = _cameraSettingsService.Value.ShutterSpeed;
+                cameraSettings.WhiteBalance.Current = _cameraSettingsService.Value.WhiteBalance;
+                CurrentCameraSettings = cameraSettings;
+            }
         }
 
         private void GetCameraSettings()
