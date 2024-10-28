@@ -31,13 +31,26 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             _sdkHandler.CameraHasShutdown += CameraHasShutdown;
         }
 
-        public void Dispose()
+        public CurrentCameraSettings? GetCurrentSettings()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            return new CurrentCameraSettings
+            {
+                Iso = GetIso(),
+                Aperture = GetAperture(),
+                ShutterSpeed = GetShutterSpeed(),
+                WhiteBalance = GetWhiteBalance()
+            };
         }
 
-        public CameraSetting GetAperture()
+        public void SetCurrentSettings(CurrentCameraSettings currentCameraSettings)
+        {
+            SetIso(currentCameraSettings.Iso.Current);
+            SetAperture(currentCameraSettings.Aperture.Current);
+            SetShutterSpeed(currentCameraSettings.ShutterSpeed.Current);
+            SetWhiteBalance(currentCameraSettings.WhiteBalance.Current);
+        }
+
+        private CameraSetting GetAperture()
         {
             var apertureSettings = new List<string>();
             foreach (var aperture in _sdkHandler.GetSettingsList(PropID_Av))
@@ -54,12 +67,12 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             };
         }
 
-        public void SetAperture(string aperatureValue)
+        private void SetAperture(string aperatureValue)
         {
             _sdkHandler.SetSetting(PropID_Av, CameraValues.AvValues.FirstOrDefault(v => v.Value == aperatureValue).Key);
         }
 
-        public CameraSetting GetIso()
+        private CameraSetting GetIso()
         {
             var isoSettings = new List<string>();
             foreach (var iso in _sdkHandler.GetSettingsList(PropID_ISOSpeed))
@@ -76,12 +89,12 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             };
         }
 
-        public void SetIso(string isoValue)
+        private void SetIso(string isoValue)
         {
             _sdkHandler.SetSetting(PropID_ISOSpeed, CameraValues.IsoValues.FirstOrDefault(v => v.Value == isoValue).Key);
         }
 
-        public CameraSetting GetShutterSpeed()
+        private CameraSetting GetShutterSpeed()
         {
             var shutterSpeed = new List<string>();
             foreach (var shutter in _sdkHandler.GetSettingsList(PropID_Tv))
@@ -98,12 +111,12 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             };
         }
 
-        public void SetShutterSpeed(string shutterSpeedValue)
+        private void SetShutterSpeed(string shutterSpeedValue)
         {
             _sdkHandler.SetSetting(PropID_Tv, CameraValues.TvValues.FirstOrDefault(v => v.Value == shutterSpeedValue).Key);
         }
 
-        public CameraSetting GetWhiteBalance()
+        private CameraSetting GetWhiteBalance()
         {
             var whiteBalance = CameraValues.WhiteBalanceValues.Select(w => w.Value);
             return new CameraSetting
@@ -113,7 +126,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             };
         }
 
-        public void SetWhiteBalance(string whiteBalanceValue)
+        private void SetWhiteBalance(string whiteBalanceValue)
         {
             _sdkHandler.SetSetting(PropID_WhiteBalance, CameraValues.WhiteBalanceValues.FirstOrDefault(v => v.Value == whiteBalanceValue).Key);
         }
@@ -129,18 +142,6 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 _sdkHandler.StopLiveView();
             }
             _sdkHandler.TakePhoto();
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing && _sdkHandler != null)
-            {
-                _sdkHandler.CloseSession();
-                _sdkHandler.ImageDownloaded -= ImageDownloaded;
-                _sdkHandler.CameraAdded -= CameraAdded;
-                _sdkHandler.CameraHasShutdown -= CameraHasShutdown;
-                _sdkHandler.Dispose();
-            }
         }
 
         private void CameraAdded()
@@ -175,8 +176,25 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 }
                 _sdkHandler.SetSetting(PropID_SaveTo, (uint)EdsSaveTo.Host);
                 _sdkHandler.SetSetting(PropID_AEModeSelect, AEMode_Manual);
-                var wb = _sdkHandler.GetSetting(PropID_WhiteBalance);
             }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && _sdkHandler != null)
+            {
+                _sdkHandler.CloseSession();
+                _sdkHandler.ImageDownloaded -= ImageDownloaded;
+                _sdkHandler.CameraAdded -= CameraAdded;
+                _sdkHandler.CameraHasShutdown -= CameraHasShutdown;
+                _sdkHandler.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

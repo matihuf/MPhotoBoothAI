@@ -1,9 +1,7 @@
 ﻿using Avalonia;
 using MPhotoBoothAI.Infrastructure.Services;
 using Serilog;
-using Serilog.Events;
 using System;
-using System.IO;
 
 namespace MPhotoBoothAI.Avalonia;
 
@@ -17,21 +15,22 @@ sealed class Program
         try
         {
             var applicationInfoService = new ApplicationInfoService();
+#if !DEBUG
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Default", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .WriteTo.File(Path.Combine(applicationInfoService.UserProfilePath, "Logs", "log.txt"), fileSizeLimitBytes: 2000000, rollOnFileSizeLimit: true)
                 .CreateLogger();
             Log.Information("Application started, Version {version}", applicationInfoService.Version);
+#endif
 
             BuildAvaloniaApp()
                .StartWithClassicDesktopLifetime(args);
         }
         catch (Exception e)
         {
+#if !DEBUG
             Log.Fatal(e, "Something very bad happened");
-#if DEBUG
-            throw;
 #endif
         }
         finally

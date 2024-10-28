@@ -7,6 +7,7 @@ namespace MPhotoBoothAI.Models.Camera
         [ObservableProperty]
         private string? _current;
 
-        public IEnumerable<string>? AvailableValues { get; set; }
+        [ObservableProperty]
+        private IEnumerable<string>? _availableValues;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace MPhotoBoothAI.Models.Entities
+﻿using MPhotoBoothAI.Models.Entities.Base;
+
+namespace MPhotoBoothAI.Models.Entities
 {
     public class CameraSettingsEntity : BaseEntity
     {

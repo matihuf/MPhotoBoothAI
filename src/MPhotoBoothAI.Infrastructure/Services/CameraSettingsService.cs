@@ -9,7 +9,7 @@ namespace MPhotoBoothAI.Infrastructure.Services
     public class CameraSettingsService(IDatabaseContext databaseContext, IMapper mapper)
         : BaseSettingsService<CameraSettings>(databaseContext, mapper), ICameraSettingsService
     {
-        CameraSettings ICameraSettingsService.Value { get; }
+        public CameraSettings Value => SettingsValue;
 
         protected override CameraSettings Load()
         {

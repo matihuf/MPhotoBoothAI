@@ -12,14 +12,14 @@ namespace MPhotoBoothAI.Infrastructure.Services.Base
 
         protected IMapper _mapper;
 
-        public T Value { get; }
+        protected T SettingsValue { get; }
 
         protected BaseSettingsService(IDatabaseContext databaseContext, IMapper mapper)
         {
             _databaseContext = databaseContext;
             _mapper = mapper;
-            Value = Load();
-            Value.PropertyChanged += PropertyChanged;
+            SettingsValue = Load();
+            SettingsValue.PropertyChanged += PropertyChanged;
         }
 
         protected abstract T Load();
@@ -43,7 +43,7 @@ namespace MPhotoBoothAI.Infrastructure.Services.Base
         {
             if (disposing)
             {
-                Value.PropertyChanged -= PropertyChanged;
+                SettingsValue.PropertyChanged -= PropertyChanged;
             }
         }
 

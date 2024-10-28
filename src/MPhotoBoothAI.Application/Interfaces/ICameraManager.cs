@@ -8,20 +8,9 @@ namespace MPhotoBoothAI.Application.Interfaces
 
         ICameraDevice? Current { get; set; }
 
-        CameraSetting? GetIso();
+        CurrentCameraSettings? GetCurrentCameraSettings();
 
-        void SetIso(string isoValue);
+        void SetCurrentCameraSettings(CurrentCameraSettings currentCameraSettings);
 
-        CameraSetting? GetShutterSpeed();
-
-        void SetShutterSpeed(string shutterSpeedValue);
-
-        CameraSetting? GetWhiteBalance();
-
-        void SetWhiteBalance(string whiteBalanceValue);
-
-        CameraSetting? GetAperture();
-
-        void SetAperture(string apertureValue);
     }
 }

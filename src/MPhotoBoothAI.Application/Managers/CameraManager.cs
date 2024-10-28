@@ -9,6 +9,14 @@ namespace MPhotoBoothAI.Infrastructure.Services
     {
         private readonly IEnumerable<ICameraDevice> _cameras;
 
+        private ICameraDeviceSettings? CurrentSettings => Current as ICameraDeviceSettings;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public IEnumerable<ICameraDevice> Availables => _cameras != null ? _cameras.Where(x => x.IsAvailable) : [];
+
+        public ICameraDevice? Current { get; set; }
+
         public CameraManager(IEnumerable<ICameraDevice> cameras)
         {
             _cameras = cameras;
@@ -19,35 +27,22 @@ namespace MPhotoBoothAI.Infrastructure.Services
             }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public CurrentCameraSettings? GetCurrentCameraSettings()
+        {
+            return CurrentSettings?.GetCurrentSettings();
+        }
 
-        public IEnumerable<ICameraDevice> Availables => _cameras != null ? _cameras.Where(x => x.IsAvailable) : [];
+        public void SetCurrentCameraSettings(CurrentCameraSettings currentCameraSettings)
+        {
+            CurrentSettings?.SetCurrentSettings(currentCameraSettings);
+        }
 
-        public ICameraDevice? Current { get; set; }
-
-        private ICameraDeviceSettings? CurrentSettings => Current as ICameraDeviceSettings;
 
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        public CameraSetting? GetAperture() => CurrentSettings?.GetAperture();
-
-        public CameraSetting? GetIso() => CurrentSettings?.GetIso();
-
-        public CameraSetting? GetShutterSpeed() => CurrentSettings?.GetShutterSpeed();
-
-        public CameraSetting? GetWhiteBalance() => CurrentSettings?.GetWhiteBalance();
-
-        public void SetAperture(string apertureValue) => CurrentSettings?.SetAperture(apertureValue);
-
-        public void SetIso(string isoValue) => CurrentSettings?.SetIso(isoValue);
-
-        public void SetShutterSpeed(string shutterSpeedValue) => CurrentSettings?.SetShutterSpeed(shutterSpeedValue);
-
-        public void SetWhiteBalance(string whiteBalanceValue) => CurrentSettings?.SetWhiteBalance(whiteBalanceValue);
 
         protected virtual void Dispose(bool disposing)
         {
@@ -67,5 +62,6 @@ namespace MPhotoBoothAI.Infrastructure.Services
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

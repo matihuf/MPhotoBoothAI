@@ -42,11 +42,11 @@
 							Width="300" />
 			</StackPanel>
 			<WrapPanel Grid.Row="1"
-					   IsVisible="{Binding IsoSettings, Converter={StaticResource nullToVisibilityConverter}}">
+					   IsVisible="{Binding CurrentCameraSettings.Iso, Converter={StaticResource nullToVisibilityConverter}}">
 				<StackPanel>
 					<TextBlock Text="Iso" />
-					<ComboBox ItemsSource="{Binding IsoSettings.AvailableValues, Mode=OneWay}"
-							  SelectedItem="{Binding IsoSettings.Current, Mode=TwoWay}">
+					<ComboBox ItemsSource="{Binding CurrentCameraSettings.Iso.AvailableValues, Mode=OneWay}"
+							  SelectedItem="{Binding CurrentCameraSettings.Iso.Current, Mode=TwoWay}">
 						<i:Interaction.Behaviors>
 							<ia:EventTriggerBehavior EventName="SelectionChanged">
 								<ia:InvokeCommandAction Command="{Binding CameraSettingsChangedCommand}" CommandParameter="Iso"/>
@@ -56,8 +56,8 @@
 				</StackPanel>
 				<StackPanel>
 					<TextBlock Text="ShutterSpeed" />
-					<ComboBox ItemsSource="{Binding ShutterSettings.AvailableValues, Mode=OneWay}"
-							  SelectedItem="{Binding ShutterSettings.Current, Mode=TwoWay}">
+					<ComboBox ItemsSource="{Binding CurrentCameraSettings.ShutterSpeed.AvailableValues, Mode=OneWay}"
+							  SelectedItem="{Binding CurrentCameraSettings.ShutterSpeed.Current, Mode=TwoWay}">
 						<i:Interaction.Behaviors>
 							<ia:EventTriggerBehavior EventName="SelectionChanged">
 								<ia:InvokeCommandAction Command="{Binding CameraSettingsChangedCommand}" CommandParameter="ShutterSpeed"/>
@@ -67,8 +67,8 @@
 				</StackPanel>
 				<StackPanel>
 					<TextBlock Text="Aperture" />
-					<ComboBox ItemsSource="{Binding ApertureSettings.AvailableValues, Mode=OneWay}"
-							  SelectedItem="{Binding ApertureSettings.Current, Mode=TwoWay}">
+					<ComboBox ItemsSource="{Binding CurrentCameraSettings.Aperture.AvailableValues, Mode=OneWay}"
+							  SelectedItem="{Binding CurrentCameraSettings.Aperture.Current, Mode=TwoWay}">
 						<i:Interaction.Behaviors>
 							<ia:EventTriggerBehavior EventName="SelectionChanged">
 								<ia:InvokeCommandAction Command="{Binding CameraSettingsChangedCommand}" CommandParameter="Aperture"/>
@@ -78,8 +78,8 @@
 				</StackPanel>
 				<StackPanel>
 					<TextBlock Text="WhiteBalance" />
-					<ComboBox ItemsSource="{Binding WhiteBalanceSettings.AvailableValues, Mode=OneWay}"
-							  SelectedItem="{Binding WhiteBalanceSettings.Current, Mode=TwoWay}">
+					<ComboBox ItemsSource="{Binding CurrentCameraSettings.WhiteBalance.AvailableValues, Mode=OneWay}"
+							  SelectedItem="{Binding CurrentCameraSettings.WhiteBalance.Current, Mode=TwoWay}">
 						<i:Interaction.Behaviors>
 							<ia:EventTriggerBehavior EventName="SelectionChanged">
 								<ia:InvokeCommandAction Command="{Binding CameraSettingsChangedCommand}" CommandParameter="WhiteBalance"/>

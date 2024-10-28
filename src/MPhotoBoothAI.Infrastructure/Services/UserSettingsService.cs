@@ -8,7 +8,7 @@ namespace MPhotoBoothAI.Infrastructure.Services;
 public class UserSettingsService(IDatabaseContext databaseContext, IMapper mapper)
     : BaseSettingsService<UserSettings>(databaseContext, mapper), IUserSettingsService
 {
-    public UserSettings Value { get; }
+    public UserSettings Value => SettingsValue;
 
     protected override UserSettings Load()
     {
