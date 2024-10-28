@@ -9,8 +9,6 @@ namespace MPhotoBoothAI.Application.ViewModels
 {
     public partial class CameraSettingsViewModel : ViewModelBase, IObserver, IDisposable
     {
-        private readonly Dictionary<string, Action> _cameraSettingByStringKey = [];
-
         private readonly ICameraManager _cameraManager;
 
         private readonly ICameraSettingsService _cameraSettingsService;
@@ -33,13 +31,6 @@ namespace MPhotoBoothAI.Application.ViewModels
             _cameraSettingsService = cameraSettingsService;
             _availables = _cameraManager.Availables;
             Frame = new Mat();
-            //_cameraSettingByStringKey = new Dictionary<string, Action>()
-            //{
-            //    {"Iso", SetIso },
-            //    {"ShutterSpeed", SetShutterSpeed },
-            //    {"Aperture", SetAperture },
-            //    {"WhiteBalance", SetWhiteBalance },
-            //};
         }
 
         public void Notify(Mat mat) => Frame = mat;

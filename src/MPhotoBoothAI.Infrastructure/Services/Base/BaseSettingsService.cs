@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Models;
 using MPhotoBoothAI.Models.Base;
@@ -24,14 +23,8 @@ namespace MPhotoBoothAI.Infrastructure.Services.Base
 
         protected abstract T Load();
 
-        private void PropertyChanged(object? sender, PropertyChangedValueEventArgs e)
-        {
-            if (e.NewValue != null)
-            {
-                var sql = $"UPDATE [UserSettings] SET [{e.PropertyName}] = @p0";
-                _databaseContext.Database.ExecuteSqlRaw(sql, e.NewValue);
-            }
-        }
+        protected abstract void PropertyChanged(object? sender, PropertyChangedValueEventArgs e);
+
 
         public void Dispose()
         {

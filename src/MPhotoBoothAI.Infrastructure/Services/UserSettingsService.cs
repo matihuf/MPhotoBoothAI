@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Infrastructure.Services.Base;
 using MPhotoBoothAI.Models;
@@ -14,5 +15,16 @@ public class UserSettingsService(IDatabaseContext databaseContext, IMapper mappe
     {
         var settings = _databaseContext.UserSettings.ProjectTo<UserSettings>(_mapper.ConfigurationProvider).FirstOrDefault();
         return settings ?? new UserSettings();
+    }
+
+    protected override void PropertyChanged(object? sender, PropertyChangedValueEventArgs e)
+    {
+        {
+            if (e.NewValue != null)
+            {
+                var sql = $"UPDATE [UserSettings] SET [{e.PropertyName}] = @p0";
+                _databaseContext.Database.ExecuteSqlRaw(sql, e.NewValue);
+            }
+        }
     }
 }
