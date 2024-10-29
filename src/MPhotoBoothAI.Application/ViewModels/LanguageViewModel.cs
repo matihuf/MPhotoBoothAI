@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using MPhotoBoothAI.Application.Interfaces;
 using System.Globalization;
 
@@ -19,22 +20,22 @@ public partial class LanguageViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isRestartVisible;
 
-    private readonly IUserSettingsService _userSettings;
+    private readonly IDatabaseContext _databaseContext;
     private readonly IAppRestarterService _appRestarterService;
     private readonly string _default;
 
-    public LanguageViewModel(IUserSettingsService userSettings, IAppRestarterService appRestarterService)
+    public LanguageViewModel(IDatabaseContext databaseContext, IAppRestarterService appRestarterService)
     {
-        _userSettings = userSettings;
+        _databaseContext = databaseContext;
         _appRestarterService = appRestarterService;
-        SelectedCultureInfo = Cultures.FirstOrDefault(x => x.Name == userSettings.Value.CultureInfoName) ?? Cultures.First();
+        SelectedCultureInfo = Cultures.FirstOrDefault(x => x.Name == _databaseContext.UserSettings.AsNoTracking().FirstOrDefault()?.CultureInfoName) ?? Cultures.First();
         _default = SelectedCultureInfo.Name;
         IsRestartVisible = false;
     }
 
     partial void OnSelectedCultureInfoChanged(CultureInfo value)
     {
-        _userSettings.Value.CultureInfoName = value.Name;
+        _databaseContext.UserSettings.ExecuteUpdate(s => s.SetProperty(b => b.CultureInfoName, value.Name));
         IsRestartVisible = value.Name != _default;
     }
 

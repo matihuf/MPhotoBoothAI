@@ -5,8 +5,9 @@ using MPhotoBoothAI.Models.Entities;
 namespace MPhotoBoothAI.Application.Interfaces;
 public interface IDatabaseContext : IDisposable
 {
-    public DbSet<UserSettingsEntity> UserSettings { get; set; }
+    public DbSet<UserSettingsEntity> UserSettings { get; }
     public DatabaseFacade Database { get; }
 
+    int SaveChanges();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
 }
