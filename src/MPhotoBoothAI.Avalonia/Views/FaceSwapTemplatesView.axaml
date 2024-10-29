@@ -75,10 +75,10 @@
               <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
                 <PathIcon Data="{StaticResource dismiss_regular}" />
               </Button>
-              <Button>
+              <Button Command="{Binding DeleteGroupCommand}">
                 <PathIcon Data="{StaticResource delete_regular}" />
               </Button>
-              <CheckBox IsChecked="True" Content="Enabled"/>
+              <CheckBox IsChecked="{Binding SelectedGroup.IsEnabled, Mode=TwoWay}" Content="Enabled" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
               <Button Command="{Binding AddTemplateCommand}">

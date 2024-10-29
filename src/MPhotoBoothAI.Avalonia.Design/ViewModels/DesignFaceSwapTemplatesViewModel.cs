@@ -3,7 +3,7 @@
 namespace MPhotoBoothAI.Avalonia.Design.ViewModels;
 public class DesignFaceSwapTemplatesViewModel : FaceSwapTemplatesViewModel
 {
-    public DesignFaceSwapTemplatesViewModel() : base()
+    public DesignFaceSwapTemplatesViewModel() : base(DesignTimeDbContextFactory.CreateDbContext())
     {
     }
 }
