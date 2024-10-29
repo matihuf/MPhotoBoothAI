@@ -5,7 +5,7 @@ using MPhotoBoothAI.Application.ViewModels;
 namespace MPhotoBoothAI.Avalonia.Design.ViewModels;
 public class DesignLanguageViewModel : LanguageViewModel
 {
-    public DesignLanguageViewModel() : base(new Mock<IDatabaseContext>().Object, new Mock<IAppRestarterService>().Object)
+    public DesignLanguageViewModel() : base(DesignTimeDbContextFactory.CreateDbContext(), new Mock<IAppRestarterService>().Object)
     {
         IsRestartVisible = true;
     }

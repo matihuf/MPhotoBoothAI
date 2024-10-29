@@ -31,11 +31,11 @@ public partial class App : AvaloniaApplication
 
     public override void OnFrameworkInitializationCompleted()
     {
-        ServiceProvider = ConfigureServiceProvider();
-        ServiceProvider.GetRequiredService<IDatabaseContext>().Database.Migrate();
-        SetApplicationLanguage(ServiceProvider.GetRequiredService<IDatabaseContext>());
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            ServiceProvider = ConfigureServiceProvider();
+            ServiceProvider.GetRequiredService<IDatabaseContext>().Database.Migrate();
+            SetApplicationLanguage(ServiceProvider.GetRequiredService<IDatabaseContext>());
             desktop.MainWindow = new MainWindow
             {
                 DataContext = ServiceProvider.GetRequiredService<MainViewModel>()
