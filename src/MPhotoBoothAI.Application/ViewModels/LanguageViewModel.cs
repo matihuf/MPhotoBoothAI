@@ -28,7 +28,7 @@ public partial class LanguageViewModel : ViewModelBase
     {
         _databaseContext = databaseContext;
         _appRestarterService = appRestarterService;
-        SelectedCultureInfo = Cultures.FirstOrDefault(x => x.Name == _databaseContext.UserSettings.FirstOrDefault()?.CultureInfoName) ?? Cultures.First();
+        SelectedCultureInfo = Cultures.FirstOrDefault(x => x.Name == _databaseContext.UserSettings.AsNoTracking().FirstOrDefault()?.CultureInfoName) ?? Cultures.First();
         _default = SelectedCultureInfo.Name;
         IsRestartVisible = false;
     }
