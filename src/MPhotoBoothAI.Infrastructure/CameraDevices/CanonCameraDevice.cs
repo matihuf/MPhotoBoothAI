@@ -13,6 +13,14 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         private readonly SDKHandler _sdkHandler;
 
+        private CameraSetting _iso = new();
+
+        private CameraSetting _aperture = new();
+
+        private CameraSetting _shutterSpeed = new();
+
+        private CameraSetting _whiteBalance = new();
+
         public event EventHandler Connected;
 
         public event EventHandler Disconnected;
@@ -31,14 +39,18 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             _sdkHandler.CameraHasShutdown += CameraHasShutdown;
         }
 
-        public CurrentCameraSettings? GetCurrentSettings()
+        public CurrentCameraSettings GetCurrentSettings()
         {
+            _iso = GetIso();
+            _aperture = GetAperture();
+            _shutterSpeed = GetShutterSpeed();
+            _whiteBalance = GetWhiteBalance();
             return new CurrentCameraSettings
             {
-                Iso = GetIso(),
-                Aperture = GetAperture(),
-                ShutterSpeed = GetShutterSpeed(),
-                WhiteBalance = GetWhiteBalance()
+                Iso = _iso,
+                Aperture = _aperture,
+                ShutterSpeed = _shutterSpeed,
+                WhiteBalance = _whiteBalance
             };
         }
 
@@ -47,36 +59,29 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             if (currentCameraSettings?.Iso?.Current != null)
             {
                 SetIso(currentCameraSettings.Iso.Current);
+                _iso.Current = currentCameraSettings.Iso.Current;
             }
             if (currentCameraSettings?.Aperture?.Current != null)
             {
                 SetAperture(currentCameraSettings.Aperture.Current);
+                _aperture.Current = currentCameraSettings.Aperture.Current;
             }
             if (currentCameraSettings?.ShutterSpeed?.Current != null)
             {
                 SetShutterSpeed(currentCameraSettings.ShutterSpeed.Current);
+                _shutterSpeed.Current = currentCameraSettings.ShutterSpeed.Current;
             }
             if (currentCameraSettings?.WhiteBalance?.Current != null)
             {
                 SetWhiteBalance(currentCameraSettings.WhiteBalance.Current);
+                _whiteBalance.Current = currentCameraSettings.WhiteBalance.Current;
             }
         }
 
         private CameraSetting GetAperture()
         {
-            var apertureSettings = new List<string>();
-            foreach (var aperture in _sdkHandler.GetSettingsList(PropID_Av))
-            {
-                if (CameraValues.AvValues.TryGetValue((uint)aperture, out string? dictApertureValue))
-                {
-                    apertureSettings.Add(dictApertureValue);
-                }
-            }
-            return new CameraSetting
-            {
-                AvailableValues = apertureSettings,
-                Current = CameraValues.AvValues.TryGetValue(_sdkHandler.GetSetting(PropID_Av), out string? apertureValue) ? apertureValue : string.Empty
-            };
+            _aperture.Current = CameraValues.AvValues.TryGetValue(_sdkHandler.GetSetting(PropID_Av), out string? apertureValue) ? apertureValue : string.Empty;
+            return _aperture;
         }
 
         private void SetAperture(string? aperatureValue)
@@ -86,19 +91,8 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         private CameraSetting GetIso()
         {
-            var isoSettings = new List<string>();
-            foreach (var iso in _sdkHandler.GetSettingsList(PropID_ISOSpeed))
-            {
-                if (CameraValues.IsoValues.TryGetValue((uint)iso, out string? dictIsoValue))
-                {
-                    isoSettings.Add(dictIsoValue);
-                }
-            }
-            return new CameraSetting
-            {
-                AvailableValues = isoSettings,
-                Current = CameraValues.IsoValues.TryGetValue(_sdkHandler.GetSetting(PropID_ISOSpeed), out string? isoValue) ? isoValue : string.Empty
-            };
+            _iso.Current = CameraValues.IsoValues.TryGetValue(_sdkHandler.GetSetting(PropID_ISOSpeed), out string? isoValue) ? isoValue : string.Empty;
+            return _iso;
         }
 
         private void SetIso(string isoValue)
@@ -108,19 +102,21 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         private CameraSetting GetShutterSpeed()
         {
-            var shutterSpeed = new List<string>();
-            foreach (var shutter in _sdkHandler.GetSettingsList(PropID_Tv))
+            _shutterSpeed.Current = CameraValues.TvValues.TryGetValue(_sdkHandler.GetSetting(PropID_Tv), out string? shutterSpeedValue) ? shutterSpeedValue : string.Empty;
+            return _shutterSpeed;
+        }
+
+        private List<string> GetCanonPropValues(uint propID, Dictionary<uint, string> dictValues)
+        {
+            var listOfValues = new List<string>();
+            foreach (var value in _sdkHandler.GetSettingsList(propID))
             {
-                if (CameraValues.TvValues.TryGetValue((uint)shutter, out string? dictShutterSpeed))
+                if (dictValues.TryGetValue((uint)value, out string? dictValue))
                 {
-                    shutterSpeed.Add(dictShutterSpeed);
+                    listOfValues.Add(dictValue);
                 }
             }
-            return new CameraSetting
-            {
-                AvailableValues = shutterSpeed,
-                Current = CameraValues.TvValues.TryGetValue(_sdkHandler.GetSetting(PropID_Tv), out string? shutterSpeedValue) ? shutterSpeedValue : string.Empty
-            };
+            return listOfValues;
         }
 
         private void SetShutterSpeed(string shutterSpeedValue)
@@ -130,17 +126,21 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         private CameraSetting GetWhiteBalance()
         {
-            var whiteBalance = CameraValues.WhiteBalanceValues.Select(w => w.Value);
-            return new CameraSetting
-            {
-                AvailableValues = whiteBalance,
-                Current = CameraValues.WhiteBalanceValues.TryGetValue(_sdkHandler.GetSetting(PropID_WhiteBalance), out string? whiteBalanceValue) ? whiteBalanceValue : string.Empty
-            };
+            _whiteBalance.Current = CameraValues.WhiteBalanceValues.TryGetValue(_sdkHandler.GetSetting(PropID_WhiteBalance), out string? whiteBalanceValue) ? whiteBalanceValue : string.Empty;
+            return _whiteBalance;
         }
 
         private void SetWhiteBalance(string whiteBalanceValue)
         {
             _sdkHandler.SetSetting(PropID_WhiteBalance, CameraValues.WhiteBalanceValues.FirstOrDefault(v => v.Value == whiteBalanceValue).Key);
+        }
+
+        private void SetCameraAvaliableValues()
+        {
+            _iso.AvailableValues = GetCanonPropValues(PropID_ISOSpeed, CameraValues.IsoValues);
+            _aperture.AvailableValues = GetCanonPropValues(PropID_Av, CameraValues.AvValues);
+            _shutterSpeed.AvailableValues = GetCanonPropValues(PropID_Tv, CameraValues.TvValues);
+            _whiteBalance.AvailableValues = CameraValues.WhiteBalanceValues.Select(w => w.Value);
         }
 
         public void StartLiveView() => _sdkHandler?.StartLiveView();
@@ -188,6 +188,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 }
                 _sdkHandler.SetSetting(PropID_SaveTo, (uint)EdsSaveTo.Host);
                 _sdkHandler.SetSetting(PropID_AEModeSelect, AEMode_Manual);
+                SetCameraAvaliableValues();
             }
         }
 

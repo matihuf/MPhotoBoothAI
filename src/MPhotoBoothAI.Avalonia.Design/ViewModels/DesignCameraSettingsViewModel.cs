@@ -6,7 +6,7 @@ namespace MPhotoBoothAI.Avalonia.Design.ViewModels
 {
     public class DesignCameraSettingsViewModel : CameraSettingsViewModel
     {
-        public DesignCameraSettingsViewModel() : base(new Mock<ICameraManager>().Object, new Mock<ICameraSettingsService>().Object)
+        public DesignCameraSettingsViewModel() : base(new Mock<ICameraManager>().Object, new Mock<IDatabaseContext>().Object)
         {
 
         }

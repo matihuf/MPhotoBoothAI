@@ -11,7 +11,7 @@ namespace MPhotoBoothAI.Application.ViewModels
     {
         private readonly ICameraManager _cameraManager;
 
-        private readonly ICameraSettingsService _cameraSettingsService;
+        private readonly IDatabaseContext _databaseContext;
 
         [ObservableProperty]
         private Mat _frame;
@@ -23,12 +23,12 @@ namespace MPhotoBoothAI.Application.ViewModels
         private IEnumerable<ICameraDevice> _availables;
 
         [ObservableProperty]
-        private CurrentCameraSettings? _currentCameraSettings = new CurrentCameraSettings();
+        private CurrentCameraSettings? _currentCameraSettings;
 
-        public CameraSettingsViewModel(ICameraManager cameraManager, ICameraSettingsService cameraSettingsService)
+        public CameraSettingsViewModel(ICameraManager cameraManager, IDatabaseContext databaseContext)
         {
             _cameraManager = cameraManager;
-            _cameraSettingsService = cameraSettingsService;
+            _databaseContext = databaseContext;
             _availables = _cameraManager.Availables;
             Frame = new Mat();
         }
@@ -47,14 +47,17 @@ namespace MPhotoBoothAI.Application.ViewModels
 
         private void LoadSettingsFromDatabase()
         {
-            var cameraSettings = _cameraManager.GetCurrentCameraSettings();
-            if (cameraSettings is not null)
+            CurrentCameraSettings = _cameraManager?.GetCurrentCameraSettings();
+            if (CurrentCameraSettings is not null)
             {
-                cameraSettings.Iso.Current = _cameraSettingsService.Value.Iso;
-                cameraSettings.Aperture.Current = _cameraSettingsService.Value.Aperture;
-                cameraSettings.ShutterSpeed.Current = _cameraSettingsService.Value.ShutterSpeed;
-                cameraSettings.WhiteBalance.Current = _cameraSettingsService.Value.WhiteBalance;
-                CurrentCameraSettings.Iso = cameraSettings.Iso;
+                var dataBaseCameraSettings = _databaseContext.CameraSettings.FirstOrDefault();
+                if (dataBaseCameraSettings is not null)
+                {
+                    CurrentCameraSettings.Iso.Current = dataBaseCameraSettings.Iso;
+                    CurrentCameraSettings.Aperture.Current = dataBaseCameraSettings.Aperture;
+                    CurrentCameraSettings.ShutterSpeed.Current = dataBaseCameraSettings.ShutterSpeed;
+                    CurrentCameraSettings.WhiteBalance.Current = dataBaseCameraSettings.WhiteBalance;
+                }
             }
         }
 
@@ -85,13 +88,18 @@ namespace MPhotoBoothAI.Application.ViewModels
         private void StartLiveView() => CurrentCameraDevice?.StartLiveView();
 
         [RelayCommand]
-        private void CameraSettingsChanged()
+        private async Task CameraSettingsChanged()
         {
-            _cameraSettingsService.Value.Iso = CurrentCameraSettings.Iso?.Current ?? string.Empty;
-            _cameraSettingsService.Value.Aperture = CurrentCameraSettings.Aperture?.Current ?? string.Empty;
-            _cameraSettingsService.Value.ShutterSpeed = CurrentCameraSettings.ShutterSpeed?.Current ?? string.Empty;
-            _cameraSettingsService.Value.WhiteBalance = CurrentCameraSettings.WhiteBalance?.Current ?? string.Empty;
-            _cameraManager.SetCurrentCameraSettings(CurrentCameraSettings);
+            var databaseCameraSettings = _databaseContext.CameraSettings.FirstOrDefault();
+            if (databaseCameraSettings is not null && CurrentCameraSettings is not null)
+            {
+                databaseCameraSettings.Iso = CurrentCameraSettings?.Iso?.Current ?? string.Empty;
+                databaseCameraSettings.Aperture = CurrentCameraSettings?.Aperture?.Current ?? string.Empty;
+                databaseCameraSettings.ShutterSpeed = CurrentCameraSettings?.ShutterSpeed?.Current ?? string.Empty;
+                databaseCameraSettings.WhiteBalance = CurrentCameraSettings?.WhiteBalance?.Current ?? string.Empty;
+                await _databaseContext.SaveChangesAsync();
+                _cameraManager.SetCurrentCameraSettings(CurrentCameraSettings);
+            }
         }
     }
 }

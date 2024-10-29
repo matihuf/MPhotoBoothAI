@@ -1,13 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace MPhotoBoothAI.Models.Camera
+﻿namespace MPhotoBoothAI.Models.Camera
 {
-    public partial class CameraSetting : ObservableObject
+    public class CameraSetting
     {
-        [ObservableProperty]
-        private string? _current;
+        public string? Current { get; set; }
 
-        [ObservableProperty]
-        private IEnumerable<string>? _availableValues;
+        public IEnumerable<string>? AvailableValues { get; set; }
     }
 }
