@@ -44,10 +44,22 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         public void SetCurrentSettings(CurrentCameraSettings currentCameraSettings)
         {
-            SetIso(currentCameraSettings.Iso.Current);
-            SetAperture(currentCameraSettings.Aperture.Current);
-            SetShutterSpeed(currentCameraSettings.ShutterSpeed.Current);
-            SetWhiteBalance(currentCameraSettings.WhiteBalance.Current);
+            if (currentCameraSettings?.Iso?.Current != null)
+            {
+                SetIso(currentCameraSettings.Iso.Current);
+            }
+            if (currentCameraSettings?.Aperture?.Current != null)
+            {
+                SetAperture(currentCameraSettings.Aperture.Current);
+            }
+            if (currentCameraSettings?.ShutterSpeed?.Current != null)
+            {
+                SetShutterSpeed(currentCameraSettings.ShutterSpeed.Current);
+            }
+            if (currentCameraSettings?.WhiteBalance?.Current != null)
+            {
+                SetWhiteBalance(currentCameraSettings.WhiteBalance.Current);
+            }
         }
 
         private CameraSetting GetAperture()
@@ -67,7 +79,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             };
         }
 
-        private void SetAperture(string aperatureValue)
+        private void SetAperture(string? aperatureValue)
         {
             _sdkHandler.SetSetting(PropID_Av, CameraValues.AvValues.FirstOrDefault(v => v.Value == aperatureValue).Key);
         }

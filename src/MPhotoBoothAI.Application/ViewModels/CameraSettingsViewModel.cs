@@ -45,18 +45,6 @@ namespace MPhotoBoothAI.Application.ViewModels
             GetCameraSettings();
         }
 
-        partial void OnCurrentCameraSettingsChanged(CurrentCameraSettings? value)
-        {
-            if (value is not null)
-            {
-                _cameraSettingsService.Value.Iso = value.Iso?.Current ?? string.Empty;
-                _cameraSettingsService.Value.Aperture = value.Aperture?.Current ?? string.Empty;
-                _cameraSettingsService.Value.ShutterSpeed = value.ShutterSpeed?.Current ?? string.Empty;
-                _cameraSettingsService.Value.WhiteBalance = value.WhiteBalance?.Current ?? string.Empty;
-                _cameraManager.SetCurrentCameraSettings(value);
-            }
-        }
-
         private void LoadSettingsFromDatabase()
         {
             var cameraSettings = _cameraManager.GetCurrentCameraSettings();
@@ -66,7 +54,7 @@ namespace MPhotoBoothAI.Application.ViewModels
                 cameraSettings.Aperture.Current = _cameraSettingsService.Value.Aperture;
                 cameraSettings.ShutterSpeed.Current = _cameraSettingsService.Value.ShutterSpeed;
                 cameraSettings.WhiteBalance.Current = _cameraSettingsService.Value.WhiteBalance;
-                CurrentCameraSettings = cameraSettings;
+                CurrentCameraSettings.Iso = cameraSettings.Iso;
             }
         }
 
@@ -95,5 +83,15 @@ namespace MPhotoBoothAI.Application.ViewModels
 
         [RelayCommand]
         private void StartLiveView() => CurrentCameraDevice?.StartLiveView();
+
+        [RelayCommand]
+        private void CameraSettingsChanged()
+        {
+            _cameraSettingsService.Value.Iso = CurrentCameraSettings.Iso?.Current ?? string.Empty;
+            _cameraSettingsService.Value.Aperture = CurrentCameraSettings.Aperture?.Current ?? string.Empty;
+            _cameraSettingsService.Value.ShutterSpeed = CurrentCameraSettings.ShutterSpeed?.Current ?? string.Empty;
+            _cameraSettingsService.Value.WhiteBalance = CurrentCameraSettings.WhiteBalance?.Current ?? string.Empty;
+            _cameraManager.SetCurrentCameraSettings(CurrentCameraSettings);
+        }
     }
 }
