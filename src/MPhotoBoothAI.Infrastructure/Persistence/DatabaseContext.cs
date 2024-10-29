@@ -17,15 +17,5 @@ public class DatabaseContext : DbContext, IDatabaseContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
-        modelBuilder.Entity<UserSettingsEntity>().HasData(new UserSettingsEntity { Id = 1, CultureInfoName = string.Empty });
-        modelBuilder.Entity<CameraSettingsEntity>().HasData(
-            new CameraSettingsEntity
-            {
-                Id = 1,
-                Iso = string.Empty,
-                Aperture = string.Empty,
-                ShutterSpeed = string.Empty,
-                WhiteBalance = string.Empty
-            });
     }
 }

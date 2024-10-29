@@ -5,7 +5,6 @@ using Microsoft.ML.OnnxRuntime;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Managers;
-using MPhotoBoothAI.Application.Profiles;
 using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
@@ -31,7 +30,6 @@ public static class DependencyInjection
         AddNavigation(services);
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
         AddDatabase(services);
-        services.AddAutoMapper(typeof(EntitiesProfiles));
         return services;
     }
 
@@ -92,8 +90,6 @@ public static class DependencyInjection
         services.AddTransient<IFaceGenderService, FaceGenderService>();
         services.AddTransient<IAppRestarterService, AppRestarterService>();
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
-        services.AddSingleton<IUserSettingsService, UserSettingsService>();
-        services.AddSingleton<ICameraSettingsService, CameraSettingsService>();
     }
 
     private static void AddCamera(IServiceCollection services)
