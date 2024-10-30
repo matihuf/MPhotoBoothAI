@@ -15,9 +15,6 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     private FaceSwapTemplateGroupEntity? _selectedGroup;
 
     [ObservableProperty]
-    private string? _title;
-
-    [ObservableProperty]
     private bool _isGroupInEdit;
 
     private readonly IDatabaseContext _databaseContext;
@@ -51,11 +48,6 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
         }
     }
 
-    partial void OnSelectedGroupChanged(FaceSwapTemplateGroupEntity? value)
-    {
-        Title = value?.Name ?? string.Empty;
-    }
-
     [RelayCommand]
     private void AddTemplate()
     {
@@ -64,4 +56,8 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
 
     [RelayCommand]
     private void EditGroup() => IsGroupInEdit = !IsGroupInEdit;
+
+    partial void OnSelectedGroupChanged(FaceSwapTemplateGroupEntity? value)
+    {
+    }
 }

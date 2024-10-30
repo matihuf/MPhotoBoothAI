@@ -24,7 +24,10 @@
           <Panel Grid.Row="0">
             <TextBlock Text="{x:Static assets:UI.groups}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <Button Command="{Binding AddGroupCommand}" HorizontalAlignment="Right">
-              <PathIcon Data="{StaticResource add_circle_regular}" />
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <PathIcon Data="{StaticResource add_circle_regular}" />
+                <TextBlock Text="Dodaj grupę" />
+              </StackPanel>
             </Button>
           </Panel>
           <ListBox Grid.Row="1" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
@@ -59,34 +62,43 @@
       <Border Background="White" CornerRadius="20" Padding="10">
         <Grid>
           <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
           </Grid.RowDefinitions>
           <Panel Grid.Row="0">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-              <TextBox Text="{Binding Title}" IsVisible="{Binding IsGroupInEdit}" VerticalAlignment="Center"/>
-              <TextBlock Text="{Binding Title}" IsVisible="{Binding !IsGroupInEdit}" VerticalAlignment="Center"/>
-              <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
-                <PathIcon Data="{StaticResource edit_regular}" />
-              </Button>
-              <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
-                <PathIcon Data="{StaticResource save_regular}" />
-              </Button>
-              <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
-                <PathIcon Data="{StaticResource dismiss_regular}" />
-              </Button>
-              <Button Command="{Binding DeleteGroupCommand}">
-                <PathIcon Data="{StaticResource delete_regular}" />
-              </Button>
-              <CheckBox IsChecked="{Binding SelectedGroup.IsEnabled, Mode=TwoWay}" Content="Enabled" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-              <Button Command="{Binding AddTemplateCommand}">
-                <PathIcon Data="{StaticResource add_circle_regular}" />
-              </Button>
-            </StackPanel>
+            <TextBox Text="{Binding SelectedGroup.Name, Mode=TwoWay}" IsVisible="{Binding IsGroupInEdit}" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding SelectedGroup.Name}" IsVisible="{Binding !IsGroupInEdit}" VerticalAlignment="Center"/>
           </Panel>
-          <ScrollViewer Grid.Row="1">
+          <CheckBox Grid.Row="1" IsChecked="{Binding SelectedGroup.IsEnabled, Mode=TwoWay}" Content="Enabled" />
+          <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="5" Margin="0,10,0,0">
+            <Button Command="{Binding AddTemplateCommand}">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <PathIcon Data="{StaticResource add_circle_regular}" />
+                <TextBlock Text="Dodaj szablon" />
+              </StackPanel>
+            </Button>
+            <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <PathIcon Data="{StaticResource edit_regular}" />
+                <TextBlock Text="Edytuj" />
+              </StackPanel>
+            </Button>
+            <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
+              <PathIcon Data="{StaticResource save_regular}" />
+            </Button>
+            <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
+              <PathIcon Data="{StaticResource dismiss_regular}" />
+            </Button>
+            <Button Command="{Binding DeleteGroupCommand}">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <PathIcon Data="{StaticResource delete_regular}" />
+                <TextBlock Text="Usuń" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+          <ScrollViewer Grid.Row="3">
             <ItemsControl ItemsSource="{Binding Templates}" >
               <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
