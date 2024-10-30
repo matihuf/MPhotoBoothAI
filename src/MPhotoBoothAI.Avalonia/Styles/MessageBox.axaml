@@ -16,4 +16,7 @@
     <Setter Property="Background" Value="WhiteSmoke"/>
     <Setter Property="CornerRadius" Value="10" />
   </Style>
+  <Style Selector="msBox|MsBoxStandardView TextBox">
+    <Setter Property="MaxLength" Value="50"/>
+  </Style>
 </Styles>

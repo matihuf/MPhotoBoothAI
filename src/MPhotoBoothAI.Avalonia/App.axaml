@@ -13,5 +13,6 @@
     <FluentTheme />
     <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Icons.axaml" />
     <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/MessageBox.axaml" />
+    <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Styles.axaml" />
   </Application.Styles>
 </Application>

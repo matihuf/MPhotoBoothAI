@@ -17,7 +17,7 @@
 
   <SplitView IsPaneOpen="True" DisplayMode="Inline">
     <SplitView.Pane>
-      <Border Background="White" CornerRadius="20" Padding="10" Margin="0,0,10,0"  IsEnabled="{Binding !IsGroupInEdit}">
+      <Border Classes="BorderContent" Margin="0,0,10,0" IsEnabled="{Binding !IsGroupInEdit}">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -33,24 +33,6 @@
             </Button>
           </Panel>
           <ListBox Grid.Row="1" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
-            <ListBox.Styles>
-              <Style Selector="ListBox">
-                <Setter Property="Background" Value="White"/>
-                <Setter Property="CornerRadius" Value="8"/>
-              </Style>
-              <Style Selector="ListBoxItem">
-                <Setter Property="FontWeight" Value="DemiBold"/>
-                <Setter Property="Padding" Value="10"/>
-                <Setter Property="Margin" Value="5 5 5 0"/>
-                <Setter Property="CornerRadius" Value="8"/>
-                <Style Selector="^:selected /template/ ContentPresenter">
-                  <Setter Property="Background" Value="#b4b4db"/>
-                </Style>
-                <Style Selector="^:pointerover /template/ ContentPresenter">
-                  <Setter Property="Background" Value="#dfdff5"/>
-                </Style>
-              </Style>
-            </ListBox.Styles>
             <ListBox.ItemTemplate>
               <DataTemplate DataType="{x:Type entities:FaceSwapTemplateGroupEntity}">
                 <Panel>
@@ -70,7 +52,7 @@
       </Border>
     </SplitView.Pane>
     <SplitView.Content>
-      <Border Background="White" CornerRadius="20" Padding="10" IsVisible="{Binding Groups.Count}">
+      <Border Classes="BorderContent" Padding="10" IsVisible="{Binding Groups.Count}">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
