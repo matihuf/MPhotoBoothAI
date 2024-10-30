@@ -18,13 +18,15 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     private bool _isGroupInEdit;
 
     private readonly IDatabaseContext _databaseContext;
+    private FaceSwapTemplateGroupEntity? _beforeEditGroup;
 
     public FaceSwapTemplatesViewModel(IDatabaseContext databaseContext)
     {
         _databaseContext = databaseContext;
-        _databaseContext.FaceSwapTemplateGroups.Load();
+        _databaseContext.FaceSwapTemplateGroups.OrderBy(x => x.CreatedAt).Load();
         Groups = _databaseContext.FaceSwapTemplateGroups.Local.ToObservableCollection();
         SelectedGroup = Groups.FirstOrDefault();
+        _beforeEditGroup = (FaceSwapTemplateGroupEntity?)SelectedGroup?.Clone();
         IsGroupInEdit = false;
     }
 
@@ -34,7 +36,7 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
         var faceSwapTemplateGroup = new FaceSwapTemplateGroupEntity { Name = Assets.UI.newGroup };
         Groups.Add(faceSwapTemplateGroup);
         SelectedGroup = faceSwapTemplateGroup;
-        await _databaseContext.SaveChangesAsync();
+        await SaveChanges();
     }
 
     [RelayCommand]
@@ -43,7 +45,7 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
         if (SelectedGroup != null)
         {
             Groups.Remove(SelectedGroup);
-            await _databaseContext.SaveChangesAsync();
+            await SaveChanges();
             SelectedGroup = Groups.FirstOrDefault();
         }
     }
@@ -55,9 +57,32 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void EditGroup() => IsGroupInEdit = !IsGroupInEdit;
-
-    partial void OnSelectedGroupChanged(FaceSwapTemplateGroupEntity? value)
+    private void EditGroup()
     {
+        _beforeEditGroup = (FaceSwapTemplateGroupEntity?)SelectedGroup?.Clone();
+        IsGroupInEdit = !IsGroupInEdit;
     }
+
+    [RelayCommand]
+    private void CancelEditGroup()
+    {
+        if (SelectedGroup == null || _beforeEditGroup == null)
+        {
+            return;
+        }
+        var editedIndex = Groups.IndexOf(SelectedGroup);
+        Groups[editedIndex] = _beforeEditGroup;
+        SelectedGroup = Groups[editedIndex];
+        IsGroupInEdit = !IsGroupInEdit;
+    }
+
+    [RelayCommand]
+    private async Task SaveEditGroup()
+    {
+        await SaveChanges();
+        IsGroupInEdit = !IsGroupInEdit;
+    }
+
+    [RelayCommand]
+    private Task SaveChanges() => _databaseContext.SaveChangesAsync();
 }

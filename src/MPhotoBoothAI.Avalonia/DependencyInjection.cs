@@ -36,8 +36,8 @@ public static class DependencyInjection
 
     private static void AddDatabase(IServiceCollection services)
     {
-        services.AddDbContext<DatabaseContext>(o => o.UseSqlite());
-        services.AddScoped<IDatabaseContext, DatabaseContext>(s => s.GetRequiredService<DatabaseContext>());
+        services.AddDbContext<DatabaseContext>(o => o.UseSqlite(), ServiceLifetime.Transient);
+        services.AddTransient<IDatabaseContext, DatabaseContext>(s => s.GetRequiredService<DatabaseContext>());
     }
 
     private static void AddNavigation(IServiceCollection services)

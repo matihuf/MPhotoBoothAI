@@ -1,28 +1,22 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace MPhotoBoothAI.Models.Entities;
-public class FaceSwapTemplateGroupEntity : BaseEntity, INotifyPropertyChanged
+public partial class FaceSwapTemplateGroupEntity : BaseEntity, ICloneable
 {
-    public string Name { get; set; }
+    [ObservableProperty]
+    private string _name;
 
+    [ObservableProperty]
     private bool _isEnabled;
-    public bool IsEnabled
-    {
-        get => _isEnabled;
-        set
-        {
-            _isEnabled = value;
-            NotifyPropertyChanged();
-        }
-    }
 
     public ICollection<FaceSwapTemplateEntity> Templates { get; } = [];
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+    public object Clone()
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        return new FaceSwapTemplateGroupEntity
+        {
+            Name = Name,
+            IsEnabled = IsEnabled
+        };
     }
 }

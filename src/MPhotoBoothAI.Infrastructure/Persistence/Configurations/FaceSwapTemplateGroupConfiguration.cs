@@ -16,5 +16,9 @@ public class FaceSwapTemplateGroupConfiguration : IEntityTypeConfiguration<FaceS
             .WithOne(x => x.FaceSwapTemplateGroup)
             .HasForeignKey(b => b.FaceSwapTemplateGroupId)
             .OnDelete(DeleteBehavior.Cascade);
+        builder.Property(x => x.CreatedAt)
+            .HasColumnType("DATETIME")
+            .HasDefaultValueSql("date('now')")
+            .IsRequired();
     }
 }

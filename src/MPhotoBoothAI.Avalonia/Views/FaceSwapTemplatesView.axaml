@@ -7,6 +7,8 @@
              x:DataType="vm:FaceSwapTemplatesViewModel"
              xmlns:entities="using:MPhotoBoothAI.Models.Entities"
              xmlns:assets="using:MPhotoBoothAI.Application.Assets"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			       xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="MPhotoBoothAI.Avalonia.Views.FaceSwapTemplatesView">
   <Design.DataContext>
@@ -15,7 +17,7 @@
 
   <SplitView IsPaneOpen="True" DisplayMode="Inline">
     <SplitView.Pane>
-      <Border Background="White" CornerRadius="20" Padding="10" Margin="0,0,10,0">
+      <Border Background="White" CornerRadius="20" Padding="10" Margin="0,0,10,0"  IsEnabled="{Binding !IsGroupInEdit}">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -67,37 +69,51 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
           </Grid.RowDefinitions>
-          <Panel Grid.Row="0">
-            <TextBox Text="{Binding SelectedGroup.Name, Mode=TwoWay}" IsVisible="{Binding IsGroupInEdit}" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding SelectedGroup.Name}" IsVisible="{Binding !IsGroupInEdit}" VerticalAlignment="Center"/>
-          </Panel>
-          <CheckBox Grid.Row="1" IsChecked="{Binding SelectedGroup.IsEnabled, Mode=TwoWay}" Content="Enabled" />
-          <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="5" Margin="0,10,0,0">
+          <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Panel Grid.Column="0">
+              <TextBlock Text="{Binding SelectedGroup.Name}" IsVisible="{Binding !IsGroupInEdit}" VerticalAlignment="Center"/>
+              <TextBox Text="{Binding SelectedGroup.Name, Mode=TwoWay}" MaxLength="50" IsVisible="{Binding IsGroupInEdit}" VerticalAlignment="Center"/>
+            </Panel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5,0,0,0">
+              <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <PathIcon Data="{StaticResource edit_regular}" />
+                  <TextBlock Text="Edytuj" />
+                </StackPanel>
+              </Button>
+              <Button Command="{Binding DeleteGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <PathIcon Data="{StaticResource delete_regular}" />
+                  <TextBlock Text="Usuń" />
+                </StackPanel>
+              </Button>
+              <Button Command="{Binding SaveEditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
+                <PathIcon Data="{StaticResource save_regular}" />
+              </Button>
+              <Button Command="{Binding CancelEditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
+                <PathIcon Data="{StaticResource dismiss_regular}" />
+              </Button>
+            </StackPanel>
+          </Grid>
+          <CheckBox Grid.Row="1" IsChecked="{Binding SelectedGroup.IsEnabled, Mode=TwoWay}" Content="{x:Static assets:UI.groupVisibleForUser}">
+            <i:Interaction.Behaviors>
+              <ia:EventTriggerBehavior EventName="Click">
+                <ia:InvokeCommandAction Command="{Binding SaveChangesCommand}" />
+              </ia:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+          </CheckBox>
+          <Panel Grid.Row="2" Margin="0,10,0,0">
             <Button Command="{Binding AddTemplateCommand}">
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <PathIcon Data="{StaticResource add_circle_regular}" />
                 <TextBlock Text="Dodaj szablon" />
               </StackPanel>
             </Button>
-            <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
-              <StackPanel Orientation="Horizontal" Spacing="10">
-                <PathIcon Data="{StaticResource edit_regular}" />
-                <TextBlock Text="Edytuj" />
-              </StackPanel>
-            </Button>
-            <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
-              <PathIcon Data="{StaticResource save_regular}" />
-            </Button>
-            <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
-              <PathIcon Data="{StaticResource dismiss_regular}" />
-            </Button>
-            <Button Command="{Binding DeleteGroupCommand}">
-              <StackPanel Orientation="Horizontal" Spacing="10">
-                <PathIcon Data="{StaticResource delete_regular}" />
-                <TextBlock Text="Usuń" />
-              </StackPanel>
-            </Button>
-          </StackPanel>
+          </Panel>
           <ScrollViewer Grid.Row="3">
             <ItemsControl ItemsSource="{Binding Templates}" >
               <ItemsControl.ItemsPanel>

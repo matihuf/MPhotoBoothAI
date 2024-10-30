@@ -115,6 +115,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grupa będzie dostępna do wyboru przez użytkowniak.
+        /// </summary>
+        public static string groupVisibleForUser {
+            get {
+                return ResourceManager.GetString("groupVisibleForUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Język.
         /// </summary>
         public static string language {

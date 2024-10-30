@@ -12,5 +12,9 @@ public class FaceSwapTemplateConfiguration : IEntityTypeConfiguration<FaceSwapTe
             .HasMaxLength(50)
             .HasColumnType("NVARCHAR")
             .IsRequired();
+        builder.Property(x => x.CreatedAt)
+            .HasColumnType("DATETIME")
+            .HasDefaultValueSql("date('now')")
+            .IsRequired();
     }
 }
