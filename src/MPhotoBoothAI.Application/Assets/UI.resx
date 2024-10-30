@@ -126,6 +126,9 @@
   <data name="cameraSettings" xml:space="preserve">
     <value>Aparat</value>
   </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
   <data name="en-US" xml:space="preserve">
     <value>Angielski</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="newGroup" xml:space="preserve">
     <value>Nowa grupa</value>
+  </data>
+  <data name="no" xml:space="preserve">
+    <value>Nie</value>
   </data>
   <data name="pl-PL" xml:space="preserve">
     <value>Polski</value>
@@ -164,5 +170,8 @@
   </data>
   <data name="whiteBalance" xml:space="preserve">
     <value>Balans bieli</value>
+  </data>
+  <data name="yes" xml:space="preserve">
+    <value>Tak</value>
   </data>
 </root>

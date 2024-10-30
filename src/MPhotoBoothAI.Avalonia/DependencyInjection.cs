@@ -94,6 +94,7 @@ public static class DependencyInjection
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
         services.AddTransient<IDiskInfoService, DiskInfoService>();
         services.AddTransient<SDKHandler>();
+        services.AddTransient<IMessageBoxService, MessageBoxService>();
     }
 
     private static void AddCamera(IServiceCollection services)

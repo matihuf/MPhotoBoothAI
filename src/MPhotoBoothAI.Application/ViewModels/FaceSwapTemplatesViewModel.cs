@@ -18,11 +18,13 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     private bool _isGroupInEdit;
 
     private readonly IDatabaseContext _databaseContext;
+    private readonly IMessageBoxService _messageBoxService;
     private FaceSwapTemplateGroupEntity? _beforeEditGroup;
 
-    public FaceSwapTemplatesViewModel(IDatabaseContext databaseContext)
+    public FaceSwapTemplatesViewModel(IDatabaseContext databaseContext, IMessageBoxService messageBoxService)
     {
         _databaseContext = databaseContext;
+        _messageBoxService = messageBoxService;
         _databaseContext.FaceSwapTemplateGroups.OrderBy(x => x.CreatedAt).Load();
         Groups = _databaseContext.FaceSwapTemplateGroups.Local.ToObservableCollection();
         SelectedGroup = Groups.FirstOrDefault();
@@ -42,7 +44,7 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteGroup()
     {
-        if (SelectedGroup != null)
+        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.language, Assets.UI.newGroup))
         {
             Groups.Remove(SelectedGroup);
             await SaveChanges();

@@ -1,0 +1,19 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:assets="using:MPhotoBoothAI.Application.Assets"
+        xmlns:msBox="using:MsBox.Avalonia.Controls">
+  <Design.PreviewWith>
+    <msBox:MsBoxStandardView />
+  </Design.PreviewWith>
+
+  <Style Selector="Button.yes /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Content" Value="{x:Static assets:UI.yes}" />
+  </Style>
+  <Style Selector="Button.no /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Content" Value="{x:Static assets:UI.no}" />
+  </Style>
+  <Style Selector="msBox|MsBoxStandardView">
+    <Setter Property="Background" Value="WhiteSmoke"/>
+    <Setter Property="CornerRadius" Value="10" />
+  </Style>
+</Styles>

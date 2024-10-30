@@ -61,7 +61,7 @@
       </Border>
     </SplitView.Pane>
     <SplitView.Content>
-      <Border Background="White" CornerRadius="20" Padding="10">
+      <Border Background="White" CornerRadius="20" Padding="10" IsVisible="{Binding Groups.Count}">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
