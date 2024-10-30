@@ -88,6 +88,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dodaj grupę.
+        /// </summary>
+        public static string addGroup {
+            get {
+                return ResourceManager.GetString("addGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anuluj.
         /// </summary>
         public static string cancel {
@@ -138,6 +147,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string language {
             get {
                 return ResourceManager.GetString("language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nazwa.
+        /// </summary>
+        public static string name {
+            get {
+                return ResourceManager.GetString("name", resourceCulture);
             }
         }
         

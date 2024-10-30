@@ -35,7 +35,12 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddGroup()
     {
-        var faceSwapTemplateGroup = new FaceSwapTemplateGroupEntity { Name = Assets.UI.newGroup };
+        string groupName = await _messageBoxService.ShowInput(Assets.UI.addGroup, Assets.UI.name);
+        if (string.IsNullOrEmpty(groupName))
+        {
+            return;
+        }
+        var faceSwapTemplateGroup = new FaceSwapTemplateGroupEntity { Name = groupName };
         Groups.Add(faceSwapTemplateGroup);
         SelectedGroup = faceSwapTemplateGroup;
         await SaveChanges();

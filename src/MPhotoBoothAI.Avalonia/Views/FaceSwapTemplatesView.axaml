@@ -28,7 +28,7 @@
             <Button Command="{Binding AddGroupCommand}" HorizontalAlignment="Right">
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <PathIcon Data="{StaticResource add_circle_regular}" />
-                <TextBlock Text="Dodaj grupę" />
+                <TextBlock Text="{x:Static assets:UI.addGroup}" />
               </StackPanel>
             </Button>
           </Panel>

@@ -126,6 +126,9 @@
   <data name="cameraSettings" xml:space="preserve">
     <value>Aparat</value>
   </data>
+  <data name="addGroup" xml:space="preserve">
+    <value>Dodaj grupę</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>Anuluj</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="language" xml:space="preserve">
     <value>Język</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Nazwa</value>
   </data>
   <data name="newGroup" xml:space="preserve">
     <value>Nowa grupa</value>

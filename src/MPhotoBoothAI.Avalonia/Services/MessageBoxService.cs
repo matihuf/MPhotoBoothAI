@@ -26,4 +26,24 @@ public class MessageBoxService : IMessageBoxService
         var result = await box.ShowAsync();
         return result == ButtonResult.Yes;
     }
+
+    public async Task<string> ShowInput(string title, string text)
+    {
+        var box = MessageBoxManager.GetMessageBoxStandard(new MessageBoxStandardParams
+        {
+            ContentHeader = title,
+            ContentMessage = text,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+            CanResize = false,
+            Width = 500,
+            Height = 180,
+            ShowInCenter = true,
+            Topmost = true,
+            SystemDecorations = SystemDecorations.None,
+            ButtonDefinitions = ButtonEnum.YesNo,
+            InputParams = new InputParams { Label = string.Empty }
+        });
+        var result = await box.ShowAsync();
+        return result == ButtonResult.Yes ? box.InputValue : string.Empty;
+    }
 }
