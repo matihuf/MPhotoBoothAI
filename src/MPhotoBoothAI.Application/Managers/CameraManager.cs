@@ -1,21 +1,16 @@
 ﻿using MPhotoBoothAI.Application.Interfaces;
-using MPhotoBoothAI.Models.Camera;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace MPhotoBoothAI.Infrastructure.Services
 {
-    public class CameraManager : ICameraManager, INotifyPropertyChanged
+    public class CameraManager : ICameraManager
     {
         private readonly IEnumerable<ICameraDevice> _cameras;
-
-        private ICameraDeviceSettings? CurrentSettings => Current as ICameraDeviceSettings;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         public IEnumerable<ICameraDevice> Availables => _cameras != null ? _cameras.Where(x => x.IsAvailable) : [];
 
         public ICameraDevice? Current { get; set; }
+
+        public event ICameraManager.AvaliableCameraListChanged OnAvaliableCameraListChanged;
 
         public CameraManager(IEnumerable<ICameraDevice> cameras)
         {
@@ -26,17 +21,6 @@ namespace MPhotoBoothAI.Infrastructure.Services
                 camera.Disconnected += Camera_AvilableChanged;
             }
         }
-
-        public CurrentCameraSettings? GetCurrentCameraSettings()
-        {
-            return CurrentSettings?.GetCurrentSettings();
-        }
-
-        public void SetCurrentCameraSettings(CurrentCameraSettings currentCameraSettings)
-        {
-            CurrentSettings?.SetCurrentSettings(currentCameraSettings);
-        }
-
 
         public void Dispose()
         {
@@ -56,12 +40,11 @@ namespace MPhotoBoothAI.Infrastructure.Services
             }
         }
 
-        private void Camera_AvilableChanged(object? sender, EventArgs e) => NotifyPropertyChanged(nameof(Availables));
+        private void Camera_AvilableChanged(object? sender, EventArgs e) => NotifyCameraListChanged(Availables);
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyCameraListChanged(IEnumerable<ICameraDevice> cameraList)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            OnAvaliableCameraListChanged?.Invoke(cameraList);
         }
-
     }
 }

@@ -4,8 +4,7 @@
 			 xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
 			 xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-			 xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+			 xmlns:cs="using:MPhotoBoothAI.Application.Interfaces"
 			 xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
 			 mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="MPhotoBoothAI.Avalonia.Views.CameraSettingsView"
@@ -16,7 +15,6 @@
 	</Design.DataContext>
 	<UserControl.Resources>
 		<converters:MatConverter x:Key="matConverter" />
-		<converters:NullToVisibility x:Key="nullToVisibilityConverter" />
 	</UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
@@ -39,52 +37,37 @@
 				<TextBlock Text="Camera name" />
 				<ComboBox	ItemsSource="{Binding Availables, Mode=OneWay}"
 							SelectedItem="{Binding CurrentCameraDevice}"
-							Width="300" />
+							Width="300">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding CameraName}"/>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
 			</StackPanel>
-			<WrapPanel Grid.Row="1"
-					   IsVisible="{Binding CurrentCameraSettings.Iso, Converter={StaticResource nullToVisibilityConverter}}">
+			<WrapPanel Grid.Row="1" IsVisible="{Binding CameraSettings, Converter={x:Static ObjectConverters.IsNotNull}}">
 				<StackPanel>
 					<TextBlock Text="Iso" />
-					<ComboBox ItemsSource="{Binding CurrentCameraSettings.Iso.AvailableValues, Mode=OneWay}"
-							  SelectedItem="{Binding CurrentCameraSettings.Iso.Current, Mode=TwoWay}">
-						<i:Interaction.Behaviors>
-							<ia:EventTriggerBehavior EventName="SelectionChanged">
-								<ia:InvokeCommandAction Command="{Binding CameraSettingsChangedCommand}" CommandParameter="Iso"/>
-							</ia:EventTriggerBehavior>
-						</i:Interaction.Behaviors>
+					<ComboBox ItemsSource="{Binding CameraSettings.IsoValues, Mode=OneWay}"
+							  SelectedItem="{Binding CameraSettings.Iso, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>
 				<StackPanel>
 					<TextBlock Text="ShutterSpeed" />
-					<ComboBox ItemsSource="{Binding CurrentCameraSettings.ShutterSpeed.AvailableValues, Mode=OneWay}"
-							  SelectedItem="{Binding CurrentCameraSettings.ShutterSpeed.Current, Mode=TwoWay}">
-						<i:Interaction.Behaviors>
-							<ia:EventTriggerBehavior EventName="SelectionChanged">
-								<ia:InvokeCommandAction Command="{Binding CameraSettingsChangedCommand}" CommandParameter="ShutterSpeed"/>
-							</ia:EventTriggerBehavior>
-						</i:Interaction.Behaviors>
+					<ComboBox ItemsSource="{Binding CameraSettings.ShutterSpeedValues, Mode=OneWay}"
+							  SelectedItem="{Binding CameraSettings.ShutterSpeed, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>
 				<StackPanel>
 					<TextBlock Text="Aperture" />
-					<ComboBox ItemsSource="{Binding CurrentCameraSettings.Aperture.AvailableValues, Mode=OneWay}"
-							  SelectedItem="{Binding CurrentCameraSettings.Aperture.Current, Mode=TwoWay}">
-						<i:Interaction.Behaviors>
-							<ia:EventTriggerBehavior EventName="SelectionChanged">
-								<ia:InvokeCommandAction Command="{Binding CameraSettingsChangedCommand}" CommandParameter="Aperture"/>
-							</ia:EventTriggerBehavior>
-						</i:Interaction.Behaviors>
+					<ComboBox ItemsSource="{Binding CameraSettings.ApertureValues, Mode=OneWay}"
+							  SelectedItem="{Binding CameraSettings.Aperture, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>
 				<StackPanel>
 					<TextBlock Text="WhiteBalance" />
-					<ComboBox ItemsSource="{Binding CurrentCameraSettings.WhiteBalance.AvailableValues, Mode=OneWay}"
-							  SelectedItem="{Binding CurrentCameraSettings.WhiteBalance.Current, Mode=TwoWay}">
-						<i:Interaction.Behaviors>
-							<ia:EventTriggerBehavior EventName="SelectionChanged">
-								<ia:InvokeCommandAction Command="{Binding CameraSettingsChangedCommand}" CommandParameter="WhiteBalance"/>
-							</ia:EventTriggerBehavior>
-						</i:Interaction.Behaviors>
+					<ComboBox ItemsSource="{Binding CameraSettings.WhiteBalanceValues, Mode=OneWay}"
+							  SelectedItem="{Binding CameraSettings.WhiteBalance, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>
 			</WrapPanel>

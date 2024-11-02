@@ -1,6 +1,4 @@
-﻿using MPhotoBoothAI.Models.Camera;
-
-namespace MPhotoBoothAI.Application.Interfaces
+﻿namespace MPhotoBoothAI.Application.Interfaces
 {
     public interface ICameraManager : IDisposable
     {
@@ -8,9 +6,9 @@ namespace MPhotoBoothAI.Application.Interfaces
 
         ICameraDevice? Current { get; set; }
 
-        CurrentCameraSettings? GetCurrentCameraSettings();
+        delegate void AvaliableCameraListChanged(IEnumerable<ICameraDevice> cameraList);
 
-        void SetCurrentCameraSettings(CurrentCameraSettings currentCameraSettings);
+        event AvaliableCameraListChanged OnAvaliableCameraListChanged;
 
     }
 }

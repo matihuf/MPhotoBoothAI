@@ -1,8 +1,9 @@
 ﻿using EDSDK.NET;
 using Emgu.CV;
+using Microsoft.Extensions.Logging;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Infrastructure.Services;
-using MPhotoBoothAI.Models.Camera;
+using System.Collections.ObjectModel;
 using static EDSDKLib.EDSDK;
 
 namespace MPhotoBoothAI.Infrastructure.CameraDevices
@@ -13,135 +14,139 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         private readonly SDKHandler _sdkHandler;
 
-        private CameraSetting _iso = new();
+        private readonly ILogger<CanonCameraDevice> _logger;
 
-        private CameraSetting _aperture = new();
+        public event EventHandler? Connected;
 
-        private CameraSetting _shutterSpeed = new();
-
-        private CameraSetting _whiteBalance = new();
-
-        public event EventHandler Connected;
-
-        public event EventHandler Disconnected;
+        public event EventHandler? Disconnected;
 
         public bool IsAvailable { get; private set; } = false;
 
-        public string CameraName { get; private set; }
+        public string Iso
+        {
+            get
+            {
+                if (_sdkHandler.CameraSessionOpen)
+                {
+                    return _sdkHandler.GetSetting(PropID_ISOSpeed, CameraValues.IsoValues);
+                }
+                return string.Empty;
+            }
+            set
+            {
+                if (value != null && _sdkHandler.CameraSessionOpen)
+                {
+                    _sdkHandler.SetSetting(PropID_ISOSpeed, value, CameraValues.IsoValues);
+                }
+            }
+        }
 
-        public CanonCameraDevice()
+        public string Aperture
+        {
+            get
+            {
+                if (_sdkHandler.CameraSessionOpen)
+                {
+                    return _sdkHandler.GetSetting(PropID_Av, CameraValues.AvValues);
+                }
+                return string.Empty;
+            }
+            set
+            {
+                if (value != null && _sdkHandler.CameraSessionOpen)
+                {
+                    _sdkHandler.SetSetting(PropID_Av, value, CameraValues.AvValues);
+                }
+            }
+        }
+        public string ShutterSpeed
+        {
+            get
+            {
+                if (_sdkHandler.CameraSessionOpen)
+                {
+                    return _sdkHandler.GetSetting(PropID_Tv, CameraValues.TvValues);
+                }
+                return string.Empty;
+            }
+            set
+            {
+                if (value != null && _sdkHandler.CameraSessionOpen)
+                {
+                    _sdkHandler.SetSetting(PropID_Tv, value, CameraValues.TvValues);
+                }
+            }
+        }
+        public string WhiteBalance
+        {
+            get
+            {
+                if (_sdkHandler.CameraSessionOpen)
+                {
+                    return _sdkHandler.GetSetting(PropID_WhiteBalance, CameraValues.WhiteBalanceValues);
+                }
+                return string.Empty;
+            }
+            set
+            {
+                if (value != null && _sdkHandler.CameraSessionOpen)
+                {
+                    _sdkHandler.SetSetting(PropID_WhiteBalance, value, CameraValues.WhiteBalanceValues);
+                }
+            }
+        }
+
+        public ObservableCollection<string> IsoValues { get; set; }
+
+        public ObservableCollection<string> ApertureValues { get; set; }
+
+        public ObservableCollection<string> ShutterSpeedValues { get; set; }
+
+        public ObservableCollection<string> WhiteBalanceValues { get; set; }
+
+        public string? CameraName { get; private set; }
+
+        public CanonCameraDevice(ILogger<CanonCameraDevice> logger)
         {
             _diskInfoService = new DiskInfoService();
             _sdkHandler = new SDKHandler();
-            Reconnect();
             _sdkHandler.ImageDownloaded += ImageDownloaded;
             _sdkHandler.CameraAdded += CameraAdded;
             _sdkHandler.CameraHasShutdown += CameraHasShutdown;
+            _sdkHandler.SDKPropertyChangedEvent += CameraPropertyChanged;
+            _sdkHandler.SDKErrorEvent += _sdkHandler_SdkErrorEvent;
+            _logger = logger;
+            Reconnect();
         }
 
-        public CurrentCameraSettings GetCurrentSettings()
+        private void _sdkHandler_SdkErrorEvent(object? sender, uint e)
         {
-            _iso = GetIso();
-            _aperture = GetAperture();
-            _shutterSpeed = GetShutterSpeed();
-            _whiteBalance = GetWhiteBalance();
-            return new CurrentCameraSettings
+            _logger.Log(LogLevel.Error, $"Canon SDK error: {Enum.GetName(typeof(CameraErrorCodes), (long)e)}");
+        }
+
+        private ObservableCollection<string> GetSetting(Dictionary<uint, string> cameraValues, uint propID) => new(GetCanonPropValues(propID, cameraValues));
+
+        private IEnumerable<string> GetCanonPropValues(uint propID, Dictionary<uint, string> dictValues)
+        {
+            if (propID == PropID_WhiteBalance)
             {
-                Iso = _iso,
-                Aperture = _aperture,
-                ShutterSpeed = _shutterSpeed,
-                WhiteBalance = _whiteBalance
-            };
-        }
-
-        public void SetCurrentSettings(CurrentCameraSettings currentCameraSettings)
-        {
-            if (currentCameraSettings?.Iso?.Current != null)
-            {
-                SetIso(currentCameraSettings.Iso.Current);
-                _iso.Current = currentCameraSettings.Iso.Current;
-            }
-            if (currentCameraSettings?.Aperture?.Current != null)
-            {
-                SetAperture(currentCameraSettings.Aperture.Current);
-                _aperture.Current = currentCameraSettings.Aperture.Current;
-            }
-            if (currentCameraSettings?.ShutterSpeed?.Current != null)
-            {
-                SetShutterSpeed(currentCameraSettings.ShutterSpeed.Current);
-                _shutterSpeed.Current = currentCameraSettings.ShutterSpeed.Current;
-            }
-            if (currentCameraSettings?.WhiteBalance?.Current != null)
-            {
-                SetWhiteBalance(currentCameraSettings.WhiteBalance.Current);
-                _whiteBalance.Current = currentCameraSettings.WhiteBalance.Current;
-            }
-        }
-
-        private CameraSetting GetAperture()
-        {
-            _aperture.Current = CameraValues.AvValues.TryGetValue(_sdkHandler.GetSetting(PropID_Av), out string? apertureValue) ? apertureValue : string.Empty;
-            return _aperture;
-        }
-
-        private void SetAperture(string? aperatureValue)
-        {
-            _sdkHandler.SetSetting(PropID_Av, CameraValues.AvValues.FirstOrDefault(v => v.Value == aperatureValue).Key);
-        }
-
-        private CameraSetting GetIso()
-        {
-            _iso.Current = CameraValues.IsoValues.TryGetValue(_sdkHandler.GetSetting(PropID_ISOSpeed), out string? isoValue) ? isoValue : string.Empty;
-            return _iso;
-        }
-
-        private void SetIso(string isoValue)
-        {
-            _sdkHandler.SetSetting(PropID_ISOSpeed, CameraValues.IsoValues.FirstOrDefault(v => v.Value == isoValue).Key);
-        }
-
-        private CameraSetting GetShutterSpeed()
-        {
-            _shutterSpeed.Current = CameraValues.TvValues.TryGetValue(_sdkHandler.GetSetting(PropID_Tv), out string? shutterSpeedValue) ? shutterSpeedValue : string.Empty;
-            return _shutterSpeed;
-        }
-
-        private List<string> GetCanonPropValues(uint propID, Dictionary<uint, string> dictValues)
-        {
-            var listOfValues = new List<string>();
-            foreach (var value in _sdkHandler.GetSettingsList(propID))
-            {
-                if (dictValues.TryGetValue((uint)value, out string? dictValue))
+                foreach (var item in CameraValues.WhiteBalanceValues.Select(p => p.Value))
                 {
-                    listOfValues.Add(dictValue);
+                    yield return item;
                 }
             }
-            return listOfValues;
+            else
+            {
+                foreach (var value in _sdkHandler.GetSettingsList(propID))
+                {
+                    if (dictValues.TryGetValue((uint)value, out string? dictValue))
+                    {
+                        yield return dictValue;
+                    }
+                }
+            }
         }
 
-        private void SetShutterSpeed(string shutterSpeedValue)
-        {
-            _sdkHandler.SetSetting(PropID_Tv, CameraValues.TvValues.FirstOrDefault(v => v.Value == shutterSpeedValue).Key);
-        }
-
-        private CameraSetting GetWhiteBalance()
-        {
-            _whiteBalance.Current = CameraValues.WhiteBalanceValues.TryGetValue(_sdkHandler.GetSetting(PropID_WhiteBalance), out string? whiteBalanceValue) ? whiteBalanceValue : string.Empty;
-            return _whiteBalance;
-        }
-
-        private void SetWhiteBalance(string whiteBalanceValue)
-        {
-            _sdkHandler.SetSetting(PropID_WhiteBalance, CameraValues.WhiteBalanceValues.FirstOrDefault(v => v.Value == whiteBalanceValue).Key);
-        }
-
-        private void SetCameraAvaliableValues()
-        {
-            _iso.AvailableValues = GetCanonPropValues(PropID_ISOSpeed, CameraValues.IsoValues);
-            _aperture.AvailableValues = GetCanonPropValues(PropID_Av, CameraValues.AvValues);
-            _shutterSpeed.AvailableValues = GetCanonPropValues(PropID_Tv, CameraValues.TvValues);
-            _whiteBalance.AvailableValues = CameraValues.WhiteBalanceValues.Select(w => w.Value);
-        }
 
         public void StartLiveView() => _sdkHandler?.StartLiveView();
 
@@ -181,14 +186,39 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 IsAvailable = true;
                 _sdkHandler.CloseSession();
                 _sdkHandler.OpenSession(camera);
+                _sdkHandler.UILock(true);
+                _sdkHandler.SetSetting(PropID_AEModeSelect, AEMode_Manual);
                 var (bytesPerSector, numberOfFreeClusters) = _diskInfoService.GetBytesPerSector();
                 if (bytesPerSector.HasValue && numberOfFreeClusters.HasValue)
                 {
                     _sdkHandler.SetCapacity(bytesPerSector.Value, numberOfFreeClusters.Value);
                 }
                 _sdkHandler.SetSetting(PropID_SaveTo, (uint)EdsSaveTo.Host);
-                _sdkHandler.SetSetting(PropID_AEModeSelect, AEMode_Manual);
-                SetCameraAvaliableValues();
+                CameraName = _sdkHandler.GetStringSetting(PropID_ProductName);
+                ApertureValues = GetSetting(CameraValues.AvValues, PropID_Av);
+                IsoValues = GetSetting(CameraValues.IsoValues, PropID_ISOSpeed);
+                ShutterSpeedValues = GetSetting(CameraValues.TvValues, PropID_Tv);
+                WhiteBalanceValues = GetSetting(CameraValues.WhiteBalanceValues, PropID_WhiteBalance);
+            }
+        }
+
+        private void CameraPropertyChanged(object? sender, uint e)
+        {
+            switch (e)
+            {
+                case PropID_ISOSpeed:
+                    IsoValues = GetSetting(CameraValues.IsoValues, PropID_ISOSpeed);
+                    break;
+                case PropID_WhiteBalance:
+                    WhiteBalanceValues = GetSetting(CameraValues.WhiteBalanceValues, PropID_WhiteBalance);
+                    break;
+                case PropID_Av:
+                    ApertureValues = GetSetting(CameraValues.AvValues, PropID_Av);
+                    break;
+                case PropID_Tv:
+                    ShutterSpeedValues = GetSetting(CameraValues.TvValues, PropID_Tv);
+                    break;
+
             }
         }
 
@@ -196,10 +226,13 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
         {
             if (disposing && _sdkHandler != null)
             {
+                _sdkHandler.UILock(false);
                 _sdkHandler.CloseSession();
                 _sdkHandler.ImageDownloaded -= ImageDownloaded;
                 _sdkHandler.CameraAdded -= CameraAdded;
                 _sdkHandler.CameraHasShutdown -= CameraHasShutdown;
+                _sdkHandler.SDKPropertyChangedEvent -= CameraPropertyChanged;
+                _sdkHandler.SDKErrorEvent -= _sdkHandler_SdkErrorEvent;
                 _sdkHandler.Dispose();
             }
         }

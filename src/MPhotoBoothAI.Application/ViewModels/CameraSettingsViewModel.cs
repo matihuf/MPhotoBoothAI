@@ -3,15 +3,12 @@ using CommunityToolkit.Mvvm.Input;
 using Emgu.CV;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
-using MPhotoBoothAI.Models.Camera;
 
 namespace MPhotoBoothAI.Application.ViewModels
 {
     public partial class CameraSettingsViewModel : ViewModelBase, IObserver, IDisposable
     {
         private readonly ICameraManager _cameraManager;
-
-        private readonly IDatabaseContext _databaseContext;
 
         [ObservableProperty]
         private Mat _frame;
@@ -23,14 +20,19 @@ namespace MPhotoBoothAI.Application.ViewModels
         private IEnumerable<ICameraDevice> _availables;
 
         [ObservableProperty]
-        private CurrentCameraSettings? _currentCameraSettings;
+        private ICameraDeviceSettings? _cameraSettings;
 
-        public CameraSettingsViewModel(ICameraManager cameraManager, IDatabaseContext databaseContext)
+        public CameraSettingsViewModel(ICameraManager cameraManager)
         {
             _cameraManager = cameraManager;
-            _databaseContext = databaseContext;
-            _availables = _cameraManager.Availables;
+            Availables = _cameraManager.Availables;
             Frame = new Mat();
+            _cameraManager.OnAvaliableCameraListChanged += CameraListChanged;
+        }
+
+        private void CameraListChanged(IEnumerable<ICameraDevice> cameraList)
+        {
+            Availables = cameraList;
         }
 
         public void Notify(Mat mat) => Frame = mat;
@@ -41,30 +43,14 @@ namespace MPhotoBoothAI.Application.ViewModels
             oldValue?.Detach(this);
             newValue?.Attach(this);
             _cameraManager.Current = newValue;
-            LoadSettingsFromDatabase();
-            GetCameraSettings();
+            CameraSettings = newValue is ICameraDeviceSettings cameraDeviceSettings ? cameraDeviceSettings : null;
         }
 
-        private void LoadSettingsFromDatabase()
-        {
-            CurrentCameraSettings = _cameraManager?.GetCurrentCameraSettings();
-            if (CurrentCameraSettings is not null)
-            {
-                var dataBaseCameraSettings = _databaseContext.CameraSettings.FirstOrDefault();
-                if (dataBaseCameraSettings is not null)
-                {
-                    CurrentCameraSettings.Iso.Current = dataBaseCameraSettings.Iso;
-                    CurrentCameraSettings.Aperture.Current = dataBaseCameraSettings.Aperture;
-                    CurrentCameraSettings.ShutterSpeed.Current = dataBaseCameraSettings.ShutterSpeed;
-                    CurrentCameraSettings.WhiteBalance.Current = dataBaseCameraSettings.WhiteBalance;
-                }
-            }
-        }
+        [RelayCommand]
+        private void TakePhoto() => CurrentCameraDevice?.TakePhoto();
 
-        private void GetCameraSettings()
-        {
-            CurrentCameraSettings = _cameraManager.GetCurrentCameraSettings();
-        }
+        [RelayCommand]
+        private void StartLiveView() => CurrentCameraDevice?.StartLiveView();
 
         public void Dispose()
         {
@@ -78,27 +64,6 @@ namespace MPhotoBoothAI.Application.ViewModels
             {
                 CurrentCameraDevice?.Detach(this);
                 Frame?.Dispose();
-            }
-        }
-
-        [RelayCommand]
-        private void TakePhoto() => CurrentCameraDevice?.TakePhoto();
-
-        [RelayCommand]
-        private void StartLiveView() => CurrentCameraDevice?.StartLiveView();
-
-        [RelayCommand]
-        private async Task CameraSettingsChanged()
-        {
-            var databaseCameraSettings = _databaseContext.CameraSettings.FirstOrDefault();
-            if (databaseCameraSettings is not null && CurrentCameraSettings is not null)
-            {
-                databaseCameraSettings.Iso = CurrentCameraSettings?.Iso?.Current ?? string.Empty;
-                databaseCameraSettings.Aperture = CurrentCameraSettings?.Aperture?.Current ?? string.Empty;
-                databaseCameraSettings.ShutterSpeed = CurrentCameraSettings?.ShutterSpeed?.Current ?? string.Empty;
-                databaseCameraSettings.WhiteBalance = CurrentCameraSettings?.WhiteBalance?.Current ?? string.Empty;
-                await _databaseContext.SaveChangesAsync();
-                _cameraManager.SetCurrentCameraSettings(CurrentCameraSettings);
             }
         }
     }
