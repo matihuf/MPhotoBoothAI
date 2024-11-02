@@ -21,7 +21,9 @@ public partial class LanguageViewModel : ViewModelBase
     private bool _isRestartVisible;
 
     private readonly IDatabaseContext _databaseContext;
+
     private readonly IAppRestarterService _appRestarterService;
+
     private readonly string _default;
 
     public LanguageViewModel(IDatabaseContext databaseContext, IAppRestarterService appRestarterService)

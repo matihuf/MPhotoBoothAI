@@ -4,7 +4,6 @@
 			 xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
 			 xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:cs="using:MPhotoBoothAI.Application.Interfaces"
 			 xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
 			 mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="MPhotoBoothAI.Avalonia.Views.CameraSettingsView"

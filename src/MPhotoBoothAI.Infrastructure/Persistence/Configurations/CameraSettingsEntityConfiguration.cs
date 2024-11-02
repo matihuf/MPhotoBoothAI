@@ -9,6 +9,10 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<CameraSettingsEntity> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Camera)
+            .HasMaxLength(50)
+            .HasColumnType("NVARCHAR")
+            .IsRequired();
             builder.Property(x => x.Iso)
             .HasMaxLength(20)
             .HasColumnType("NVARCHAR")

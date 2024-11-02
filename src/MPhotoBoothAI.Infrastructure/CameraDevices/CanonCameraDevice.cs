@@ -20,6 +20,8 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         public event EventHandler? Disconnected;
 
+        public event EventHandler<string> CameraSettingChanged;
+
         public bool IsAvailable { get; private set; } = false;
 
         public string Iso
@@ -37,6 +39,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 if (value != null && _sdkHandler.CameraSessionOpen)
                 {
                     _sdkHandler.SetSetting(PropID_ISOSpeed, value, CameraValues.IsoValues);
+                    CameraSettingChanged?.Invoke(this, value);
                 }
             }
         }
@@ -56,6 +59,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 if (value != null && _sdkHandler.CameraSessionOpen)
                 {
                     _sdkHandler.SetSetting(PropID_Av, value, CameraValues.AvValues);
+                    CameraSettingChanged?.Invoke(this, value);
                 }
             }
         }
@@ -74,6 +78,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 if (value != null && _sdkHandler.CameraSessionOpen)
                 {
                     _sdkHandler.SetSetting(PropID_Tv, value, CameraValues.TvValues);
+                    CameraSettingChanged?.Invoke(this, value);
                 }
             }
         }
@@ -92,6 +97,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 if (value != null && _sdkHandler.CameraSessionOpen)
                 {
                     _sdkHandler.SetSetting(PropID_WhiteBalance, value, CameraValues.WhiteBalanceValues);
+                    CameraSettingChanged?.Invoke(this, value);
                 }
             }
         }
@@ -121,7 +127,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         private void _sdkHandler_SdkErrorEvent(object? sender, uint e)
         {
-            _logger.Log(LogLevel.Error, $"Canon SDK error: {Enum.GetName(typeof(CameraErrorCodes), (long)e)}");
+            _logger.Log(LogLevel.Information, $"Canon SDK error: {Enum.GetName(typeof(CameraErrorCodes), (long)e)}");
         }
 
         private ObservableCollection<string> GetSetting(Dictionary<uint, string> cameraValues, uint propID) => new(GetCanonPropValues(propID, cameraValues));
@@ -194,11 +200,11 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                     _sdkHandler.SetCapacity(bytesPerSector.Value, numberOfFreeClusters.Value);
                 }
                 _sdkHandler.SetSetting(PropID_SaveTo, (uint)EdsSaveTo.Host);
-                CameraName = _sdkHandler.GetStringSetting(PropID_ProductName);
                 ApertureValues = GetSetting(CameraValues.AvValues, PropID_Av);
                 IsoValues = GetSetting(CameraValues.IsoValues, PropID_ISOSpeed);
                 ShutterSpeedValues = GetSetting(CameraValues.TvValues, PropID_Tv);
                 WhiteBalanceValues = GetSetting(CameraValues.WhiteBalanceValues, PropID_WhiteBalance);
+                CameraName = _sdkHandler.GetStringSetting(PropID_ProductName);
             }
         }
 
@@ -218,7 +224,6 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 case PropID_Tv:
                     ShutterSpeedValues = GetSetting(CameraValues.TvValues, PropID_Tv);
                     break;
-
             }
         }
 

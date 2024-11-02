@@ -13,4 +13,6 @@ public interface ICameraDeviceSettings
     public ObservableCollection<string> ApertureValues { get; set; }
     public ObservableCollection<string> ShutterSpeedValues { get; set; }
     public ObservableCollection<string> WhiteBalanceValues { get; set; }
+
+    public event EventHandler<string> CameraSettingChanged;
 }
