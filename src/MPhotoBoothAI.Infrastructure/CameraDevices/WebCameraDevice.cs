@@ -1,5 +1,4 @@
 using Emgu.CV;
-using MPhotoBoothAI.Application.Enums;
 using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Infrastructure.CameraDevices;

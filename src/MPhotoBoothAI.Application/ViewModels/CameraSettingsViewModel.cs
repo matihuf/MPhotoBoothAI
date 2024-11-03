@@ -4,6 +4,7 @@ using Emgu.CV;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
 using MPhotoBoothAI.Models.Entities;
+using System.ComponentModel;
 
 namespace MPhotoBoothAI.Application.ViewModels
 {
@@ -43,21 +44,29 @@ namespace MPhotoBoothAI.Application.ViewModels
 
         partial void OnCurrentCameraDeviceChanged(ICameraDevice? oldValue, ICameraDevice? newValue)
         {
+            if (oldValue is ICameraDeviceSettings oldCameraSettings)
+            {
+                oldCameraSettings.PropertyChanged -= CameraSettings_CameraSettingChanged;
+            }
+            CameraSettings = newValue is ICameraDeviceSettings cameraDeviceSettings ? cameraDeviceSettings : null;
+            if (CameraSettings != null)
+            {
+                CameraSettings.PropertyChanged += CameraSettings_CameraSettingChanged;
+            }
             oldValue?.StopLiveView();
             oldValue?.Detach(this);
             newValue?.Attach(this);
             _cameraManager.Current = newValue;
-            SetCameraSettingFromDatabase(newValue);
-            CameraSettings = newValue is ICameraDeviceSettings cameraDeviceSettings ? cameraDeviceSettings : null;
-            if (CameraSettings != null)
-            {
-                CameraSettings.CameraSettingChanged -= CameraSettings_CameraSettingChanged;
-                CameraSettings.CameraSettingChanged += CameraSettings_CameraSettingChanged;
-            }
+            GetCameraSettingFromDatabase(newValue);
         }
 
-        private void CameraSettings_CameraSettingChanged(object? sender, string e)
+        private void CameraSettings_CameraSettingChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "Manual")
+            {
+                GetCameraSettingFromDatabase(CurrentCameraDevice);
+                return;
+            }
             if (CameraSettings != null && CurrentCameraDevice != null)
             {
                 var cameraName = CurrentCameraDevice.CameraName;
@@ -78,7 +87,7 @@ namespace MPhotoBoothAI.Application.ViewModels
             }
         }
 
-        private void SetCameraSettingFromDatabase(ICameraDevice? newValue)
+        private void GetCameraSettingFromDatabase(ICameraDevice? newValue)
         {
             if (newValue != null && _databaseContext.CameraSettings.Any(s => s.Camera == newValue.CameraName) && newValue is ICameraDeviceSettings settings)
             {

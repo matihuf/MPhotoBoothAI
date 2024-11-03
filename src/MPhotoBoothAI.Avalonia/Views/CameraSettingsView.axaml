@@ -48,24 +48,28 @@
 				<StackPanel>
 					<TextBlock Text="Iso" />
 					<ComboBox ItemsSource="{Binding CameraSettings.IsoValues, Mode=OneWay}"
+							  IsEnabled="{Binding CameraSettings.IsoValues.Count}"
 							  SelectedItem="{Binding CameraSettings.Iso, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>
 				<StackPanel>
 					<TextBlock Text="ShutterSpeed" />
 					<ComboBox ItemsSource="{Binding CameraSettings.ShutterSpeedValues, Mode=OneWay}"
+							  IsEnabled="{Binding CameraSettings.ShutterSpeedValues.Count}"
 							  SelectedItem="{Binding CameraSettings.ShutterSpeed, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>
 				<StackPanel>
 					<TextBlock Text="Aperture" />
 					<ComboBox ItemsSource="{Binding CameraSettings.ApertureValues, Mode=OneWay}"
+							  IsEnabled="{Binding CameraSettings.ApertureValues.Count}"
 							  SelectedItem="{Binding CameraSettings.Aperture, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>
 				<StackPanel>
 					<TextBlock Text="WhiteBalance" />
 					<ComboBox ItemsSource="{Binding CameraSettings.WhiteBalanceValues, Mode=OneWay}"
+							  IsEnabled="{Binding CameraSettings.WhiteBalanceValues.Count}"
 							  SelectedItem="{Binding CameraSettings.WhiteBalance, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>

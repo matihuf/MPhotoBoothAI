@@ -4,12 +4,16 @@ using Microsoft.Extensions.Logging;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Infrastructure.Services;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using static EDSDKLib.EDSDK;
 
 namespace MPhotoBoothAI.Infrastructure.CameraDevices
 {
     public class CanonCameraDevice : BaseCameraDevice, ICameraDevice, ICameraDeviceSettings
     {
+        private const string Manual = "Manual";
+
         private readonly IDiskInfoService _diskInfoService;
 
         private readonly SDKHandler _sdkHandler;
@@ -20,7 +24,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         public event EventHandler? Disconnected;
 
-        public event EventHandler<string> CameraSettingChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public bool IsAvailable { get; private set; } = false;
 
@@ -39,7 +43,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 if (value != null && _sdkHandler.CameraSessionOpen)
                 {
                     _sdkHandler.SetSetting(PropID_ISOSpeed, value, CameraValues.IsoValues);
-                    CameraSettingChanged?.Invoke(this, value);
+                    NotifyPropertyChanged();
                 }
             }
         }
@@ -59,10 +63,11 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 if (value != null && _sdkHandler.CameraSessionOpen)
                 {
                     _sdkHandler.SetSetting(PropID_Av, value, CameraValues.AvValues);
-                    CameraSettingChanged?.Invoke(this, value);
+                    NotifyPropertyChanged();
                 }
             }
         }
+
         public string ShutterSpeed
         {
             get
@@ -78,10 +83,11 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 if (value != null && _sdkHandler.CameraSessionOpen)
                 {
                     _sdkHandler.SetSetting(PropID_Tv, value, CameraValues.TvValues);
-                    CameraSettingChanged?.Invoke(this, value);
+                    NotifyPropertyChanged();
                 }
             }
         }
+
         public string WhiteBalance
         {
             get
@@ -97,20 +103,20 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 if (value != null && _sdkHandler.CameraSessionOpen)
                 {
                     _sdkHandler.SetSetting(PropID_WhiteBalance, value, CameraValues.WhiteBalanceValues);
-                    CameraSettingChanged?.Invoke(this, value);
+                    NotifyPropertyChanged();
                 }
             }
         }
 
-        public ObservableCollection<string> IsoValues { get; set; }
+        public ObservableCollection<string> IsoValues { get; set; } = [];
 
-        public ObservableCollection<string> ApertureValues { get; set; }
+        public ObservableCollection<string> ApertureValues { get; set; } = [];
 
-        public ObservableCollection<string> ShutterSpeedValues { get; set; }
+        public ObservableCollection<string> ShutterSpeedValues { get; set; } = [];
 
-        public ObservableCollection<string> WhiteBalanceValues { get; set; }
+        public ObservableCollection<string> WhiteBalanceValues { get; set; } = [];
 
-        public string? CameraName { get; private set; }
+        public string CameraName { get; private set; } = "Canon EOS";
 
         public CanonCameraDevice(ILogger<CanonCameraDevice> logger)
         {
@@ -128,6 +134,11 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
         private void _sdkHandler_SdkErrorEvent(object? sender, uint e)
         {
             _logger.Log(LogLevel.Information, $"Canon SDK error: {Enum.GetName(typeof(CameraErrorCodes), (long)e)}");
+        }
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private ObservableCollection<string> GetSetting(Dictionary<uint, string> cameraValues, uint propID) => new(GetCanonPropValues(propID, cameraValues));
@@ -153,7 +164,6 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             }
         }
 
-
         public void StartLiveView() => _sdkHandler?.StartLiveView();
 
         public void StopLiveView() => _sdkHandler?.StopLiveView();
@@ -173,7 +183,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             Connected?.Invoke(this, EventArgs.Empty);
         }
 
-        private void CameraHasShutdown(object? sender, EventArgs e)
+        private void CameraHasShutdown(object? sender, EventArgs args)
         {
             IsAvailable = _sdkHandler.GetCameraList().Any();
             if (!IsAvailable)
@@ -190,9 +200,8 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
             if (camera != null)
             {
                 IsAvailable = true;
-                _sdkHandler.CloseSession();
                 _sdkHandler.OpenSession(camera);
-                _sdkHandler.UILock(true);
+                CameraName = _sdkHandler.GetStringSetting(PropID_ProductName);
                 _sdkHandler.SetSetting(PropID_AEModeSelect, AEMode_Manual);
                 var (bytesPerSector, numberOfFreeClusters) = _diskInfoService.GetBytesPerSector();
                 if (bytesPerSector.HasValue && numberOfFreeClusters.HasValue)
@@ -204,25 +213,59 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
                 IsoValues = GetSetting(CameraValues.IsoValues, PropID_ISOSpeed);
                 ShutterSpeedValues = GetSetting(CameraValues.TvValues, PropID_Tv);
                 WhiteBalanceValues = GetSetting(CameraValues.WhiteBalanceValues, PropID_WhiteBalance);
-                CameraName = _sdkHandler.GetStringSetting(PropID_ProductName);
             }
         }
 
-        private void CameraPropertyChanged(object? sender, uint e)
+        private void CameraPropertyChanged(uint prop, uint eventType)
         {
-            switch (e)
+            switch (prop)
             {
                 case PropID_ISOSpeed:
-                    IsoValues = GetSetting(CameraValues.IsoValues, PropID_ISOSpeed);
+                    if (eventType == PropertyEvent_PropertyDescChanged)
+                    {
+                        IsoValues = GetSetting(CameraValues.IsoValues, PropID_ISOSpeed);
+                    }
+                    else
+                    {
+                        NotifyPropertyChanged(nameof(Iso));
+                    }
                     break;
                 case PropID_WhiteBalance:
-                    WhiteBalanceValues = GetSetting(CameraValues.WhiteBalanceValues, PropID_WhiteBalance);
+                    if (eventType == PropertyEvent_PropertyDescChanged)
+                    {
+                        WhiteBalanceValues = GetSetting(CameraValues.WhiteBalanceValues, PropID_WhiteBalance);
+                    }
+                    else
+                    {
+                        NotifyPropertyChanged(nameof(WhiteBalance));
+                    }
                     break;
                 case PropID_Av:
-                    ApertureValues = GetSetting(CameraValues.AvValues, PropID_Av);
+                    if (eventType == PropertyEvent_PropertyDescChanged)
+                    {
+                        ApertureValues = GetSetting(CameraValues.AvValues, PropID_Av);
+                    }
+                    else
+                    {
+                        NotifyPropertyChanged(nameof(Aperture));
+                    }
                     break;
                 case PropID_Tv:
-                    ShutterSpeedValues = GetSetting(CameraValues.TvValues, PropID_Tv);
+                    if (eventType == PropertyEvent_PropertyDescChanged)
+                    {
+                        ShutterSpeedValues = GetSetting(CameraValues.TvValues, PropID_Tv);
+                    }
+                    else
+                    {
+                        NotifyPropertyChanged(nameof(ShutterSpeed));
+                    }
+                    break;
+                case PropID_AEModeSelect:
+                    if (_sdkHandler.GetSetting(PropID_AEModeSelect) != AEMode_Manual)
+                    {
+                        _sdkHandler.SetSetting(PropID_AEModeSelect, AEMode_Manual);
+                        NotifyPropertyChanged(Manual);
+                    }
                     break;
             }
         }
@@ -231,7 +274,6 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
         {
             if (disposing && _sdkHandler != null)
             {
-                _sdkHandler.UILock(false);
                 _sdkHandler.CloseSession();
                 _sdkHandler.ImageDownloaded -= ImageDownloaded;
                 _sdkHandler.CameraAdded -= CameraAdded;
