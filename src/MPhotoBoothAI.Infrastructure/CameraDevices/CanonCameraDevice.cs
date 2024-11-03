@@ -117,7 +117,7 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         public string CameraName { get; private set; } = "Canon EOS";
 
-        public CanonCameraDevice(ILogger<CanonCameraDevice> logger, SDKHandler sdkHandler, IDiskInfoService diskInfoService)
+        public CanonCameraDevice(ILogger<CanonCameraDevice> logger, IDiskInfoService diskInfoService, SDKHandler sdkHandler)
         {
             _diskInfoService = diskInfoService;
             _sdkHandler = sdkHandler;

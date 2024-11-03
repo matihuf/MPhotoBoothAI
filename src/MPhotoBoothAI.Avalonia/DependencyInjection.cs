@@ -1,4 +1,5 @@
-﻿using Emgu.CV.Dnn;
+﻿using EDSDK.NET;
+using Emgu.CV.Dnn;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML.OnnxRuntime;
@@ -90,6 +91,8 @@ public static class DependencyInjection
         services.AddTransient<IFaceGenderService, FaceGenderService>();
         services.AddTransient<IAppRestarterService, AppRestarterService>();
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
+        services.AddTransient<IDiskInfoService, DiskInfoService>();
+        services.AddTransient<SDKHandler>();
     }
 
     private static void AddCamera(IServiceCollection services)

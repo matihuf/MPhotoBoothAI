@@ -4,6 +4,7 @@
 			 xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
 			 xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:assets="using:MPhotoBoothAI.Application.Assets"
 			 xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
 			 mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="MPhotoBoothAI.Avalonia.Views.CameraSettingsView"
@@ -33,7 +34,7 @@
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 			<StackPanel Grid.Row="0">
-				<TextBlock Text="Camera name" />
+				<TextBlock Text="{x:Static assets:UI.cameraName}" />
 				<ComboBox	ItemsSource="{Binding Availables, Mode=OneWay}"
 							SelectedItem="{Binding CurrentCameraDevice}"
 							Width="300">
@@ -46,28 +47,28 @@
 			</StackPanel>
 			<WrapPanel Grid.Row="1" IsVisible="{Binding CameraSettings, Converter={x:Static ObjectConverters.IsNotNull}}">
 				<StackPanel>
-					<TextBlock Text="Iso" />
+					<TextBlock Text="{x:Static assets:UI.iso}" />
 					<ComboBox ItemsSource="{Binding CameraSettings.IsoValues, Mode=OneWay}"
 							  IsEnabled="{Binding CameraSettings.IsoValues.Count}"
 							  SelectedItem="{Binding CameraSettings.Iso, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>
 				<StackPanel>
-					<TextBlock Text="ShutterSpeed" />
+					<TextBlock Text="{x:Static assets:UI.shutterSpeed}" />
 					<ComboBox ItemsSource="{Binding CameraSettings.ShutterSpeedValues, Mode=OneWay}"
 							  IsEnabled="{Binding CameraSettings.ShutterSpeedValues.Count}"
 							  SelectedItem="{Binding CameraSettings.ShutterSpeed, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>
 				<StackPanel>
-					<TextBlock Text="Aperture" />
+					<TextBlock Text="{x:Static assets:UI.aperture}" />
 					<ComboBox ItemsSource="{Binding CameraSettings.ApertureValues, Mode=OneWay}"
 							  IsEnabled="{Binding CameraSettings.ApertureValues.Count}"
 							  SelectedItem="{Binding CameraSettings.Aperture, Mode=TwoWay}">
 					</ComboBox>
 				</StackPanel>
 				<StackPanel>
-					<TextBlock Text="WhiteBalance" />
+					<TextBlock Text="{x:Static assets:UI.whiteBalance}" />
 					<ComboBox ItemsSource="{Binding CameraSettings.WhiteBalanceValues, Mode=OneWay}"
 							  IsEnabled="{Binding CameraSettings.WhiteBalanceValues.Count}"
 							  SelectedItem="{Binding CameraSettings.WhiteBalance, Mode=TwoWay}">
@@ -76,9 +77,9 @@
 			</WrapPanel>
 			<StackPanel Grid.Row="2" Orientation="Horizontal">
 				<Button Command="{Binding TakePhotoCommand}"
-						Content="TakePhoto" />
+						Content="{x:Static assets:UI.takePhoto}" />
 				<Button Command="{Binding StartLiveViewCommand}"
-						Content="Start Live View" />
+						Content="{x:Static assets:UI.startLiveView}" />
 			</StackPanel>
 		</Grid>
 	</Grid>
