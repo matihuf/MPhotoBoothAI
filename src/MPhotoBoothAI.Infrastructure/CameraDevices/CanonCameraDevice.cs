@@ -2,7 +2,6 @@
 using Emgu.CV;
 using Microsoft.Extensions.Logging;
 using MPhotoBoothAI.Application.Interfaces;
-using MPhotoBoothAI.Infrastructure.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -118,10 +117,10 @@ namespace MPhotoBoothAI.Infrastructure.CameraDevices
 
         public string CameraName { get; private set; } = "Canon EOS";
 
-        public CanonCameraDevice(ILogger<CanonCameraDevice> logger)
+        public CanonCameraDevice(ILogger<CanonCameraDevice> logger, SDKHandler sdkHandler, IDiskInfoService diskInfoService)
         {
-            _diskInfoService = new DiskInfoService();
-            _sdkHandler = new SDKHandler();
+            _diskInfoService = diskInfoService;
+            _sdkHandler = sdkHandler;
             _sdkHandler.ImageDownloaded += ImageDownloaded;
             _sdkHandler.CameraAdded += CameraAdded;
             _sdkHandler.CameraHasShutdown += CameraHasShutdown;
