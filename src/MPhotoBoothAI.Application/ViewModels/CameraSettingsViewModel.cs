@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Emgu.CV;
+using Microsoft.EntityFrameworkCore;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
 using MPhotoBoothAI.Models.Entities;
@@ -52,6 +53,15 @@ namespace MPhotoBoothAI.Application.ViewModels
             if (CameraSettings != null)
             {
                 CameraSettings.PropertyChanged += CameraSettings_CameraSettingChanged;
+                if (!_databaseContext.CameraSettings.Any(c => c.Camera == CurrentCameraDevice.CameraName))
+                {
+                    var cameraSettings = new CameraSettingsEntity
+                    {
+                        Camera = CurrentCameraDevice.CameraName
+                    };
+                    _databaseContext.CameraSettings.Add(cameraSettings);
+                    _databaseContext.SaveChanges();
+                }
             }
             oldValue?.StopLiveView();
             oldValue?.Detach(this);
@@ -62,34 +72,23 @@ namespace MPhotoBoothAI.Application.ViewModels
 
         private void CameraSettings_CameraSettingChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Manual")
-            {
-                GetCameraSettingFromDatabase(CurrentCameraDevice);
-                return;
-            }
             if (CameraSettings != null && CurrentCameraDevice != null)
             {
-                var cameraName = CurrentCameraDevice.CameraName;
-                var cameraSettings = _databaseContext.CameraSettings.FirstOrDefault(s => s.Camera == cameraName);
-                if (cameraSettings == null)
-                {
-                    cameraSettings = new CameraSettingsEntity
-                    {
-                        Camera = cameraName
-                    };
-                    _databaseContext.CameraSettings.Add(cameraSettings);
-                }
-                cameraSettings.Iso = CameraSettings.Iso;
-                cameraSettings.Aperture = CameraSettings.Aperture;
-                cameraSettings.ShutterSpeed = CameraSettings.ShutterSpeed;
-                cameraSettings.WhiteBalance = CameraSettings.WhiteBalance;
+                _databaseContext.CameraSettings.Where(s => s.Camera == CurrentCameraDevice.CameraName)
+                    .ExecuteUpdate(setters => setters.SetProperty(p => p.Iso, CameraSettings.Iso));
+                _databaseContext.CameraSettings.Where(s => s.Camera == CurrentCameraDevice.CameraName)
+                    .ExecuteUpdate(setters => setters.SetProperty(p => p.Aperture, CameraSettings.Aperture));
+                _databaseContext.CameraSettings.Where(s => s.Camera == CurrentCameraDevice.CameraName)
+                    .ExecuteUpdate(setters => setters.SetProperty(p => p.ShutterSpeed, CameraSettings.ShutterSpeed));
+                _databaseContext.CameraSettings.Where(s => s.Camera == CurrentCameraDevice.CameraName)
+                    .ExecuteUpdate(setters => setters.SetProperty(p => p.WhiteBalance, CameraSettings.WhiteBalance));
                 _databaseContext.SaveChanges();
             }
         }
 
         private void GetCameraSettingFromDatabase(ICameraDevice? newValue)
         {
-            if (newValue != null && _databaseContext.CameraSettings.Any(s => s.Camera == newValue.CameraName) && newValue is ICameraDeviceSettings settings)
+            if (newValue is ICameraDeviceSettings settings)
             {
                 var dbCameraSettings = _databaseContext.CameraSettings.FirstOrDefault(s => s.Camera == newValue.CameraName);
                 if (dbCameraSettings != null)

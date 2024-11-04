@@ -1,6 +1,6 @@
 ﻿using MPhotoBoothAI.Application.Interfaces;
 
-namespace MPhotoBoothAI.Infrastructure.Services
+namespace MPhotoBoothAI.Application.Managers
 {
     public class CameraManager : ICameraManager
     {

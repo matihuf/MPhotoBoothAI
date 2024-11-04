@@ -406,9 +406,3 @@ models/
 #Avalonia
 src/MPhotoBoothAI.Avalonia/.avalonia-build-tasks/
 tests/MPhotoBoothAI.Avalonia.Tests/.avalonia-build-tasks/
-*.onnx
-models/arcface_backbone.onnx
-models/face_landmarks.onnx
-models/G_unet_2blocks.onnx
-models/gfpgan_1.4.onnx
-models/yolov8n-face.onnx

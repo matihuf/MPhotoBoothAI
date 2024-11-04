@@ -1,6 +1,6 @@
 ﻿using Moq;
 using MPhotoBoothAI.Application.Interfaces;
-using MPhotoBoothAI.Infrastructure.Services;
+using MPhotoBoothAI.Application.Managers;
 
 namespace MPhotoBooth.Unit.Tests.Application.Managers
 {
