@@ -2,7 +2,7 @@
 
 namespace MPhotoBoothAI.Models.Entities
 {
-    public class CameraSettingsEntity : BaseEntity
+    public class CameraSettingsEntity : Entity
     {
         public string Camera { get; set; } = string.Empty;
 

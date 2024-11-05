@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241027112555_AddCameraSettings")]
-    partial class AddCameraSettings
+    [Migration("20241105194048_AddCameraNameInDatabase")]
+    partial class AddCameraNameInDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,6 +28,11 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.Property<string>("Aperture")
                         .IsRequired()
                         .HasMaxLength(20)
+                        .HasColumnType("NVARCHAR");
+
+                    b.Property<string>("Camera")
+                        .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("NVARCHAR");
 
                     b.Property<string>("Iso")
@@ -48,16 +53,6 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CameraSettings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Aperture = "",
-                            Iso = "",
-                            ShutterSpeed = "",
-                            WhiteBalance = ""
-                        });
                 });
 
             modelBuilder.Entity("MPhotoBoothAI.Models.Entities.UserSettingsEntity", b =>
@@ -74,13 +69,6 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserSettings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CultureInfoName = ""
-                        });
                 });
 #pragma warning restore 612, 618
         }

@@ -46,6 +46,7 @@ public partial class App : AvaloniaApplication
         base.OnFrameworkInitializationCompleted();
     }
 
+
     private static void SetApplicationLanguage(IDatabaseContext databaseContext)
     {
         var userSettingsEntity = databaseContext.UserSettings.FirstOrDefault();

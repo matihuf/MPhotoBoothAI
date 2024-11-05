@@ -1,5 +1,5 @@
 ﻿namespace MPhotoBoothAI.Models.Entities.Base;
-public abstract class BaseEntity
+public abstract class Entity
 {
     public int Id { get; set; }
 }

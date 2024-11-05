@@ -1,6 +1,5 @@
 ﻿using Moq;
-using MPhotoBoothAI.Application.Interfaces;
-using MPhotoBoothAI.Application.Managers;
+using MPhotoBooth.Unit.Tests.Application.Managers.Builders;
 
 namespace MPhotoBooth.Unit.Tests.Application.Managers
 {
@@ -10,38 +9,33 @@ namespace MPhotoBooth.Unit.Tests.Application.Managers
         public void Availables_ShouldReturnOnlyAvailableCameras()
         {
             // Arrange
-            var avaliableCamera = new Mock<ICameraDevice>();
-            avaliableCamera.Setup(c => c.IsAvailable).Returns(true);
-
-            var unAvaliableCamera = new Mock<ICameraDevice>();
-            unAvaliableCamera.Setup(c => c.IsAvailable).Returns(false);
-
-            var cameraList = new List<ICameraDevice> { avaliableCamera.Object, unAvaliableCamera.Object };
-            var cameraManager = new CameraManager(cameraList);
+            var builder = new CameraManagerBuilder()
+                .WithAvailableCamera()
+                .WithUnavailableCamera();
+            var cameraManager = builder.Build();
 
             // Act
             var availableCameras = cameraManager.Availables;
 
             // Assert
             Assert.Single(availableCameras);
-            Assert.Contains(avaliableCamera.Object, availableCameras);
+            var availableCameraMock = builder.GetCameraMocks().Find(m => m.Object.IsAvailable);
+            Assert.Contains(availableCameraMock.Object, availableCameras);
         }
 
         [Fact]
         public void ChangingCameraAvailability_ShouldTriggerEvent()
         {
             // Arrange
-            var camera = new Mock<ICameraDevice>();
-            camera.Setup(c => c.IsAvailable).Returns(true);
-
-            var cameraList = new List<ICameraDevice> { camera.Object };
-            var cameraManager = new CameraManager(cameraList);
+            var builder = new CameraManagerBuilder().WithAvailableCamera();
+            var cameraManager = builder.Build();
 
             bool eventTriggered = false;
             cameraManager.OnAvaliableCameraListChanged += (cameras) => eventTriggered = true;
 
             // Act
-            camera.Raise(c => c.Connected += null, EventArgs.Empty);
+            var cameraMock = builder.GetCameraMocks()[0];
+            cameraMock.Raise(c => c.Connected += null, EventArgs.Empty);
 
             // Assert
             Assert.True(eventTriggered);
@@ -51,33 +45,31 @@ namespace MPhotoBooth.Unit.Tests.Application.Managers
         public void Dispose_ShouldUnsubscribeFromCameraEvents()
         {
             // Arrange
-            var camera = new Mock<ICameraDevice>();
-
-            var cameraList = new List<ICameraDevice> { camera.Object };
-            var cameraManager = new CameraManager(cameraList);
+            var builder = new CameraManagerBuilder().WithAvailableCamera();
+            var cameraManager = builder.Build();
 
             // Act
             cameraManager.Dispose();
 
             // Assert
-            camera.VerifyRemove(c => c.Connected -= It.IsAny<EventHandler>(), Times.Once);
-            camera.VerifyRemove(c => c.Disconnected -= It.IsAny<EventHandler>(), Times.Once);
+            var cameraMock = builder.GetCameraMocks()[0];
+            cameraMock.VerifyRemove(c => c.Connected -= It.IsAny<EventHandler>(), Times.Once);
+            cameraMock.VerifyRemove(c => c.Disconnected -= It.IsAny<EventHandler>(), Times.Once);
         }
 
         [Fact]
         public void Constructor_ShouldSubscribeToCameraEvents()
         {
             // Arrange
-            var camera = new Mock<ICameraDevice>();
-
-            var cameraList = new List<ICameraDevice> { camera.Object };
+            var builder = new CameraManagerBuilder().WithAvailableCamera();
 
             // Act
-            var cameraManager = new CameraManager(cameraList);
+            var cameraManager = builder.Build();
 
             // Assert
-            camera.VerifyAdd(c => c.Connected += It.IsAny<EventHandler>(), Times.Once);
-            camera.VerifyAdd(c => c.Disconnected += It.IsAny<EventHandler>(), Times.Once);
+            var cameraMock = builder.GetCameraMocks()[0];
+            cameraMock.VerifyAdd(c => c.Connected += It.IsAny<EventHandler>(), Times.Once);
+            cameraMock.VerifyAdd(c => c.Disconnected += It.IsAny<EventHandler>(), Times.Once);
         }
     }
 }

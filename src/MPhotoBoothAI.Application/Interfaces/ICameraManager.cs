@@ -1,14 +1,13 @@
-﻿namespace MPhotoBoothAI.Application.Interfaces
+﻿namespace MPhotoBoothAI.Application.Interfaces;
+
+public interface ICameraManager : IDisposable
 {
-    public interface ICameraManager : IDisposable
-    {
-        IEnumerable<ICameraDevice> Availables { get; }
+    IEnumerable<ICameraDevice> Availables { get; }
 
-        ICameraDevice? Current { get; set; }
+    ICameraDevice? Current { get; set; }
 
-        delegate void AvaliableCameraListChanged(IEnumerable<ICameraDevice> cameraList);
+    delegate void AvaliableCameraListChanged(IEnumerable<ICameraDevice> cameraList);
 
-        event AvaliableCameraListChanged OnAvaliableCameraListChanged;
+    event AvaliableCameraListChanged OnAvaliableCameraListChanged;
 
-    }
 }

@@ -18,8 +18,8 @@
 	</UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="1.5*" />
 			<RowDefinition Height="*" />
+			<RowDefinition MinHeight="200" />
 		</Grid.RowDefinitions>
 		<Image Source="{Binding Frame, Converter={StaticResource matConverter}}"
 			   VerticalAlignment="Stretch"
@@ -27,13 +27,14 @@
 			   Stretch="Uniform"
 			   StretchDirection="Both"
 			   Grid.Row="0" />
-		<Grid Grid.Row="1">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
-			<StackPanel Grid.Row="0">
+		<StackPanel Grid.Row="1">
+			<StackPanel Orientation="Horizontal">
+				<Button Command="{Binding TakePhotoCommand}"
+						Content="{x:Static assets:UI.takePhoto}" />
+				<Button Command="{Binding StartLiveViewCommand}"
+						Content="{x:Static assets:UI.startLiveView}" />
+			</StackPanel>
+			<StackPanel>
 				<TextBlock Text="{x:Static assets:UI.cameraName}" />
 				<ComboBox	ItemsSource="{Binding Availables, Mode=OneWay}"
 							SelectedItem="{Binding CurrentCameraDevice}"
@@ -45,7 +46,16 @@
 					</ComboBox.ItemTemplate>
 				</ComboBox>
 			</StackPanel>
-			<WrapPanel Grid.Row="1" IsVisible="{Binding CameraSettings, Converter={x:Static ObjectConverters.IsNotNull}}">
+			<WrapPanel IsVisible="{Binding CameraSettings, Converter={x:Static ObjectConverters.IsNotNull}}">
+				<WrapPanel.Styles>
+					<Style Selector="StackPanel">
+						<Setter Property="Width" Value="220"/>
+						<Setter Property="Margin" Value="0 20 10 0"/>
+					</Style>
+					<Style Selector="ComboBox">
+						<Setter Property="Width" Value="200"/>
+					</Style>
+				</WrapPanel.Styles>
 				<StackPanel>
 					<TextBlock Text="{x:Static assets:UI.iso}" />
 					<ComboBox ItemsSource="{Binding CameraSettings.IsoValues, Mode=OneWay}"
@@ -75,12 +85,6 @@
 					</ComboBox>
 				</StackPanel>
 			</WrapPanel>
-			<StackPanel Grid.Row="2" Orientation="Horizontal">
-				<Button Command="{Binding TakePhotoCommand}"
-						Content="{x:Static assets:UI.takePhoto}" />
-				<Button Command="{Binding StartLiveViewCommand}"
-						Content="{x:Static assets:UI.startLiveView}" />
-			</StackPanel>
-		</Grid>
+		</StackPanel>
 	</Grid>
 </UserControl>
