@@ -183,6 +183,9 @@
   <data name="whiteBalance" xml:space="preserve">
     <value>White Balance</value>
   </data>
+  <data name="templates" xml:space="preserve">
+    <value>Templates</value>
+  </data>
   <data name="yes" xml:space="preserve">
     <value>Yes</value>
   </data>

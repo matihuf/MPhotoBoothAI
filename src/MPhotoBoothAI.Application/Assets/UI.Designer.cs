@@ -259,6 +259,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Szablony.
+        /// </summary>
+        public static string templates {
+            get {
+                return ResourceManager.GetString("templates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tak.
         /// </summary>
         public static string yes {
