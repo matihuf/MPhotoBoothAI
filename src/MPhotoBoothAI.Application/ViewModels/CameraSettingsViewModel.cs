@@ -49,7 +49,7 @@ public partial class CameraSettingsViewModel : ViewModelBase, IObserver, IDispos
         {
             oldCameraSettings.PropertyChanged -= CameraSettings_CameraSettingChanged;
         }
-        CameraSettings = newValue is ICameraDeviceSettings cameraDeviceSettings ? cameraDeviceSettings : null;
+        CameraSettings = newValue as ICameraDeviceSettings;
         if (CameraSettings != null)
         {
             CameraSettings.PropertyChanged += CameraSettings_CameraSettingChanged;

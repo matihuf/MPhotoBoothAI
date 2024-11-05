@@ -125,12 +125,12 @@ public class CanonCameraDevice : BaseCameraDevice, ICameraDevice, ICameraDeviceS
         _sdkHandler.CameraAdded += CameraAdded;
         _sdkHandler.CameraHasShutdown += CameraHasShutdown;
         _sdkHandler.SDKPropertyChangedEvent += CameraPropertyChanged;
-        _sdkHandler.SDKErrorEvent += _sdkHandler_SdkErrorEvent;
+        _sdkHandler.SDKErrorEvent += CameraError;
         _logger = logger;
         Reconnect();
     }
 
-    private void _sdkHandler_SdkErrorEvent(object? sender, uint e)
+    private void CameraError(object? sender, uint e)
     {
         _logger.LogError("Canon SDK Error: {CanonSDKError}", Enum.GetName(typeof(CameraErrorCodes), (long)e));
     }
@@ -278,7 +278,7 @@ public class CanonCameraDevice : BaseCameraDevice, ICameraDevice, ICameraDeviceS
             _sdkHandler.CameraAdded -= CameraAdded;
             _sdkHandler.CameraHasShutdown -= CameraHasShutdown;
             _sdkHandler.SDKPropertyChangedEvent -= CameraPropertyChanged;
-            _sdkHandler.SDKErrorEvent -= _sdkHandler_SdkErrorEvent;
+            _sdkHandler.SDKErrorEvent -= CameraError;
             _sdkHandler.Dispose();
         }
     }
