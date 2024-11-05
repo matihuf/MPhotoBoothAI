@@ -132,6 +132,12 @@
   <data name="cancel" xml:space="preserve">
     <value>Anuluj</value>
   </data>
+  <data name="deleteGroup" xml:space="preserve">
+    <value>Usunąć grupę?</value>
+  </data>
+  <data name="deleteGroupDesc" xml:space="preserve">
+    <value>Usunąć grupę i wszystkie szablony?</value>
+  </data>
   <data name="en-US" xml:space="preserve">
     <value>Angielski</value>
   </data>

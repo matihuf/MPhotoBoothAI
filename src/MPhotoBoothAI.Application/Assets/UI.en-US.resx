@@ -132,6 +132,12 @@
   <data name="cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="deleteGroup" xml:space="preserve">
+    <value>Delete Group?</value>
+  </data>
+  <data name="deleteGroupDesc" xml:space="preserve">
+    <value>Delete group and all templates?</value>
+  </data>
   <data name="en-EN" xml:space="preserve">
     <value>English</value>
   </data>

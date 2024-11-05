@@ -49,18 +49,12 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteGroup()
     {
-        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.language, Assets.UI.newGroup))
+        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteGroup, Assets.UI.deleteGroupDesc))
         {
             Groups.Remove(SelectedGroup);
             await SaveChanges();
             SelectedGroup = Groups.FirstOrDefault();
         }
-    }
-
-    [RelayCommand]
-    private void AddTemplate()
-    {
-        Templates.Add(new FaceSwapTemplateEntity());
     }
 
     [RelayCommand]
@@ -88,6 +82,36 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     {
         await SaveChanges();
         IsGroupInEdit = !IsGroupInEdit;
+    }
+
+    [RelayCommand]
+    private async Task AddTemplate()
+    {
+        if (SelectedGroup == null)
+        {
+            return;
+        }
+        var newTemplate = new FaceSwapTemplateEntity
+        {
+            FaceSwapTemplateGroupId = SelectedGroup.Id,
+            FileName = string.Empty
+        };
+        _databaseContext.FaceSwapTemplates.Add(newTemplate);
+        await SaveChanges();
+        Templates.Add(newTemplate);
+    }
+
+    partial void OnSelectedGroupChanged(FaceSwapTemplateGroupEntity? value)
+    {
+        if (value == null)
+        {
+            return;
+        }
+        Templates.Clear();
+        foreach (var item in _databaseContext.FaceSwapTemplates.Where(x => x.FaceSwapTemplateGroupId == value.Id).OrderBy(x => x.CreatedAt).ToList())
+        {
+            Templates.Add(item);
+        }
     }
 
     [RelayCommand]

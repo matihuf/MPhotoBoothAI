@@ -106,6 +106,24 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Usunąć grupę?.
+        /// </summary>
+        public static string deleteGroup {
+            get {
+                return ResourceManager.GetString("deleteGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usunąć grupę i wszystkie szablony?.
+        /// </summary>
+        public static string deleteGroupDesc {
+            get {
+                return ResourceManager.GetString("deleteGroupDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Angielski.
         /// </summary>
         public static string en_US {
