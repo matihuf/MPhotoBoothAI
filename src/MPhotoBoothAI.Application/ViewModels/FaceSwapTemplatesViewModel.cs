@@ -115,5 +115,5 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private Task SaveChanges() => _databaseContext.SaveChangesAsync();
+    private Task<int> SaveChanges() => _databaseContext.SaveChangesAsync();
 }
