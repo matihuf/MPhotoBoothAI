@@ -18,8 +18,8 @@
 	</UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-			<RowDefinition MinHeight="200" />
+			<RowDefinition Height="500" />
+			<RowDefinition Height="auto" />
 		</Grid.RowDefinitions>
 		<Image Source="{Binding Frame, Converter={StaticResource matConverter}}"
 			   VerticalAlignment="Stretch"
@@ -27,14 +27,24 @@
 			   Stretch="Uniform"
 			   StretchDirection="Both"
 			   Grid.Row="0" />
-		<StackPanel Grid.Row="1">
+		<StackPanel Grid.Row="1"
+					Margin="0 20">
 			<StackPanel Orientation="Horizontal">
+				<StackPanel.Styles>
+					<Style Selector="Button">
+						<Setter Property="Width" Value="150"/>
+						<Setter Property="Height" Value="120"/>
+						<Setter Property="VerticalContentAlignment" Value="Center"/>
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+					</Style>
+				</StackPanel.Styles>
 				<Button Command="{Binding TakePhotoCommand}"
 						Content="{x:Static assets:UI.takePhoto}" />
 				<Button Command="{Binding StartLiveViewCommand}"
-						Content="{x:Static assets:UI.startLiveView}" />
+						Content="{x:Static assets:UI.startLiveView}" 
+						Margin="20 0 0 0"/>
 			</StackPanel>
-			<StackPanel>
+			<StackPanel Margin="0 20 0 0">
 				<TextBlock Text="{x:Static assets:UI.cameraName}" />
 				<ComboBox	ItemsSource="{Binding Availables, Mode=OneWay}"
 							SelectedItem="{Binding CurrentCameraDevice}"
