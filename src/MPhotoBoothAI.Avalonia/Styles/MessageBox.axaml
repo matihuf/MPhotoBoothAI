@@ -3,20 +3,14 @@
         xmlns:assets="using:MPhotoBoothAI.Application.Assets"
         xmlns:msBox="using:MsBox.Avalonia.Controls">
   <Design.PreviewWith>
-    <msBox:MsBoxStandardView />
+    <msBox:MsBoxCustomView />
   </Design.PreviewWith>
 
-  <Style Selector="Button.yes /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Content" Value="{x:Static assets:UI.yes}" />
-  </Style>
-  <Style Selector="Button.no /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Content" Value="{x:Static assets:UI.no}" />
-  </Style>
-  <Style Selector="msBox|MsBoxStandardView">
+  <Style Selector="msBox|MsBoxCustomView">
     <Setter Property="Background" Value="WhiteSmoke"/>
     <Setter Property="CornerRadius" Value="10" />
   </Style>
-  <Style Selector="msBox|MsBoxStandardView TextBox">
+  <Style Selector="msBox|MsBoxCustomView TextBox">
     <Setter Property="MaxLength" Value="50"/>
   </Style>
 </Styles>
