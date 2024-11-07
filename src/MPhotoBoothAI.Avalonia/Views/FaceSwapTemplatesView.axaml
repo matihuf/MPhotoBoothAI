@@ -21,6 +21,7 @@
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
           </Grid.RowDefinitions>
           <Panel Grid.Row="0">
@@ -32,7 +33,17 @@
               </StackPanel>
             </Button>
           </Panel>
-          <ListBox Grid.Row="1" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
+          <Grid Grid.Row="1" Margin="0,30,0,10">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{x:Static assets:UI.name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="3" Text="{x:Static assets:UI.active}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+          </Grid>
+          <ListBox Grid.Row="2" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
             <ListBox.ItemTemplate>
               <DataTemplate DataType="{x:Type entities:FaceSwapTemplateGroupEntity}">
                 <Panel>
@@ -73,32 +84,38 @@
               <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                   <PathIcon Data="{StaticResource edit_regular}" />
-                  <TextBlock Text="Edytuj" />
+                  <TextBlock Text="{x:Static assets:UI.edit}" />
                 </StackPanel>
               </Button>
               <Button Command="{Binding DeleteGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                   <PathIcon Data="{StaticResource delete_regular}" />
-                  <TextBlock Text="Usuń" />
+                  <TextBlock Text="{x:Static assets:UI.delete}" />
                 </StackPanel>
               </Button>
               <Button Command="{Binding SaveEditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
-                <PathIcon Data="{StaticResource save_regular}" />
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <PathIcon Data="{StaticResource save_regular}" />
+                  <TextBlock Text="{x:Static assets:UI.save}" />
+                </StackPanel>
               </Button>
               <Button Command="{Binding CancelEditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
-                <PathIcon Data="{StaticResource dismiss_regular}" />
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <PathIcon Data="{StaticResource dismiss_regular}" />
+                  <TextBlock Text="{x:Static assets:UI.cancel}" />
+                </StackPanel>
               </Button>
             </StackPanel>
           </Grid>
-          <Panel Grid.Row="2" Margin="0,10,0,0">
+          <Panel Grid.Row="2" Margin="0,10,0,0" IsEnabled="{Binding !IsGroupInEdit}">
             <Button Command="{Binding AddTemplateCommand}">
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <PathIcon Data="{StaticResource add_circle_regular}" />
-                <TextBlock Text="Dodaj szablon" />
+                <TextBlock Text="{x:Static assets:UI.addTemplate}" />
               </StackPanel>
             </Button>
           </Panel>
-          <ListBox Grid.Row="3" ItemsSource="{Binding Templates}" >
+          <ListBox Grid.Row="3" ItemsSource="{Binding Templates}" IsEnabled="{Binding !IsGroupInEdit}">
             <ListBox.ItemsPanel>
               <ItemsPanelTemplate>
                 <WrapPanel />
