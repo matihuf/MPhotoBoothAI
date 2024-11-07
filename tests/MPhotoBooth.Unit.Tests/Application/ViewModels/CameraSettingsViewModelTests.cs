@@ -69,7 +69,6 @@ namespace MPhotoBooth.Unit.Tests.Application.ViewModels
             var mockCameraSettingsDbSet = builder.GetQueryableMockDbSet(cameraSettingsList);
             builder.MockDatabaseContext.Setup(db => db.CameraSettings).Returns(mockCameraSettingsDbSet);
             builder.MockDatabaseContext.Setup(db => db.SaveChanges());
-
             // Act
             viewModel.CurrentCameraDevice = cameraDeviceMock.Object;
             viewModel.StartLiveViewCommand.Execute(null);
