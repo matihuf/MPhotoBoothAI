@@ -79,6 +79,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aparat.
+        /// </summary>
+        public static string cameraSettings {
+            get {
+                return ResourceManager.GetString("cameraSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Angielski.
         /// </summary>
         public static string en_US {

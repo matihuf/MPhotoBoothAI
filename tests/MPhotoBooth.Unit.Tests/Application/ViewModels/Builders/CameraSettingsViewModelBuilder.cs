@@ -18,11 +18,7 @@ namespace MPhotoBooth.Unit.Tests.Application.ViewModels.Builders
         {
             MockCameraManager = new Mock<ICameraManager>();
             MockDatabaseContext = new Mock<IDatabaseContext>();
-
-            // Inicjalizacja pustych list i mocków
             MockCameraManager.Setup(cm => cm.Availables).Returns(new List<ICameraDevice>());
-
-            // Upewnij się, że CameraSettings jest inicjalizowane jako pusta lista, aby uniknąć błędów ArgumentNullException
             var cameraSettingsList = new List<CameraSettingsEntity>();
             var mockCameraSettingsDbSet = GetQueryableMockDbSet(cameraSettingsList);
             MockDatabaseContext.Setup(db => db.CameraSettings).Returns(mockCameraSettingsDbSet);
@@ -71,14 +67,11 @@ namespace MPhotoBooth.Unit.Tests.Application.ViewModels.Builders
         {
             var queryable = sourceList.AsQueryable();
             var mockSet = new Mock<DbSet<T>>();
-
             mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(queryable.Provider);
             mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
             mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
             mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(() => queryable.GetEnumerator());
-
             mockSet.Setup(d => d.Add(It.IsAny<T>())).Callback<T>(s => sourceList.Add(s));
-
             return mockSet.Object;
         }
     }

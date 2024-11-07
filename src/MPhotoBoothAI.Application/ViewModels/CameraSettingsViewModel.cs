@@ -75,13 +75,11 @@ public partial class CameraSettingsViewModel : ViewModelBase, IObserver, IDispos
         if (CameraSettings != null && CurrentCameraDevice != null)
         {
             _databaseContext.CameraSettings.Where(s => s.Camera == CurrentCameraDevice.CameraName)
-                .ExecuteUpdate(setters => setters.SetProperty(p => p.Iso, CameraSettings.Iso));
-            _databaseContext.CameraSettings.Where(s => s.Camera == CurrentCameraDevice.CameraName)
-                .ExecuteUpdate(setters => setters.SetProperty(p => p.Aperture, CameraSettings.Aperture));
-            _databaseContext.CameraSettings.Where(s => s.Camera == CurrentCameraDevice.CameraName)
-                .ExecuteUpdate(setters => setters.SetProperty(p => p.ShutterSpeed, CameraSettings.ShutterSpeed));
-            _databaseContext.CameraSettings.Where(s => s.Camera == CurrentCameraDevice.CameraName)
-                .ExecuteUpdate(setters => setters.SetProperty(p => p.WhiteBalance, CameraSettings.WhiteBalance));
+                .ExecuteUpdate(setters => setters
+                .SetProperty(p => p.Iso, CameraSettings.Iso)
+                .SetProperty(p => p.Aperture, CameraSettings.Aperture)
+                .SetProperty(p => p.ShutterSpeed, CameraSettings.ShutterSpeed)
+                .SetProperty(p => p.WhiteBalance, CameraSettings.WhiteBalance));
             _databaseContext.SaveChanges();
         }
     }

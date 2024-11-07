@@ -20,7 +20,7 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     private readonly List<ListItemTemplate> _pages =
     [
         new ListItemTemplate(typeof(HomeViewModel), "home_regular", "Home"),
-        new ListItemTemplate(typeof(CameraSettingsViewModel), "camera_regular", "CameraSettings"),
+        new ListItemTemplate(typeof(CameraSettingsViewModel), "camera_regular", "cameraSettings"),
         new ListItemTemplate(typeof(FaceDetectionViewModel), "person_swap_regular", "FaceDetection"),
     ];
 

@@ -123,6 +123,9 @@
   <data name="cameraName" xml:space="preserve">
     <value>Twój aparat</value>
   </data>
+  <data name="cameraSettings" xml:space="preserve">
+    <value>Aparat</value>
+  </data>
   <data name="en-US" xml:space="preserve">
     <value>Angielski</value>
   </data>

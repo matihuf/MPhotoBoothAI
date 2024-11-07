@@ -9,7 +9,6 @@ namespace MPhotoBooth.Unit.Tests.Application.ViewModels
 {
     public class CameraSettingsViewModelTests
     {
-
         [Fact]
         public void Constructor_ShouldInitializeProperties()
         {
@@ -28,14 +27,9 @@ namespace MPhotoBooth.Unit.Tests.Application.ViewModels
             var newCameraDeviceMock = new Mock<ICameraDevice>();
             var builder = new CameraSettingsViewModelBuilder().WithMockedICamera(oldCameraDeviceMock, newCameraDeviceMock);
             var viewModel = builder.Build();
-
-            // Ustawienie początkowego urządzenia, aby zdarzenie PropertyChanged było dodane i można było je usunąć
             viewModel.CurrentCameraDevice = oldCameraDeviceMock.Object;
-
-            // Act - zmiana urządzenia
             viewModel.CurrentCameraDevice = newCameraDeviceMock.Object;
 
-            // Assert
             Assert.Equal(newCameraDeviceMock.Object, viewModel.CurrentCameraDevice);
 
             oldCameraDeviceMock.Verify(c => c.StopLiveView(), Times.Once);
@@ -43,7 +37,6 @@ namespace MPhotoBooth.Unit.Tests.Application.ViewModels
             newCameraDeviceMock.Verify(c => c.Attach(viewModel), Times.Once);
             builder.MockCameraManager.VerifySet(cm => cm.Current = newCameraDeviceMock.Object, Times.Once);
 
-            // Weryfikacja przypisania i usunięcia zdarzenia PropertyChanged
             var oldCameraSettingsMock = oldCameraDeviceMock.As<ICameraDeviceSettings>();
             var newCameraSettingsMock = newCameraDeviceMock.As<ICameraDeviceSettings>();
 
@@ -99,7 +92,5 @@ namespace MPhotoBooth.Unit.Tests.Application.ViewModels
             // Assert
             Assert.Equal(newCameraList, viewModel.Availables);
         }
-
-
     }
 }

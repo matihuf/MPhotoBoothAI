@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241105194048_AddCameraNameInDatabase")]
+    [Migration("20241107191500_AddCameraNameInDatabase")]
     partial class AddCameraNameInDatabase
     {
         /// <inheritdoc />
