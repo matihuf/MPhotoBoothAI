@@ -2,6 +2,7 @@
 using Emgu.CV.CvEnum;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Common.Tests;
 
 namespace MPhotoBoothAI.Integration.Tests.Infrastructure.Services;
 
@@ -22,10 +23,10 @@ public class FaceMaskServiceTests(DependencyInjectionFixture dependencyInjection
 
         using var targetFace = faceDetectionService.Detect(targetFaceFrame, 0.8f, 0.5f).First();
         using var targetAlignFace = faceAlignService.Align(targetFaceFrame, targetFace.Landmarks);
-        
+
         var faceSwapPredictService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceSwapPredictService>();
         using var predictResult = faceSwapPredictService.Predict(sourceAlignFace.Align, targetAlignFace.Align);
-        
+
         var faceLandmarksService = dependencyInjectionFixture.ServiceProvider.GetService<IFaceLandmarksService>();
         var predictLandmarks = faceLandmarksService.GetLandmarks(predictResult);
         var targetLandmarks = faceLandmarksService.GetLandmarks(targetAlignFace.Align);

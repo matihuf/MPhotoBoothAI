@@ -2,19 +2,22 @@ using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Tests.Extensions;
 using MPhotoBoothAI.Avalonia.Views;
+using MPhotoBoothAI.Common.Tests;
 using MPhotoBoothAI.Models.UI;
 
 namespace MPhotoBoothAI.Avalonia.Tests.Views;
 
-public class MainWindowTests
+public class MainWindowTests(DependencyInjectionFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionFixture>
 {
     [AvaloniaFact]
     public void MainWindow_DefaultPage_Home()
     {
         //arrange
-        var window = new MainWindow { DataContext = App.ServiceProvider.GetRequiredService<MainViewModel>() };
+        var vw = new MainViewModel(new HistoryRouter<ViewModelBase>(t => (ViewModelBase)dependencyInjectionFixture.ServiceProvider.GetRequiredService(t)));
+        var window = new MainWindow { DataContext = vw };
         window.Show();
         var content = window.FindControl<ContentControl>("Content");
         //act
@@ -28,7 +31,8 @@ public class MainWindowTests
     public void MainWindow_MenuClickListBoxPageItem_ContentShouldBeAsExpected()
     {
         //arrange
-        var window = new MainWindow { DataContext = App.ServiceProvider.GetRequiredService<MainViewModel>() };
+        var vw = new MainViewModel(new HistoryRouter<ViewModelBase>(t => (ViewModelBase)dependencyInjectionFixture.ServiceProvider.GetRequiredService(t)));
+        var window = new MainWindow { DataContext = vw };
         window.Show();
         var listBoxPage = window.FindControl<ListBox>("ListBoxPage");
         for (int i = 0; i < listBoxPage.Items.Count; i++)

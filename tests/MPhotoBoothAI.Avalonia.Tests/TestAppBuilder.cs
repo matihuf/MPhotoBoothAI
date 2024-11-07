@@ -7,6 +7,6 @@ namespace MPhotoBoothAI.Avalonia.Tests;
 
 public static class TestAppBuilder
 {
-    public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<TestApp>()
+    public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>()
         .UseHeadless(new AvaloniaHeadlessPlatformOptions());
 }

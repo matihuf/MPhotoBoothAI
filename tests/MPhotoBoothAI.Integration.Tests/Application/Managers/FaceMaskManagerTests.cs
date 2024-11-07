@@ -2,7 +2,7 @@
 using Emgu.CV.CvEnum;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Interfaces;
-using MPhotoBoothAI.Application.Managers;
+using MPhotoBoothAI.Common.Tests;
 
 namespace MPhotoBoothAI.Integration.Tests.Application.Managers;
 
