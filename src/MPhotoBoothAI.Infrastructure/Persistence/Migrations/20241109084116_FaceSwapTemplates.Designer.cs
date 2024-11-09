@@ -11,14 +11,50 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241030100340_FaceSwapTemplate")]
-    partial class FaceSwapTemplate
+    [Migration("20241109084116_FaceSwapTemplates")]
+    partial class FaceSwapTemplates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
+
+            modelBuilder.Entity("MPhotoBoothAI.Models.Entities.CameraSettingsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Aperture")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("NVARCHAR");
+
+                    b.Property<string>("Camera")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("NVARCHAR");
+
+                    b.Property<string>("Iso")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("NVARCHAR");
+
+                    b.Property<string>("ShutterSpeed")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("NVARCHAR");
+
+                    b.Property<string>("WhiteBalance")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("NVARCHAR");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CameraSettings");
+                });
 
             modelBuilder.Entity("MPhotoBoothAI.Models.Entities.FaceSwapTemplateEntity", b =>
                 {
@@ -29,7 +65,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME")
-                        .HasDefaultValueSql("date('now')");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("FaceSwapTemplateGroupId")
                         .HasColumnType("INTEGER");
@@ -58,7 +94,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME")
-                        .HasDefaultValueSql("date('now')");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("INTEGER");
@@ -78,11 +114,6 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("DATETIME")
-                        .HasDefaultValueSql("date('now')");
 
                     b.Property<string>("CultureInfoName")
                         .IsRequired()

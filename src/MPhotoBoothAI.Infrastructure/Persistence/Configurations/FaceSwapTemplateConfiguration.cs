@@ -14,7 +14,7 @@ public class FaceSwapTemplateConfiguration : IEntityTypeConfiguration<FaceSwapTe
             .IsRequired();
         builder.Property(x => x.CreatedAt)
             .HasColumnType("DATETIME")
-            .HasDefaultValueSql("date('now')")
+            .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .IsRequired();
     }
 }

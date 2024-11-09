@@ -62,7 +62,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME")
-                        .HasDefaultValueSql("date('now')");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("FaceSwapTemplateGroupId")
                         .HasColumnType("INTEGER");
@@ -91,7 +91,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME")
-                        .HasDefaultValueSql("date('now')");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("INTEGER");
@@ -111,11 +111,6 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("DATETIME")
-                        .HasDefaultValueSql("date('now')");
 
                     b.Property<string>("CultureInfoName")
                         .IsRequired()

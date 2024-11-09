@@ -6,23 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class FaceSwapTemplate : Migration
+    public partial class FaceSwapTemplates : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "UserSettings",
-                keyColumn: "Id",
-                keyValue: 1);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "CreatedAt",
-                table: "UserSettings",
-                type: "DATETIME",
-                nullable: false,
-                defaultValueSql: "date('now')");
-
             migrationBuilder.CreateTable(
                 name: "FaceSwapTemplateGroups",
                 columns: table => new
@@ -31,7 +19,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "NVARCHAR", maxLength: 50, nullable: false),
                     IsEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false, defaultValueSql: "date('now')")
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
                 {
@@ -47,7 +35,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     Faces = table.Column<int>(type: "INTEGER", nullable: false),
                     FileName = table.Column<string>(type: "NVARCHAR", maxLength: 50, nullable: false),
                     FaceSwapTemplateGroupId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false, defaultValueSql: "date('now')")
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
                 {
@@ -74,15 +62,6 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "FaceSwapTemplateGroups");
-
-            migrationBuilder.DropColumn(
-                name: "CreatedAt",
-                table: "UserSettings");
-
-            migrationBuilder.InsertData(
-                table: "UserSettings",
-                columns: new[] { "Id", "CultureInfoName" },
-                values: new object[] { 1, "" });
         }
     }
 }

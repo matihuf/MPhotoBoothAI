@@ -18,7 +18,7 @@ public class FaceSwapTemplateGroupConfiguration : IEntityTypeConfiguration<FaceS
             .OnDelete(DeleteBehavior.Cascade);
         builder.Property(x => x.CreatedAt)
             .HasColumnType("DATETIME")
-            .HasDefaultValueSql("date('now')")
+            .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .IsRequired();
     }
 }

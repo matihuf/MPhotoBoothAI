@@ -1,8 +1,9 @@
-﻿using System.ComponentModel;
+﻿using MPhotoBoothAI.Models.Entities.Base;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace MPhotoBoothAI.Models.Entities;
-public partial class FaceSwapTemplateGroupEntity : BaseEntity, ICloneable, INotifyPropertyChanged
+public partial class FaceSwapTemplateGroupEntity : Entity, ICloneable, INotifyPropertyChanged
 {
     private string _name = string.Empty;
     public string Name
@@ -25,6 +26,8 @@ public partial class FaceSwapTemplateGroupEntity : BaseEntity, ICloneable, INoti
             NotifyPropertyChanged();
         }
     }
+
+    public DateTime CreatedAt { get; set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
     private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

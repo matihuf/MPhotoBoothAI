@@ -12,9 +12,5 @@ public class UserSettingsEntityConfiguration : IEntityTypeConfiguration<UserSett
             .HasMaxLength(5)
             .HasColumnType("NVARCHAR")
             .IsRequired();
-        builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME")
-            .HasDefaultValueSql("date('now')")
-            .IsRequired();
     }
 }
