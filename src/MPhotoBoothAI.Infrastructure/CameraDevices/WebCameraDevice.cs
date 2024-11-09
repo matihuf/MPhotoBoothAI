@@ -3,23 +3,33 @@ using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Infrastructure.CameraDevices;
 
-public class WebCameraDevice : BaseCameraDevice, ICameraDevice, IDisposable
+public class WebCameraDevice : BaseCameraDevice, ICameraDevice
 {
     private readonly VideoCapture _videoCapture;
+
     private bool _started = false;
+
+    public event EventHandler Connected;
+
+    public event EventHandler Disconnected;
+
+    public bool IsAvailable { get; private set; } = false;
+
+    public string CameraName => _videoCapture.BackendName;
 
     public WebCameraDevice()
     {
-        _videoCapture = new VideoCapture(0);
+        _videoCapture = new VideoCapture(0, VideoCapture.API.DShow);
+        _videoCapture.ImageGrabbed += CaptureDevice_ImageGrabbed;
+        IsAvailable = _videoCapture.IsOpened;
     }
 
-    public void Start()
+    public void StartLiveView()
     {
         if (!_started)
         {
             _started = true;
             _videoCapture.Start();
-            _videoCapture.ImageGrabbed += CaptureDevice_ImageGrabbed;
         }
     }
 
@@ -43,5 +53,17 @@ public class WebCameraDevice : BaseCameraDevice, ICameraDevice, IDisposable
             _videoCapture.Stop();
             _videoCapture.Dispose();
         }
+    }
+
+    public void StopLiveView()
+    {
+        _videoCapture.Stop();
+        _started = false;
+    }
+
+    public void TakePhoto(bool autoFocus = false)
+    {
+        StartLiveView();
+        StopLiveView();
     }
 }

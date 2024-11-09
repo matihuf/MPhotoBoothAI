@@ -27,8 +27,8 @@
   </ItemGroup>
 
    <ItemGroup>
-    <Content Include="$(SolutionDir)models\**" CopyToOutputDirectory="PreserveNewest" LinkBase="models\"/>
-    <None Update="TestData\**" CopyToOutputDirectory ="PreserveNewest" />
+    <Content Include="$(SolutionDir)models\**" CopyToOutputDirectory="PreserveNewest" LinkBase="models\" />
+    <None Update="TestData\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,9 @@ namespace MPhotoBoothAI.Application.Interfaces;
 public interface IDatabaseContext : IDisposable
 {
     public DbSet<UserSettingsEntity> UserSettings { get; }
+
+    public DbSet<CameraSettingsEntity> CameraSettings { get;}
+
     public DatabaseFacade Database { get; }
 
     int SaveChanges();

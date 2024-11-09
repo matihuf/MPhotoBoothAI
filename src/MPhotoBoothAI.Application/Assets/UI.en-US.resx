@@ -117,8 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="aperture" xml:space="preserve">
+    <value>Aperture</value>
+  </data>
+  <data name="cameraName" xml:space="preserve">
+    <value>Your camera name</value>
+  </data>
+  <data name="cameraSettings" xml:space="preserve">
+    <value>Camera settings</value>
+  </data>
   <data name="en-EN" xml:space="preserve">
     <value>English</value>
+  </data>
+  <data name="iso" xml:space="preserve">
+    <value>Iso</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>Language</value>
@@ -131,5 +143,17 @@
   </data>
   <data name="restartRequired" xml:space="preserve">
     <value>The changes will take effect after restarting the application</value>
+  </data>
+  <data name="shutterSpeed" xml:space="preserve">
+    <value>Shutter speed</value>
+  </data>
+  <data name="startLiveView" xml:space="preserve">
+    <value>Start live view</value>
+  </data>
+  <data name="takePhoto" xml:space="preserve">
+    <value>Take photo</value>
+  </data>
+  <data name="whiteBalance" xml:space="preserve">
+    <value>White Balance</value>
   </data>
 </root>

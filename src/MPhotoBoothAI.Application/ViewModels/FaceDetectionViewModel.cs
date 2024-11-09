@@ -35,11 +35,9 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
         CvInvoke.Imdecode(target, ImreadModes.Color, _target);
     }
 
-    public FaceDetectionViewModel(ICameraDevice cameraDevice, IFaceMultiSwapManager faceMultiSwapManager, IFilePickerService filePickerService)
+    public FaceDetectionViewModel(ICameraManager cameraManager, IFaceMultiSwapManager faceMultiSwapManager, IFilePickerService filePickerService)
     {
-        _cameraDevice = cameraDevice;
-        _cameraDevice.Start();
-        _cameraDevice.Attach(this);
+        _cameraDevice = cameraManager.Current;
         _faceMultiSwapManager = faceMultiSwapManager;
         _filePickerService = filePickerService;
         _target = new Mat();
@@ -61,7 +59,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     {
         if (disposing)
         {
-            _cameraDevice.Detach(this);
+            _cameraDevice?.Detach(this);
             Frame.Dispose();
             _target.Dispose();
         }

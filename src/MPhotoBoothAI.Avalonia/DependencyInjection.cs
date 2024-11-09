@@ -1,4 +1,5 @@
-﻿using Emgu.CV.Dnn;
+﻿using EDSDK.NET;
+using Emgu.CV.Dnn;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML.OnnxRuntime;
@@ -50,6 +51,7 @@ public static class DependencyInjection
         services.AddTransient<IFaceMaskManager, FaceMaskManager>();
         services.AddTransient<IFaceSwapManager, FaceSwapManager>();
         services.AddTransient<IFaceMultiSwapManager, FaceMultiSwapManager>();
+        services.AddSingleton<ICameraManager, CameraManager>();
     }
 
     private static void AddAiModels(IServiceCollection services)
@@ -63,6 +65,7 @@ public static class DependencyInjection
     }
 
     private static Net GetDnnModel(string name) => DnnInvoke.ReadNetFromONNX(GetModelPath(name));
+
     private static string GetModelPath(string name) => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "models", $"{name}.onnx");
 
     private static void AddViewModels(IServiceCollection services)
@@ -71,6 +74,7 @@ public static class DependencyInjection
         services.AddTransient<HomeViewModel>();
         services.AddTransient<FaceDetectionViewModel>();
         services.AddTransient<LanguageViewModel>();
+        services.AddTransient<CameraSettingsViewModel>();
     }
 
     private static void AddServices(IServiceCollection services)
@@ -87,10 +91,13 @@ public static class DependencyInjection
         services.AddTransient<IFaceGenderService, FaceGenderService>();
         services.AddTransient<IAppRestarterService, AppRestarterService>();
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
+        services.AddTransient<IDiskInfoService, DiskInfoService>();
+        services.AddTransient<SDKHandler>();
     }
 
     private static void AddCamera(IServiceCollection services)
     {
         services.AddSingleton<ICameraDevice, WebCameraDevice>();
+        services.AddSingleton<ICameraDevice, CanonCameraDevice>();
     }
 }

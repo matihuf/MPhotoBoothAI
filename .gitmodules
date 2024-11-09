@@ -1,0 +1,3 @@
+[submodule "EDSDK.NET"]
+	path = modules/EDSDK.NET
+	url = https://github.com/Motiony/EDSDK.NET.git

@@ -7,6 +7,8 @@ public class DatabaseContext : DbContext, IDatabaseContext
 {
     public DbSet<UserSettingsEntity> UserSettings { get; set; }
 
+    public DbSet<CameraSettingsEntity> CameraSettings { get; set; }
+
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
     }

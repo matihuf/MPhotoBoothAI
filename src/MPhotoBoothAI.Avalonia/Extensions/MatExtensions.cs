@@ -68,8 +68,10 @@ public static class MatExtensions
             }
         }
     }
+
     public static unsafe Span<T> GetRowSpan<T>(this Mat mat, int y, int length = 0, int offset = 0)
       => new(IntPtr.Add(mat.DataPointer, y * mat.GetRealStep() + offset).ToPointer(), length <= 0 ? mat.GetRealStep() : length);
+
     public static int GetRealStep(this Mat mat)
       => mat.Width * mat.NumberOfChannels;
 }

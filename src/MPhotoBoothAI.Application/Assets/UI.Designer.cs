@@ -61,11 +61,47 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Przesłona.
+        /// </summary>
+        public static string aperture {
+            get {
+                return ResourceManager.GetString("aperture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Twój aparat.
+        /// </summary>
+        public static string cameraName {
+            get {
+                return ResourceManager.GetString("cameraName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aparat.
+        /// </summary>
+        public static string cameraSettings {
+            get {
+                return ResourceManager.GetString("cameraSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Angielski.
         /// </summary>
         public static string en_US {
             get {
                 return ResourceManager.GetString("en-US", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Iso.
+        /// </summary>
+        public static string iso {
+            get {
+                return ResourceManager.GetString("iso", resourceCulture);
             }
         }
         
@@ -102,6 +138,42 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string restartRequired {
             get {
                 return ResourceManager.GetString("restartRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prędkość migawki.
+        /// </summary>
+        public static string shutterSpeed {
+            get {
+                return ResourceManager.GetString("shutterSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Włącz podgląd.
+        /// </summary>
+        public static string startLiveView {
+            get {
+                return ResourceManager.GetString("startLiveView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zrób zdjęcie.
+        /// </summary>
+        public static string takePhoto {
+            get {
+                return ResourceManager.GetString("takePhoto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Balans bieli.
+        /// </summary>
+        public static string whiteBalance {
+            get {
+                return ResourceManager.GetString("whiteBalance", resourceCulture);
             }
         }
     }

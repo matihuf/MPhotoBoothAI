@@ -1,0 +1,100 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+			 xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:assets="using:MPhotoBoothAI.Application.Assets"
+			 xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
+			 mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="MPhotoBoothAI.Avalonia.Views.CameraSettingsView"
+			 x:DataType="vm:CameraSettingsViewModel">
+
+	<Design.DataContext>
+		<dvm:DesignCameraSettingsViewModel />
+	</Design.DataContext>
+	<UserControl.Resources>
+		<converters:MatConverter x:Key="matConverter" />
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="500" />
+			<RowDefinition Height="auto" />
+		</Grid.RowDefinitions>
+		<Image Source="{Binding Frame, Converter={StaticResource matConverter}}"
+			   VerticalAlignment="Stretch"
+			   HorizontalAlignment="Left"
+			   Stretch="Uniform"
+			   StretchDirection="Both"
+			   Grid.Row="0" />
+		<StackPanel Grid.Row="1"
+					Margin="0 20">
+			<StackPanel Orientation="Horizontal">
+				<StackPanel.Styles>
+					<Style Selector="Button">
+						<Setter Property="Width" Value="150"/>
+						<Setter Property="Height" Value="120"/>
+						<Setter Property="VerticalContentAlignment" Value="Center"/>
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+					</Style>
+				</StackPanel.Styles>
+				<Button Command="{Binding TakePhotoCommand}"
+						Content="{x:Static assets:UI.takePhoto}" />
+				<Button Command="{Binding StartLiveViewCommand}"
+						Content="{x:Static assets:UI.startLiveView}" 
+						Margin="20 0 0 0"/>
+			</StackPanel>
+			<StackPanel Margin="0 20 0 0">
+				<TextBlock Text="{x:Static assets:UI.cameraName}" />
+				<ComboBox	ItemsSource="{Binding Availables, Mode=OneWay}"
+							SelectedItem="{Binding CurrentCameraDevice}"
+							Width="300">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding CameraName}"/>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+			</StackPanel>
+			<WrapPanel IsVisible="{Binding CameraSettings, Converter={x:Static ObjectConverters.IsNotNull}}">
+				<WrapPanel.Styles>
+					<Style Selector="StackPanel">
+						<Setter Property="Width" Value="220"/>
+						<Setter Property="Margin" Value="0 20 10 0"/>
+					</Style>
+					<Style Selector="ComboBox">
+						<Setter Property="Width" Value="200"/>
+					</Style>
+				</WrapPanel.Styles>
+				<StackPanel>
+					<TextBlock Text="{x:Static assets:UI.iso}" />
+					<ComboBox ItemsSource="{Binding CameraSettings.IsoValues, Mode=OneWay}"
+							  IsEnabled="{Binding CameraSettings.IsoValues.Count}"
+							  SelectedItem="{Binding CameraSettings.Iso, Mode=TwoWay}">
+					</ComboBox>
+				</StackPanel>
+				<StackPanel>
+					<TextBlock Text="{x:Static assets:UI.shutterSpeed}" />
+					<ComboBox ItemsSource="{Binding CameraSettings.ShutterSpeedValues, Mode=OneWay}"
+							  IsEnabled="{Binding CameraSettings.ShutterSpeedValues.Count}"
+							  SelectedItem="{Binding CameraSettings.ShutterSpeed, Mode=TwoWay}">
+					</ComboBox>
+				</StackPanel>
+				<StackPanel>
+					<TextBlock Text="{x:Static assets:UI.aperture}" />
+					<ComboBox ItemsSource="{Binding CameraSettings.ApertureValues, Mode=OneWay}"
+							  IsEnabled="{Binding CameraSettings.ApertureValues.Count}"
+							  SelectedItem="{Binding CameraSettings.Aperture, Mode=TwoWay}">
+					</ComboBox>
+				</StackPanel>
+				<StackPanel>
+					<TextBlock Text="{x:Static assets:UI.whiteBalance}" />
+					<ComboBox ItemsSource="{Binding CameraSettings.WhiteBalanceValues, Mode=OneWay}"
+							  IsEnabled="{Binding CameraSettings.WhiteBalanceValues.Count}"
+							  SelectedItem="{Binding CameraSettings.WhiteBalance, Mode=TwoWay}">
+					</ComboBox>
+				</StackPanel>
+			</WrapPanel>
+		</StackPanel>
+	</Grid>
+</UserControl>
