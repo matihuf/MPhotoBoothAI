@@ -1,4 +1,5 @@
 ﻿using Moq;
+using MPhotoBoothAI.Application.Assets;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.ViewModels;
 
@@ -11,13 +12,13 @@ public class FaceSwapTemplatesViewModelBuilder
 
     internal FaceSwapTemplatesViewModelBuilder WithDeleteGroupConfirmation(bool confirmed)
     {
-        MessageBoxService.Setup(x => x.ShowYesNo(MPhotoBoothAI.Application.Assets.UI.deleteGroup, MPhotoBoothAI.Application.Assets.UI.deleteGroupDesc)).ReturnsAsync(confirmed);
+        MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteGroup, UI.deleteGroupDesc, It.IsAny<IMainWindow>())).ReturnsAsync(confirmed);
         return this;
     }
 
     internal FaceSwapTemplatesViewModelBuilder WithGroupName(string groupName)
     {
-        MessageBoxService.Setup(x => x.ShowInput(MPhotoBoothAI.Application.Assets.UI.addGroup, MPhotoBoothAI.Application.Assets.UI.name)).ReturnsAsync(groupName);
+        MessageBoxService.Setup(x => x.ShowInput(UI.addGroup, UI.name, It.IsAny<IMainWindow>())).ReturnsAsync(groupName);
         return this;
     }
 }

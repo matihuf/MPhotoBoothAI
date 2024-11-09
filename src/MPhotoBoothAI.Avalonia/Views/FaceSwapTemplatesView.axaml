@@ -26,7 +26,7 @@
           </Grid.RowDefinitions>
           <Panel Grid.Row="0">
             <TextBlock Text="{x:Static assets:UI.groups}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <Button Command="{Binding AddGroupCommand}" HorizontalAlignment="Right">
+            <Button x:Name="addGroupBtn" Command="{Binding AddGroupCommand}" CommandParameter="{Binding $parent[Window]}" HorizontalAlignment="Right">
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <PathIcon Data="{StaticResource add_circle_regular}" />
                 <TextBlock Text="{x:Static assets:UI.addGroup}" />
@@ -43,7 +43,7 @@
             <TextBlock Grid.Column="0" Text="{x:Static assets:UI.name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBlock Grid.Column="3" Text="{x:Static assets:UI.active}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
           </Grid>
-          <ListBox Grid.Row="2" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
+          <ListBox x:Name="ListBoxGroups" Grid.Row="2" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
             <ListBox.ItemTemplate>
               <DataTemplate DataType="{x:Type entities:FaceSwapTemplateGroupEntity}">
                 <Panel>
@@ -77,29 +77,29 @@
               <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Panel Grid.Column="0">
-              <TextBlock Text="{Binding SelectedGroup.Name}" IsVisible="{Binding !IsGroupInEdit}" VerticalAlignment="Center"/>
-              <TextBox Text="{Binding SelectedGroup.Name, Mode=TwoWay}" MaxLength="50" IsVisible="{Binding IsGroupInEdit}" VerticalAlignment="Center"/>
+              <TextBlock x:Name="groupNameTextBlock" Text="{Binding SelectedGroup.Name}" IsVisible="{Binding !IsGroupInEdit}" VerticalAlignment="Center"/>
+              <TextBox x:Name="groupNameTextBox" Text="{Binding SelectedGroup.Name, Mode=TwoWay}" MaxLength="50" IsVisible="{Binding IsGroupInEdit}" VerticalAlignment="Center"/>
             </Panel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5,0,0,0">
-              <Button Command="{Binding EditGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
+              <Button x:Name="editGroupBtn" Command="{Binding EditGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                   <PathIcon Data="{StaticResource edit_regular}" />
                   <TextBlock Text="{x:Static assets:UI.edit}" />
                 </StackPanel>
               </Button>
-              <Button Command="{Binding DeleteGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
+              <Button x:Name="deleteGroupBtn" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding $parent[Window]}" IsVisible="{Binding !IsGroupInEdit}">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                   <PathIcon Data="{StaticResource delete_regular}" />
                   <TextBlock Text="{x:Static assets:UI.delete}" />
                 </StackPanel>
               </Button>
-              <Button Command="{Binding SaveEditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
+              <Button x:Name="saveEditGroupBtn" Command="{Binding SaveEditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                   <PathIcon Data="{StaticResource save_regular}" />
                   <TextBlock Text="{x:Static assets:UI.save}" />
                 </StackPanel>
               </Button>
-              <Button Command="{Binding CancelEditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
+              <Button x:Name="cancelEditGroupBtn" Command="{Binding CancelEditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                   <PathIcon Data="{StaticResource dismiss_regular}" />
                   <TextBlock Text="{x:Static assets:UI.cancel}" />

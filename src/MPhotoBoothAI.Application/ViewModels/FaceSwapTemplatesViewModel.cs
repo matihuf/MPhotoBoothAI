@@ -33,9 +33,9 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task AddGroup()
+    private async Task AddGroup(IMainWindow mainWindow)
     {
-        string groupName = await _messageBoxService.ShowInput(Assets.UI.addGroup, Assets.UI.name);
+        string groupName = await _messageBoxService.ShowInput(Assets.UI.addGroup, Assets.UI.name, mainWindow);
         if (string.IsNullOrEmpty(groupName))
         {
             return;
@@ -47,9 +47,9 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task DeleteGroup()
+    private async Task DeleteGroup(IMainWindow mainWindow)
     {
-        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteGroup, Assets.UI.deleteGroupDesc))
+        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteGroup, Assets.UI.deleteGroupDesc, mainWindow))
         {
             Groups.Remove(SelectedGroup);
             await SaveChanges();
