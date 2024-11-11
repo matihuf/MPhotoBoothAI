@@ -159,9 +159,6 @@
   <data name="groups" xml:space="preserve">
     <value>Groups</value>
   </data>
-  <data name="groupVisibleForUser" xml:space="preserve">
-    <value>The group will be available for selection by the user</value>
-  </data>
   <data name="language" xml:space="preserve">
     <value>Language</value>
   </data>

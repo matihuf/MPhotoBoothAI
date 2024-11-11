@@ -61,33 +61,6 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Przesłona.
-        /// </summary>
-        public static string aperture {
-            get {
-                return ResourceManager.GetString("aperture", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Twój aparat.
-        /// </summary>
-        public static string cameraName {
-            get {
-                return ResourceManager.GetString("cameraName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Aparat.
-        /// </summary>
-        public static string cameraSettings {
-            get {
-                return ResourceManager.GetString("cameraSettings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Aktywna.
         /// </summary>
         public static string active {
@@ -111,6 +84,33 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string addTemplate {
             get {
                 return ResourceManager.GetString("addTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Przesłona.
+        /// </summary>
+        public static string aperture {
+            get {
+                return ResourceManager.GetString("aperture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Twój aparat.
+        /// </summary>
+        public static string cameraName {
+            get {
+                return ResourceManager.GetString("cameraName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aparat.
+        /// </summary>
+        public static string cameraSettings {
+            get {
+                return ResourceManager.GetString("cameraSettings", resourceCulture);
             }
         }
         
@@ -169,15 +169,6 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Iso.
-        /// </summary>
-        public static string iso {
-            get {
-                return ResourceManager.GetString("iso", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Grupy.
         /// </summary>
         public static string groups {
@@ -187,11 +178,11 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Grupa będzie dostępna do wyboru przez użytkowniak.
+        ///   Looks up a localized string similar to Iso.
         /// </summary>
-        public static string groupVisibleForUser {
+        public static string iso {
             get {
-                return ResourceManager.GetString("groupVisibleForUser", resourceCulture);
+                return ResourceManager.GetString("iso", resourceCulture);
             }
         }
         
@@ -259,6 +250,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zapisz.
+        /// </summary>
+        public static string save {
+            get {
+                return ResourceManager.GetString("save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prędkość migawki.
         /// </summary>
         public static string shutterSpeed {
@@ -286,29 +286,20 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Balans bieli.
-        /// </summary>
-        public static string whiteBalance {
-            get {
-                return ResourceManager.GetString("whiteBalance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Zapisz.
-        /// </summary>
-        public static string save {
-            get {
-                return ResourceManager.GetString("save", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Szablony.
         /// </summary>
         public static string templates {
             get {
                 return ResourceManager.GetString("templates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Balans bieli.
+        /// </summary>
+        public static string whiteBalance {
+            get {
+                return ResourceManager.GetString("whiteBalance", resourceCulture);
             }
         }
         
