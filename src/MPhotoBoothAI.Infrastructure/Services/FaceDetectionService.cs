@@ -10,10 +10,10 @@ using System.Drawing;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace)] LazyDisposal<Net> net, ResizeImageService resizeImageService) : IFaceDetectionService
+public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace)] LazyDisposal<Net> net, IResizeImageService resizeImageService) : IFaceDetectionService
 {
     private readonly LazyDisposal<Net> _net = net;
-    private readonly ResizeImageService _resizeImageService = resizeImageService;
+    private readonly IResizeImageService _resizeImageService = resizeImageService;
     private readonly int _inputHeight = 640;
     private readonly int _inputWidth = 640;
     private readonly int _numClass = 1;
@@ -23,7 +23,6 @@ public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace
     {
         using var resized = _resizeImageService.Resize(frame);
         using var blob = DnnInvoke.BlobFromImage(resized.Image, 1 / 255.0, new Size(_inputWidth, _inputHeight), new MCvScalar(0, 0, 0), true, false);
-        resized.Image.Dispose();
         _net.Value.SetInput(blob);
         using var outs = new VectorOfMat();
         _net.Value.Forward(outs, _net.Value.UnconnectedOutLayersNames);
@@ -36,7 +35,6 @@ public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace
         GenerateProposal(outs[0], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw, confThreshold);
         GenerateProposal(outs[1], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw, confThreshold);
         GenerateProposal(outs[2], boxes, confidences, landmarks, frame.Rows, frame.Cols, ratioh, ratiow, resized.Padh, resized.Padw, confThreshold);
-
         var indices = DnnInvoke.NMSBoxes(boxes.ToArray(), [.. confidences], confThreshold, nmsThreshold);
         for (int i = 0; i < indices.Length; ++i)
         {
@@ -54,8 +52,8 @@ public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace
         int stride = (int)Math.Ceiling((float)_inputHeight / feat_h);
         int area = feat_h * feat_w;
 
-        float[,,,] matData = (float[,,,])outMat.GetData();
-        float[] ptr = FlattenArray(matData);
+        using var outMatReshaped = outMat.Reshape(1, 1);
+        float[] ptr = FlattenArray((float[,])outMatReshaped.GetData());
 
         int ptrClsSourceIndex = area * _regMax * 4;
         int ptr_cls_length = ptr.Length - ptrClsSourceIndex;
@@ -126,22 +124,16 @@ public class FaceDetectionService([FromKeyedServices(Consts.AiModels.Yolov8nFace
         }
     }
 
-    private static float[] FlattenArray(float[,,,] multiArray)
+    private static float[] FlattenArray(float[,] multiArray)
     {
-        int totalLength = multiArray.GetLength(0) * multiArray.GetLength(1) * multiArray.GetLength(2) * multiArray.GetLength(3);
+        int totalLength = multiArray.GetLength(0) * multiArray.GetLength(1);
         float[] flatArray = new float[totalLength];
         int index = 0;
         for (int i = 0; i < multiArray.GetLength(0); i++)
         {
             for (int j = 0; j < multiArray.GetLength(1); j++)
             {
-                for (int k = 0; k < multiArray.GetLength(2); k++)
-                {
-                    for (int l = 0; l < multiArray.GetLength(3); l++)
-                    {
-                        flatArray[index++] = multiArray[i, j, k, l];
-                    }
-                }
+                flatArray[index++] = multiArray[i, j];
             }
         }
         return flatArray;

@@ -1,6 +1,13 @@
-﻿namespace MPhotoBoothAI.Application.ViewModels;
+﻿using CommunityToolkit.Mvvm.Input;
+using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Models.WindowParameters;
 
-public partial class HomeViewModel(LanguageViewModel languageViewModel) : ViewModelBase
+namespace MPhotoBoothAI.Application.ViewModels;
+
+public partial class HomeViewModel(LanguageViewModel languageViewModel, IWindowService windowService) : ViewModelBase
 {
     public LanguageViewModel Language => languageViewModel;
+
+    [RelayCommand]
+    private void Open(IMainWindow mainWindow) => windowService.Open(typeof(AddFaceSwapTemplateViewModel), mainWindow, new AddFaceSwapTemplateParameters { GroupName = "kaszanka" });
 }

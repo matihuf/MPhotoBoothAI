@@ -52,6 +52,7 @@ public static class DependencyInjection
         services.AddTransient<IFaceSwapManager, FaceSwapManager>();
         services.AddTransient<IFaceMultiSwapManager, FaceMultiSwapManager>();
         services.AddSingleton<ICameraManager, CameraManager>();
+        services.AddTransient<IAddFaceSwapTemplateManager, AddFaceSwapTemplateManager>();
     }
 
     private static void AddAiModels(IServiceCollection services)
@@ -76,11 +77,12 @@ public static class DependencyInjection
         services.AddTransient<LanguageViewModel>();
         services.AddTransient<CameraSettingsViewModel>();
         services.AddTransient<FaceSwapTemplatesViewModel>();
+        services.AddTransient<AddFaceSwapTemplateViewModel>();
     }
 
     private static void AddServices(IServiceCollection services)
     {
-        services.AddTransient<ResizeImageService>();
+        services.AddTransient<IResizeImageService, ResizeImageService>();
         services.AddTransient<IFaceDetectionService, FaceDetectionService>();
         services.AddTransient<IFaceSwapPredictService, FaceSwapPredictService>();
         services.AddTransient<IFaceSwapService, FaceSwapService>();
@@ -95,6 +97,8 @@ public static class DependencyInjection
         services.AddTransient<IDiskInfoService, DiskInfoService>();
         services.AddTransient<SDKHandler>();
         services.AddTransient<IMessageBoxService, MessageBoxService>();
+        services.AddTransient<IWindowService, WindowService>();
+        services.AddTransient<IFaceSwapTemplateFileService, FaceSwapTemplateFileService>();
     }
 
     private static void AddCamera(IServiceCollection services)

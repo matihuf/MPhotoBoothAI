@@ -1,0 +1,94 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="720"
+        xmlns:con="using:MPhotoBoothAI.Avalonia.Converters"
+        xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
+        x:Class="MPhotoBoothAI.Avalonia.Windows.AddFaceSwapTemplateWindow"
+        xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+        x:DataType="vm:AddFaceSwapTemplateViewModel"
+        xmlns:fa="using:FluentAvalonia.UI.Controls"
+        Title="AddFaceSwapTemplateWindow"
+        SystemDecorations="None"
+        WindowStartupLocation="CenterOwner"
+        Topmost="{Binding Topmost}">
+
+  <Design.DataContext>
+    <dvm:DesignAddFaceSwapTemplateViewModel/>
+  </Design.DataContext>
+
+  <Window.Resources>
+    <con:MatConverter x:Key="matConverter"/>
+  </Window.Resources>
+
+  <Window.Styles>
+    <Style Selector="Window">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Padding" Value="20"/>
+    </Style>
+  </Window.Styles>
+
+  <Border>
+    <Border.Styles>
+      <Style Selector="Border">
+        <Setter Property="Background" Value="WhiteSmoke"/>
+        <Setter Property="CornerRadius" Value="20"/>
+      </Style>
+    </Border.Styles>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <Grid Grid.Row="0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Column="0" Grid.Row="0" CornerRadius="20">
+          <Border.Styles>
+            <Style Selector="Border">
+              <Setter Property="Margin" Value="10"/>
+              <Setter Property="Background" Value="White"/>
+            </Style>
+          </Border.Styles>
+          <Panel>
+            <Image Source="{Binding FaceSwapTemplate.Image, Converter={StaticResource matConverter}}" IsVisible="{Binding Image, Converter={x:Static ObjectConverters.IsNull}}"/>
+            <Image Source="{Binding Image, Converter={StaticResource matConverter}}" IsVisible="{Binding Image, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <TextBlock Text="Szablon" IsVisible="{Binding FaceSwapTemplate, Converter={x:Static ObjectConverters.IsNull}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <fa:ProgressRing IsIndeterminate="{Binding IsFaceDetectionProgressActive}" IsVisible="{Binding IsFaceDetectionProgressActive}" BorderThickness="10" Width="100" Height="100" />
+          </Panel>
+        </Border>
+        <Panel Grid.Column="0" Grid.Row="1" Margin="10 0 0 0">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <PathIcon Data="{StaticResource person_regular}" />
+            <TextBlock Margin="10 0 0 0" Text="{Binding FaceSwapTemplate.Faces}" VerticalAlignment="Center" IsVisible="{Binding FaceSwapTemplate, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+          </StackPanel>
+          <Button Command="{Binding PickTemplateCommand}" Content="Pick" HorizontalAlignment="Center"/>
+        </Panel>
+        <Border Grid.Column="1"  Grid.Row="0" CornerRadius="20">
+          <Border.Styles>
+            <Style Selector="Border">
+              <Setter Property="Margin" Value="10"/>
+              <Setter Property="Background" Value="White"/>
+            </Style>
+          </Border.Styles>
+          <Panel>
+            <Image Source="{Binding CameraFrame, Converter={StaticResource matConverter}}" />
+            <TextBlock Text="Podlgąd z kamery" IsVisible="{Binding CameraFrame, Converter={x:Static ObjectConverters.IsNull}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Panel>
+        </Border>
+        <Button Grid.Column="1" Grid.Row="1" Command="{Binding SwapCommand}" IsEnabled="{Binding SwapButtonIsEnabled}" Content="Swap" HorizontalAlignment="Center"/>
+      </Grid>
+      <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Spacing="10" Margin="10">
+        <Button Content="Save" Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" IsEnabled="{Binding SaveButtonIsEnabled}"/>
+        <Button Content="Close" Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+      </StackPanel>
+    </Grid>
+  </Border>
+</Window>

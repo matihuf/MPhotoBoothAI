@@ -12,6 +12,9 @@
   <Design.DataContext>
     <dvm:DesignHomeViewModel/>
   </Design.DataContext>
-
+  <Panel>
+    
   <c:LanguageControl DataContext="{Binding Language}"/>
+  <Button Command="{Binding OpenCommand}" CommandParameter="{Binding $parent[Window]}" Content="template"/>
+  </Panel>
 </UserControl>
