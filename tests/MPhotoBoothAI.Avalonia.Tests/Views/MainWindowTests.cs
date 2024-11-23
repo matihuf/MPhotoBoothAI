@@ -1,35 +1,30 @@
 using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
-using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Tests.Extensions;
-using MPhotoBoothAI.Avalonia.Views;
+using MPhotoBoothAI.Common.Tests;
 using MPhotoBoothAI.Models.UI;
 
 namespace MPhotoBoothAI.Avalonia.Tests.Views;
 
-public class MainWindowTests
+public class MainWindowTests(DependencyInjectionFixture dependencyInjectionFixture) : BaseMainWindowTests(dependencyInjectionFixture)
 {
     [AvaloniaFact]
-    public void MainWindow_DefaultPage_Home()
+    public void DefaultPage_Home()
     {
         //arrange
-        var window = new MainWindow { DataContext = App.ServiceProvider.GetRequiredService<MainViewModel>() };
-        window.Show();
-        var content = window.FindControl<ContentControl>("Content");
+        var window = _builder.Build();
         //act
-        var currentViewModel = content.Content as HomeViewModel;
+        var currentViewModel = GetContentControl(window).Content as HomeViewModel;
         //assert
-        window.Close();
         Assert.NotNull(currentViewModel);
     }
 
     [AvaloniaFact]
-    public void MainWindow_MenuClickListBoxPageItem_ContentShouldBeAsExpected()
+    public void MenuClickListBoxPageItem_ContentShouldBeAsExpected()
     {
         //arrange
-        var window = new MainWindow { DataContext = App.ServiceProvider.GetRequiredService<MainViewModel>() };
-        window.Show();
+        var window = _builder.Build();
         var listBoxPage = window.FindControl<ListBox>("ListBoxPage");
         for (int i = 0; i < listBoxPage.Items.Count; i++)
         {
@@ -37,10 +32,11 @@ public class MainWindowTests
             var listBoxItem = listBoxPage.ContainerFromIndex(i) as ListBoxItem;
             window.MouseClick(listBoxItem.Bounds.Center);
             //act
-            var contentType = window.FindControl<ContentControl>("Content").Content.GetType();
+            var contentType = GetContentControl(window).Content.GetType();
             //assert
             Assert.True(contentType == expectedViewModel, $"Expected {expectedViewModel} - Result {contentType}");
         }
-        window.Close();
     }
+
+    private static ContentControl GetContentControl(Window window) => window.FindControl<ContentControl>("Content");
 }

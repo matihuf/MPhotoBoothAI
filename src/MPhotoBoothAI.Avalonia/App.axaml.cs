@@ -15,35 +15,35 @@ namespace MPhotoBoothAI.Avalonia;
 
 public partial class App : AvaloniaApplication
 {
-    public static IServiceProvider? ServiceProvider { get; private set; }
+    private static IServiceProvider? _serviceProvider;
 
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
     }
 
-    protected virtual IServiceProvider ConfigureServiceProvider()
-    {
-        var serviceCollection = new ServiceCollection();
-        serviceCollection.Configure();
-        return serviceCollection.BuildServiceProvider();
-    }
-
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            ServiceProvider = ConfigureServiceProvider();
-            ServiceProvider.GetRequiredService<IDatabaseContext>().Database.Migrate();
-            SetApplicationLanguage(ServiceProvider.GetRequiredService<IDatabaseContext>());
+            _serviceProvider = ConfigureServiceProvider();
+            _serviceProvider.GetRequiredService<IDatabaseContext>().Database.Migrate();
+            SetApplicationLanguage(_serviceProvider.GetRequiredService<IDatabaseContext>());
             desktop.MainWindow = new MainWindow
             {
-                DataContext = ServiceProvider.GetRequiredService<MainViewModel>()
+                DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
             };
             desktop.Exit += Desktop_Exit;
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static ServiceProvider ConfigureServiceProvider()
+    {
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.Configure();
+        return serviceCollection.BuildServiceProvider();
     }
 
     private static void SetApplicationLanguage(IDatabaseContext databaseContext)
@@ -64,6 +64,6 @@ public partial class App : AvaloniaApplication
         {
             desktop.Exit -= Desktop_Exit;
         }
-        (ServiceProvider as IDisposable)?.Dispose();
+        (_serviceProvider as IDisposable)?.Dispose();
     }
 }

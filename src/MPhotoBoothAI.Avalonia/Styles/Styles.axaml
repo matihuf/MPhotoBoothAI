@@ -1,0 +1,31 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Style Selector="TextBox">
+    <Setter Property="CornerRadius" Value="10" />
+  </Style>
+  <Style Selector="Button">
+    <Setter Property="CornerRadius" Value="10" />
+  </Style>
+  <Style Selector="Border.BorderContent">
+    <Setter Property="CornerRadius" Value="20" />
+    <Setter Property="Padding" Value="10" />
+    <Setter Property="Background" Value="White" />
+  </Style>
+  <Style Selector="ListBox">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="CornerRadius" Value="8"/>
+  </Style>
+  <Style Selector="ListBoxItem">
+    <Setter Property="FontWeight" Value="DemiBold"/>
+    <Setter Property="Padding" Value="10"/>
+    <Setter Property="Margin" Value="5 5 5 0"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Style Selector="^:selected /template/ ContentPresenter">
+      <Setter Property="Background" Value="#b4b4db"/>
+    </Style>
+    <Style Selector="^:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#dfdff5"/>
+    </Style>
+  </Style>
+</Styles>

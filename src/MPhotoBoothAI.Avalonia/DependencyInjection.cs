@@ -36,8 +36,8 @@ public static class DependencyInjection
 
     private static void AddDatabase(IServiceCollection services)
     {
-        services.AddDbContext<DatabaseContext>(o => o.UseSqlite());
-        services.AddScoped<IDatabaseContext, DatabaseContext>(s => s.GetRequiredService<DatabaseContext>());
+        services.AddDbContext<DatabaseContext>(o => o.UseSqlite(), ServiceLifetime.Transient);
+        services.AddTransient<IDatabaseContext, DatabaseContext>(s => s.GetRequiredService<DatabaseContext>());
     }
 
     private static void AddNavigation(IServiceCollection services)
@@ -75,6 +75,7 @@ public static class DependencyInjection
         services.AddTransient<FaceDetectionViewModel>();
         services.AddTransient<LanguageViewModel>();
         services.AddTransient<CameraSettingsViewModel>();
+        services.AddTransient<FaceSwapTemplatesViewModel>();
     }
 
     private static void AddServices(IServiceCollection services)
@@ -93,6 +94,7 @@ public static class DependencyInjection
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
         services.AddTransient<IDiskInfoService, DiskInfoService>();
         services.AddTransient<SDKHandler>();
+        services.AddTransient<IMessageBoxService, MessageBoxService>();
     }
 
     private static void AddCamera(IServiceCollection services)

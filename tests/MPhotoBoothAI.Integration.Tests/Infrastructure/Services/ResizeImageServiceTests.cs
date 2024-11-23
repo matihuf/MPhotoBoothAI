@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MPhotoBoothAI.Common.Tests;
 using MPhotoBoothAI.Infrastructure.Services;
 
 namespace MPhotoBoothAI.Integration.Tests.Infrastructure.Services;

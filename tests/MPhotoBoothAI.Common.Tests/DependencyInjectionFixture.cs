@@ -1,4 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using MPhotoBoothAI.Application.Interfaces;
@@ -6,15 +6,16 @@ using MPhotoBoothAI.Avalonia;
 
 namespace MPhotoBoothAI.Common.Tests;
 
-public class TestDependencyInjection : IDisposable
+public class DependencyInjectionFixture : IDisposable
 {
     public ServiceProvider ServiceProvider { get; private set; }
 
-    public void Configure()
+    public DependencyInjectionFixture()
     {
         var serviceCollection = new ServiceCollection();
         serviceCollection.Configure();
         serviceCollection.Replace(ServiceDescriptor.Singleton(s => new Mock<ICameraDevice>().Object));
+        serviceCollection.Replace(ServiceDescriptor.Transient(s => new DatabaseContextBuilder().Build()));
         ServiceProvider = serviceCollection.BuildServiceProvider();
     }
 
