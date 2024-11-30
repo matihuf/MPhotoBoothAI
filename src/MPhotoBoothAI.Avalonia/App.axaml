@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="MPhotoBoothAI.Avalonia.App"
              xmlns:local="using:MPhotoBoothAI.Avalonia"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
              RequestedThemeVariant="Default">
   <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -13,6 +14,10 @@
     <FluentTheme />
     <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Icons.axaml" />
     <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/MessageBox.axaml" />
-    <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Styles.axaml" />
+	  <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Styles.axaml" />
   </Application.Styles>
+
+	<Application.Resources>
+		<x:Double x:Key="TouchItemHeight">40</x:Double>      
+	</Application.Resources>
 </Application>

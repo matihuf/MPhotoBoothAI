@@ -201,4 +201,22 @@
   <data name="yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="printLayout" xml:space="preserve">
+    <value>Print layout</value>
+  </data>
+  <data name="nextBackground" xml:space="preserve">
+    <value>Next background</value>
+  </data>
+  <data name="addPhoto" xml:space="preserve">
+    <value>Add photo</value>
+  </data>
+  <data name="removePhoto" xml:space="preserve">
+    <value>Remove photo</value>
+  </data>
+  <data name="saveLayout" xml:space="preserve">
+    <value>Save layout</value>
+  </data>
+  <data name="clearLayout" xml:space="preserve">
+    <value>Clear layout</value>
+  </data>
 </root>

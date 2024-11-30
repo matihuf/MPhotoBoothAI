@@ -79,6 +79,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dodaj zdjęcie.
+        /// </summary>
+        public static string addPhoto {
+            get {
+                return ResourceManager.GetString("addPhoto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dodaj szablon.
         /// </summary>
         public static string addTemplate {
@@ -120,6 +129,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string cancel {
             get {
                 return ResourceManager.GetString("cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wyczyść layout.
+        /// </summary>
+        public static string clearLayout {
+            get {
+                return ResourceManager.GetString("clearLayout", resourceCulture);
             }
         }
         
@@ -214,6 +232,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Następne tło.
+        /// </summary>
+        public static string nextBackground {
+            get {
+                return ResourceManager.GetString("nextBackground", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nie.
         /// </summary>
         public static string no {
@@ -228,6 +255,24 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string pl_PL {
             get {
                 return ResourceManager.GetString("pl-PL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Layout wydruku.
+        /// </summary>
+        public static string printLayout {
+            get {
+                return ResourceManager.GetString("printLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usuń zdjęcie.
+        /// </summary>
+        public static string removePhoto {
+            get {
+                return ResourceManager.GetString("removePhoto", resourceCulture);
             }
         }
         
@@ -255,6 +300,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string save {
             get {
                 return ResourceManager.GetString("save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zapisz layout.
+        /// </summary>
+        public static string saveLayout {
+            get {
+                return ResourceManager.GetString("saveLayout", resourceCulture);
             }
         }
         

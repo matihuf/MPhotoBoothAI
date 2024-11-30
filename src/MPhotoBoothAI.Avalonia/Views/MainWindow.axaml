@@ -22,7 +22,8 @@
       <ListBox x:Name="ListBoxPage" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}">
         <ListBox.ItemTemplate>
           <DataTemplate DataType="{x:Type models:ListItemTemplate}">
-            <StackPanel Orientation="Horizontal" Spacing="15">
+            <StackPanel Orientation="Horizontal" Spacing="15" 
+						Height="{StaticResource TouchItemHeight}">
               <PathIcon Data="{Binding IconKey, Converter={x:Static converters:IconConverters.IconConverter}}" />
               <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </StackPanel>
