@@ -187,6 +187,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warstwa ramek.
+        /// </summary>
+        public static string frameLayer {
+            get {
+                return ResourceManager.GetString("frameLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grupy.
         /// </summary>
         public static string groups {
@@ -246,6 +255,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string no {
             get {
                 return ResourceManager.GetString("no", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warstwa zdjęć.
+        /// </summary>
+        public static string photoLayer {
+            get {
+                return ResourceManager.GetString("photoLayer", resourceCulture);
             }
         }
         

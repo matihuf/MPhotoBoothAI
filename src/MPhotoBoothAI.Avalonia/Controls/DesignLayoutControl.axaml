@@ -1,37 +1,70 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:controls="using:MPhotoBoothAI.Avalonia.Controls"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:assets="using:MPhotoBoothAI.Application.Assets"
-			 x:DataType="controls:DesignLayoutControl"
-             x:Class="MPhotoBoothAI.Avalonia.Controls.DesignLayoutControl">
+<UserControl
+    x:Class="MPhotoBoothAI.Avalonia.Controls.DesignLayoutControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:assets="using:MPhotoBoothAI.Application.Assets"
+    xmlns:controls="using:MPhotoBoothAI.Avalonia.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:DataType="controls:DesignLayoutControl">
 
-	<UserControl.Styles>
-		<Style Selector="Button">
-			<Setter Property="Width" Value="{Binding ButtonWidth}"/>
-			<Setter Property="Height" Value="{Binding ButtonHeight}"/>
-			<Setter Property="VerticalContentAlignment" Value="Center"/>
-			<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		</Style>
-	</UserControl.Styles>
-	<StackPanel>
-		<Canvas Name="canvas"
-				Width="{Binding CanvasWidth}"
-				Height="{Binding CanvasHeight}"
-				Background="Aqua"/>
-		<StackPanel Orientation="Horizontal"
-					Spacing="15"
-					VerticalAlignment="Bottom">
+    <UserControl.Styles>
+        <Style Selector="Button">
+            <Setter Property="Width" Value="{Binding ButtonWidth}" />
+            <Setter Property="Height" Value="{Binding ButtonHeight}" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0 0 10 0" />
+        </Style>
+        <Style Selector="Border">
+            <Setter Property="Background" Value="{StaticResource ActiveColor}" />
+            <Setter Property="Width" Value="15" />
+            <Setter Property="Height" Value="15" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Margin" Value="10 0 0 0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="{StaticResource ActiveColor}" />
+        </Style>
 
-			<Button Content="{x:Static assets:UI.nextBackground}"
-					Click="LoadNextBackground" />
-			<Button Content="{x:Static assets:UI.addPhoto}"
-					Width="{Binding ButtonWidth}"/>
-			<Button Content="{x:Static assets:UI.removePhoto}"/>
-			<Button Content="{x:Static assets:UI.saveLayout}" />
-			<Button Content="{x:Static assets:UI.clearLayout}"/>
-			
-		</StackPanel>
-	</StackPanel>
+    </UserControl.Styles>
+    <StackPanel>
+        <Canvas
+            Name="canvas"
+            Width="{Binding CanvasWidth}"
+            Height="{Binding CanvasHeight}"
+            HorizontalAlignment="Left"
+            Background="" />
+        <WrapPanel
+            Margin="0,10,0,10"
+            VerticalAlignment="Bottom"
+            Orientation="Horizontal">
+
+            <Button Content="{x:Static assets:UI.nextBackground}" />
+            <Button Command="{Binding SwitchLayerCommand}" CommandParameter="{StaticResource True}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Bottom" Text="{x:Static assets:UI.photoLayer}" />
+                        <Border Background="Transparent">
+                            <Border Margin="0" IsVisible="{Binding ActiveLayerSwitch}" />
+                        </Border>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding SwitchLayerCommand}" CommandParameter="{StaticResource False}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:UI.frameLayer}" />
+                        <Border Background="Transparent">
+                            <Border Margin="0" IsVisible="{Binding !ActiveLayerSwitch}" />
+                        </Border>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button Content="{x:Static assets:UI.addPhoto}" />
+            <Button Content="{x:Static assets:UI.removePhoto}" />
+            <Button Content="{x:Static assets:UI.saveLayout}" />
+            <Button Content="{x:Static assets:UI.clearLayout}" />
+
+        </WrapPanel>
+    </StackPanel>
 </UserControl>

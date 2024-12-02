@@ -1,16 +1,20 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
-			xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
-			mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-			xmlns:control="using:MPhotoBoothAI.Avalonia.Controls"
-			x:Class="MPhotoBoothAI.Avalonia.Views.DesignPrintTemplateView"
-			Design.DataContext="vm:DesignPrintTemplateViewModel"
-			x:DataType="vm:DesignPrintTemplateViewModel">
-	<control:DesignLayoutControl CanvasWidth="1200"
-								 CanvasHeight="400"
-								 ButtonWidth="300"
-								 ButtonHeight="80"/>
+<UserControl
+    x:Class="MPhotoBoothAI.Avalonia.Views.DesignPrintTemplateView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:control="using:MPhotoBoothAI.Avalonia.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+    d:DesignHeight="1080"
+    d:DesignWidth="1920"
+    x:DataType="vm:DesignPrintTemplateViewModel"
+    Design.DataContext="vm:DesignPrintTemplateViewModel"
+    mc:Ignorable="d">
+    <control:DesignLayoutControl
+        ButtonHeight="60"
+        ButtonWidth="150"
+        CanvasHeight="300"
+        CanvasWidth="900" />
 </UserControl>

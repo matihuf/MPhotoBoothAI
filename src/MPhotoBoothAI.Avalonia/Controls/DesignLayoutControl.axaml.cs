@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
+using CommunityToolkit.Mvvm.Input;
+using System.Windows.Input;
 
 namespace MPhotoBoothAI.Avalonia.Controls;
 
@@ -42,12 +43,33 @@ public partial class DesignLayoutControl : UserControl
         set => SetValue(ButtonHeightProperty, value);
     }
 
+    public static readonly StyledProperty<bool> ActiveLayerSwitchProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, bool>(nameof(ActiveLayerSwitch), true);
+
+    public bool ActiveLayerSwitch
+    {
+        get => this.GetValue(ActiveLayerSwitchProperty);
+        set => SetValue(ActiveLayerSwitchProperty, value);
+    }
+
+    public static readonly StyledProperty<ICommand> SwitchLayerProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(SwitchLayerCommand));
+
+    public ICommand SwitchLayerCommand
+    {
+        get => this.GetValue(SwitchLayerProperty);
+        set => SetValue(SwitchLayerProperty, value);
+    }
+
     public DesignLayoutControl()
     {
         InitializeComponent();
+        DataContext = this;
+        SwitchLayerCommand = new RelayCommand<bool>(SwitchLayers);
     }
 
-    private void LoadNextBackground(object? sender, RoutedEventArgs e)
+    private void SwitchLayers(bool state)
     {
+        ActiveLayerSwitch = state;
     }
 }

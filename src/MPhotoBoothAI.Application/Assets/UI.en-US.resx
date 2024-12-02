@@ -219,4 +219,10 @@
   <data name="clearLayout" xml:space="preserve">
     <value>Clear layout</value>
   </data>
+  <data name="frameLayer" xml:space="preserve">
+    <value>Frame layer</value>
+  </data>
+  <data name="photoLayer" xml:space="preserve">
+    <value>Photo layer</value>
+  </data>
 </root>
