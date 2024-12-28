@@ -74,10 +74,18 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         if (isPostcard)
         {
             PopulateBackgroundList(pathToCopy, PostcardBackgroundsPaths);
+            if (String.IsNullOrEmpty(PostcardBackgroundPath) && PostcardBackgroundsPaths.Count > 0)
+            {
+                PostcardBackgroundPath = PostcardBackgroundsPaths[^1];
+            }
         }
         else
         {
             PopulateBackgroundList(pathToCopy, StripeBackgroundsPaths);
+            if (String.IsNullOrEmpty(StripeBackgroundPath) && StripeBackgroundsPaths.Count > 0)
+            {
+                StripeBackgroundPath = StripeBackgroundsPaths[^1];
+            }
         }
     }
 
@@ -93,10 +101,32 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         return AddBackgroundToList(false, mainWindow);
     }
 
+    [RelayCommand]
+    private void RemoveBackgroundFromList(bool postcardList)
+    {
+        if (postcardList)
+        {
+            DeleteItem(PostcardSelectedItem, PostcardBackgroundsPaths);
+        }
+        else
+        {
+            DeleteItem(StripeSelectedItem, StripeBackgroundsPaths);
+        }
+    }
+
+    private void DeleteItem(string selectedItem, ObservableCollection<string> collection)
+    {
+        if (selectedItem != null)
+        {
+            _filesManager.DeleteFile(selectedItem);
+            collection.Remove(selectedItem);
+        }
+    }
+
     private void PopulateBackgroundList(string pathToCopy, ObservableCollection<string> collection)
     {
         collection.Clear();
-        foreach (var path in _filesManager.GetFilesNames(pathToCopy))
+        foreach (var path in _filesManager.GetFiles(pathToCopy))
         {
             collection.Add(path);
         }

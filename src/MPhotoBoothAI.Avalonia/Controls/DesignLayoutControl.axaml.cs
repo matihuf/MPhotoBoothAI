@@ -38,7 +38,7 @@ public partial class DesignLayoutControl : UserControl
         set
         {
             SetValue(LayoutBackgroundPathProperty, value);
-            TryLoadImage(value);
+            LoadBackgroundImage(value);
         }
     }
 
@@ -93,8 +93,8 @@ public partial class DesignLayoutControl : UserControl
         DataContext = this;
         SwitchLayerCommand = new RelayCommand<bool>(SwitchLayers);
         canvasRoot.SizeChanged += PhotoCanvas_SizeChanged;
-        LayoutBackgroundPathProperty.Changed.Subscribe(e => TryLoadImage(e.NewValue.Value));
-        TryLoadImage(LayoutBackgroundPath);
+        LayoutBackgroundPathProperty.Changed.Subscribe(e => LoadBackgroundImage(e.NewValue.Value));
+        LoadBackgroundImage(LayoutBackgroundPath);
     }
 
     private void PhotoCanvas_SizeChanged(object? sender, SizeChangedEventArgs e)
@@ -123,11 +123,11 @@ public partial class DesignLayoutControl : UserControl
         ActiveLayerSwitch = state;
     }
 
-    private void TryLoadImage(string path)
+    private void LoadBackgroundImage(string path)
     {
         if (String.IsNullOrEmpty(path) || !File.Exists(path))
         {
-            return;
+            canvasBackground.Source = null;
         }
     }
 }
