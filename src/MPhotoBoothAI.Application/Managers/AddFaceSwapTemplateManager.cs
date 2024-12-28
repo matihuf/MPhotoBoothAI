@@ -1,6 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Models.Entities;
 using MPhotoBoothAI.Models.Enums;
 using MPhotoBoothAI.Models.FaceSwaps;
 
@@ -21,9 +22,9 @@ public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IF
         {
             return null;
         }
-        var image = CvInvoke.Imread(filePath);
+        using var image = CvInvoke.Imread(filePath);
         int faces = DetectFaces(image);
-        return new FaceSwapTemplate(filePath, faces, image);
+        return new FaceSwapTemplate(filePath, faces);
     }
 
     private int DetectFaces(Mat frame)
@@ -40,8 +41,16 @@ public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IF
 
     public Mat SwapFaces(Mat source, Mat target) => _faceMultiSwapManager.Swap(source, target);
 
-    public void SaveTemplate(string groupName, FaceSwapTemplate faceSwapTemplate)
+    public int SaveTemplate(int groupId, FaceSwapTemplate faceSwapTemplate)
     {
-        _faceSwapTemplateFileService.Save(groupName, Guid.NewGuid().ToString(), faceSwapTemplate.FilePath);
+        var entity = new FaceSwapTemplateEntity
+        {
+            FaceSwapTemplateGroupId = groupId,
+            Faces = faceSwapTemplate.Faces
+        };
+        _databaseContext.FaceSwapTemplates.Add(entity);
+        _databaseContext.SaveChanges();
+        _faceSwapTemplateFileService.Save(groupId, entity.Id, faceSwapTemplate.FilePath);
+        return entity.Id;
     }
 }

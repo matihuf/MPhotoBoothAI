@@ -1,5 +1,5 @@
 ﻿namespace MPhotoBoothAI.Application.Interfaces;
-public interface IWindowParam<T> where T : class
+public interface IWindowResult<T> where T : class
 {
-    public T? Parameters { get; set; }
+    public T? Result { get; set; }
 }

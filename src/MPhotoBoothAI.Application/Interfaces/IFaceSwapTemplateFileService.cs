@@ -1,11 +1,9 @@
-﻿namespace MPhotoBoothAI.Application.Interfaces;
+﻿
+namespace MPhotoBoothAI.Application.Interfaces;
 public interface IFaceSwapTemplateFileService
 {
-    /// <summary>
-    /// Save template
-    /// </summary>
-    /// <param name="groupName"></param>
-    /// <param name="template"></param>
-    /// <returns>Full path to template</returns>
-    string Save(string groupName, string templateId, string filePath);
+    string GetFullTemplatePath(int groupId, int templateId);
+    string GetFullTemplateThumbnailPath(int groupId, int templateId);
+    Stream ReadThumbnail(int groupId, int templateId);
+    void Save(int groupId, int templateId, string filePath);
 }

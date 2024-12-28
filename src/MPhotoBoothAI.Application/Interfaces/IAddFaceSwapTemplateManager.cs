@@ -6,6 +6,6 @@ namespace MPhotoBoothAI.Application.Interfaces;
 public interface IAddFaceSwapTemplateManager
 {
     Task<FaceSwapTemplate?> PickTemplate();
-    void SaveTemplate(string groupName, FaceSwapTemplate faceSwapTemplate);
+    int SaveTemplate(int groupId, FaceSwapTemplate faceSwapTemplate);
     Mat SwapFaces(Mat source, Mat target);
 }

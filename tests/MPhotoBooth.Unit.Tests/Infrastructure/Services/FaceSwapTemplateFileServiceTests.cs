@@ -16,17 +16,17 @@ public class FaceSwapTemplateFileServiceTests
     {
         //arrange
         string userProfilePath = Guid.NewGuid().ToString();
-        string groupName = Guid.NewGuid().ToString();
-        string templateId = Guid.NewGuid().ToString();
+        int groupId = 1;
+        int templateId = 2;
         var thumbnail = CvInvoke.Imread("TestData/square.png");
         var service = _builder.WithUserProfilePath(userProfilePath).WithThumbnail(thumbnail).Build();
         //act
         try
         {
-            string resultPath = service.Save(groupName, templateId, "TestData/square.png");
+            service.Save(groupId, templateId, "TestData/square.png");
             //assert
-            Assert.True(File.Exists(resultPath));
-            Assert.True(File.Exists($"{resultPath.Split('.')[0]}_thumbnail{Path.GetExtension(resultPath)}"));
+            Assert.True(File.Exists(service.GetFullTemplatePath(groupId, templateId)));
+            Assert.True(File.Exists(service.GetFullTemplateThumbnailPath(groupId, templateId)));
         }
         finally
         {

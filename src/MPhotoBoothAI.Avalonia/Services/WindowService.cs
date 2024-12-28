@@ -2,19 +2,20 @@
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace MPhotoBoothAI.Avalonia.Services;
 public class WindowService(IServiceProvider serviceProvider) : IWindowService
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
-    public void Open<T>(Type viewModel, IMainWindow mainWindow, T parameters) where T : class
+    public Task<Y?> Open<Y, T>(Type viewModel, IMainWindow mainWindow, T parameters) where T : class where Y : class
     {
         if (viewModel is null)
         {
-            return;
+            return Task.FromResult<Y?>(null);
         }
-
+        var tcs = new TaskCompletionSource<Y?>();
         var name = viewModel.FullName!.Replace("Application", "Avalonia", StringComparison.Ordinal).Replace("ViewModel", "Window", StringComparison.Ordinal);
         var type = Type.GetType(name);
 
@@ -22,9 +23,9 @@ public class WindowService(IServiceProvider serviceProvider) : IWindowService
         {
             var window = (Window)Activator.CreateInstance(type)!;
             var service = _serviceProvider.GetRequiredService(viewModel);
-            if (service is IWindowParam<T> param)
+            if (service is IWindowParam<T> serviceParam)
             {
-                param.Parameters = parameters;
+                serviceParam.Parameters = parameters;
             }
             window.DataContext = service;
             mainWindow.IsEnabled = false;
@@ -33,6 +34,7 @@ public class WindowService(IServiceProvider serviceProvider) : IWindowService
             {
                 try
                 {
+                    tcs.TrySetResult((service as IWindowResult<Y>)?.Result);
                     (service as IDisposable)?.Dispose();
                     service = null;
                 }
@@ -43,7 +45,8 @@ public class WindowService(IServiceProvider serviceProvider) : IWindowService
                 }
             };
             window.Closing += handler;
-            window.Show((Window)mainWindow);
+            window.ShowDialog<Y>((Window)mainWindow);
         }
+        return tcs.Task;
     }
 }

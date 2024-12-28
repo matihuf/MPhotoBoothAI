@@ -3,13 +3,16 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Models.Entities;
+using MPhotoBoothAI.Models.FaceSwaps;
+using MPhotoBoothAI.Models.WindowParameters;
+using MPhotoBoothAI.Models.WindowResults;
 using System.Collections.ObjectModel;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 public partial class FaceSwapTemplatesViewModel : ViewModelBase
 {
     public ObservableCollection<FaceSwapTemplateGroupEntity> Groups { get; set; }
-    public ObservableCollection<FaceSwapTemplateEntity> Templates { get; set; } = [];
+    public ObservableCollection<FaceSwapTemplate> Templates { get; set; } = [];
 
     [ObservableProperty]
     private FaceSwapTemplateGroupEntity? _selectedGroup;
@@ -19,12 +22,17 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
 
     private readonly IDatabaseContext _databaseContext;
     private readonly IMessageBoxService _messageBoxService;
+    private readonly IWindowService _windowsService;
+    private readonly IFaceSwapTemplateFileService _faceSwapTemplateFileService;
     private FaceSwapTemplateGroupEntity? _beforeEditGroup;
 
-    public FaceSwapTemplatesViewModel(IDatabaseContext databaseContext, IMessageBoxService messageBoxService)
+    public FaceSwapTemplatesViewModel(IDatabaseContext databaseContext, IMessageBoxService messageBoxService, IWindowService windowService,
+        IFaceSwapTemplateFileService faceSwapTemplateFileService)
     {
         _databaseContext = databaseContext;
         _messageBoxService = messageBoxService;
+        _windowsService = windowService;
+        _faceSwapTemplateFileService = faceSwapTemplateFileService;
         _databaseContext.FaceSwapTemplateGroups.OrderBy(x => x.CreatedAt).Load();
         Groups = _databaseContext.FaceSwapTemplateGroups.Local.ToObservableCollection();
         SelectedGroup = Groups.FirstOrDefault();
@@ -85,20 +93,27 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task AddTemplate()
+    private async Task AddTemplate(IMainWindow mainWindow)
     {
         if (SelectedGroup == null)
         {
             return;
         }
-        var newTemplate = new FaceSwapTemplateEntity
+        var result = await _windowsService.Open<AddFaceSwapTemplateResults, AddFaceSwapTemplateParameters>(typeof(AddFaceSwapTemplateViewModel),
+             mainWindow, new AddFaceSwapTemplateParameters(SelectedGroup.Id));
+        if (result != null)
         {
-            FaceSwapTemplateGroupId = SelectedGroup.Id,
-            FileName = string.Empty
-        };
-        _databaseContext.FaceSwapTemplates.Add(newTemplate);
-        await SaveChanges();
-        Templates.Add(newTemplate);
+            AddTemplate(SelectedGroup.Id, result.TemplateId, result.Faces);
+        }
+    }
+
+    private void AddTemplate(int groupId, int templateId, int faces)
+    {
+        string templatePath = _faceSwapTemplateFileService.GetFullTemplateThumbnailPath(groupId, templateId);
+        if (File.Exists(templatePath))
+        {
+            Templates.Add(new FaceSwapTemplate(templatePath, faces));
+        }
     }
 
     partial void OnSelectedGroupChanged(FaceSwapTemplateGroupEntity? value)
@@ -108,9 +123,9 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
             return;
         }
         Templates.Clear();
-        foreach (var item in _databaseContext.FaceSwapTemplates.Where(x => x.FaceSwapTemplateGroupId == value.Id).OrderBy(x => x.CreatedAt).ToList())
+        foreach (var item in _databaseContext.FaceSwapTemplates.AsNoTracking().Where(x => x.FaceSwapTemplateGroupId == value.Id).OrderBy(x => x.CreatedAt))
         {
-            Templates.Add(item);
+            AddTemplate(item.FaceSwapTemplateGroupId, item.Id, item.Faces);
         }
     }
 

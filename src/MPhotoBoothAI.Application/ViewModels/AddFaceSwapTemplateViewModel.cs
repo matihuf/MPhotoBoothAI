@@ -5,9 +5,10 @@ using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
 using MPhotoBoothAI.Models.FaceSwaps;
 using MPhotoBoothAI.Models.WindowParameters;
+using MPhotoBoothAI.Models.WindowResults;
 
 namespace MPhotoBoothAI.Application.ViewModels;
-public partial class AddFaceSwapTemplateViewModel : ViewModelBase, IObserver, IDisposable, IWindowParam<AddFaceSwapTemplateParameters>
+public partial class AddFaceSwapTemplateViewModel : ViewModelBase, IObserver, IDisposable, IWindowParam<AddFaceSwapTemplateParameters>, IWindowResult<AddFaceSwapTemplateResults>
 {
     private readonly IAddFaceSwapTemplateManager _addFaceSwapTemplateManager;
 
@@ -20,8 +21,16 @@ public partial class AddFaceSwapTemplateViewModel : ViewModelBase, IObserver, ID
     [ObservableProperty]
     private Mat? _cameraFrame;
 
-    [ObservableProperty]
-    private bool _topmost = false;
+    private bool _topmost = true;
+    public bool Topmost
+    {
+        get => !IsDebug && _topmost;
+        set
+        {
+            _topmost = value;
+            OnPropertyChanged(nameof(Topmost));
+        }
+    }
 
     [ObservableProperty]
     private bool _isFaceDetectionProgressActive;
@@ -36,6 +45,7 @@ public partial class AddFaceSwapTemplateViewModel : ViewModelBase, IObserver, ID
     private bool _swapButtonIsEnabled;
 
     public AddFaceSwapTemplateParameters? Parameters { get; set; }
+    public AddFaceSwapTemplateResults? Result { get; set; }
 
     public AddFaceSwapTemplateViewModel(IAddFaceSwapTemplateManager addFaceSwapTemplateManager, ICameraManager cameraManager)
     {
@@ -67,10 +77,10 @@ public partial class AddFaceSwapTemplateViewModel : ViewModelBase, IObserver, ID
     {
         if (FaceSwapTemplate != null && CameraFrame != null)
         {
-            using var templateImage = CvInvoke.Imread(FaceSwapTemplate.FilePath);
+            using var template = CvInvoke.Imread(FaceSwapTemplate.FilePath);
             using var cameraFrameTmp = CameraFrame.Clone();
             ClearImage();
-            Image = _addFaceSwapTemplateManager.SwapFaces(cameraFrameTmp, templateImage);
+            Image = _addFaceSwapTemplateManager.SwapFaces(cameraFrameTmp, template);
         }
     }
 
@@ -82,7 +92,8 @@ public partial class AddFaceSwapTemplateViewModel : ViewModelBase, IObserver, ID
     {
         if (FaceSwapTemplate != null && Parameters != null)
         {
-            _addFaceSwapTemplateManager.SaveTemplate(Parameters.GroupName, FaceSwapTemplate);
+            var templateId = _addFaceSwapTemplateManager.SaveTemplate(Parameters.GroupId, FaceSwapTemplate);
+            Result = new AddFaceSwapTemplateResults(templateId, FaceSwapTemplate.Faces);
             Close(mainWindow);
         }
     }
@@ -126,7 +137,6 @@ public partial class AddFaceSwapTemplateViewModel : ViewModelBase, IObserver, ID
             CameraDevice?.Detach(this);
             ClearImage();
             ClearCameraFrame();
-            FaceSwapTemplate?.Dispose();
         }
     }
 }

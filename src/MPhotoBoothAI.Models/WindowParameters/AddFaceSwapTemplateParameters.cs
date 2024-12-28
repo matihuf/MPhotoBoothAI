@@ -1,5 +1,4 @@
 ﻿namespace MPhotoBoothAI.Models.WindowParameters;
-public class AddFaceSwapTemplateParameters
+public record AddFaceSwapTemplateParameters(int GroupId)
 {
-    public string GroupName { get; set; }
 }

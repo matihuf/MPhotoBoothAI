@@ -152,12 +152,12 @@ public class FaceSwapTemplatesViewModelTests
         var group = new FaceSwapTemplateGroupEntity
         {
             Name = "0",
-            Templates = [new FaceSwapTemplateEntity { FileName = "1" }, new FaceSwapTemplateEntity { FileName = "2" }]
+            Templates = [new FaceSwapTemplateEntity(), new FaceSwapTemplateEntity()]
         };
         var secondGroup = new FaceSwapTemplateGroupEntity
         {
             Name = "3",
-            Templates = [new FaceSwapTemplateEntity { FileName = "4" }]
+            Templates = [new FaceSwapTemplateEntity()]
         };
         databaseContext.FaceSwapTemplateGroups.Add(group);
         databaseContext.FaceSwapTemplateGroups.Add(secondGroup);

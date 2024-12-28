@@ -7,8 +7,11 @@ namespace MPhotoBooth.Unit.Tests.Application.ViewModels.Builders;
 public class FaceSwapTemplatesViewModelBuilder
 {
     private readonly Mock<IMessageBoxService> MessageBoxService = new();
+    private readonly Mock<IWindowService> WindowService = new();
+    private readonly Mock<IFaceSwapTemplateFileService> FaceSwapTemplateFileService = new();
 
-    public FaceSwapTemplatesViewModel Build(IDatabaseContext databaseContext) => new(databaseContext, MessageBoxService.Object);
+    public FaceSwapTemplatesViewModel Build(IDatabaseContext databaseContext) => new(databaseContext, MessageBoxService.Object, WindowService.Object,
+        FaceSwapTemplateFileService.Object);
 
     internal FaceSwapTemplatesViewModelBuilder WithDeleteGroupConfirmation(bool confirmed)
     {
