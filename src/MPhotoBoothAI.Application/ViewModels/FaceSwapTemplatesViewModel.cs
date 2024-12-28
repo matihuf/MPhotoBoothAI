@@ -59,6 +59,11 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     {
         if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteGroup, Assets.UI.deleteGroupDesc, mainWindow))
         {
+            string groupPath = _faceSwapTemplateFileService.GetGroupDirectoryPath(SelectedGroup.Id);
+            if (Directory.Exists(groupPath))
+            {
+                Directory.Delete(_faceSwapTemplateFileService.GetGroupDirectoryPath(SelectedGroup.Id), true);
+            }
             Groups.Remove(SelectedGroup);
             await SaveChanges();
             SelectedGroup = Groups.FirstOrDefault();

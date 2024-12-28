@@ -27,11 +27,12 @@ public class FaceSwapTemplateFileService(IApplicationInfoService applicationInfo
         CvInvoke.Imwrite($"{templatePath}{_thumbnailSuffix}{_imageExtension}", thumbnail, new KeyValuePair<ImwriteFlags, int>(ImwriteFlags.JpegQuality, 100));
     }
 
-    public Stream ReadThumbnail(int groupId, int templateId) => File.OpenRead(GetFullTemplateThumbnailPath(groupId, templateId));
 
     public string GetFullTemplatePath(int groupId, int templateId) => Path.Combine(GetDirectoryPath(groupId, templateId), $"{templateId}{_imageExtension}");
 
     public string GetFullTemplateThumbnailPath(int groupId, int templateId) => Path.Combine(GetDirectoryPath(groupId, templateId), $"{templateId}{_thumbnailSuffix}{_imageExtension}");
+
+    public string GetGroupDirectoryPath(int groupId) => Path.Combine(_applicationInfoService.UserProfilePath, _baseFolder, groupId.ToString());
 
     private string GetDirectoryPath(int groupId, int templateId) => Path.Combine(_applicationInfoService.UserProfilePath, _baseFolder, groupId.ToString(), templateId.ToString());
 }

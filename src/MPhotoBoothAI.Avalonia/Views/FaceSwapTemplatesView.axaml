@@ -129,7 +129,13 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
               <DataTemplate DataType="{x:Type models:FaceSwapTemplate}">
-                <Image Width="300" Height="250" Source="{Binding FilePath, Converter={StaticResource pathBitmapConverter}}" />
+                <StackPanel>
+                  <Image Width="300" Height="250" Source="{Binding FilePath, Converter={StaticResource pathBitmapConverter}}" />
+                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <PathIcon Data="{StaticResource person_regular}" />
+                    <TextBlock Margin="10 0 0 0" Text="{Binding Faces}" VerticalAlignment="Center" />
+                  </StackPanel>
+                </StackPanel>
               </DataTemplate>
             </ListBox.ItemTemplate>
           </ListBox>
