@@ -1,6 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.Input;
+using System;
+using System.IO;
+using System.Reactive.Linq;
 using System.Windows.Input;
 
 namespace MPhotoBoothAI.Avalonia.Controls;
@@ -23,6 +27,19 @@ public partial class DesignLayoutControl : UserControl
     {
         get => this.GetValue(CanvasHeightProperty);
         set => SetValue(CanvasHeightProperty, value);
+    }
+
+    public static readonly StyledProperty<string> LayoutBackgroundPathProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, string>(nameof(LayoutBackgroundPath));
+
+    public string LayoutBackgroundPath
+    {
+        get => this.GetValue(LayoutBackgroundPathProperty);
+        set
+        {
+            SetValue(LayoutBackgroundPathProperty, value);
+            TryLoadImage(value);
+        }
     }
 
     public static readonly StyledProperty<double> ButtonWidthProperty =
@@ -52,6 +69,15 @@ public partial class DesignLayoutControl : UserControl
         set => SetValue(ActiveLayerSwitchProperty, value);
     }
 
+    public static readonly StyledProperty<double> SizeRatioProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, double>(nameof(SizeRatio), 1);
+
+    public double SizeRatio
+    {
+        get => this.GetValue(SizeRatioProperty);
+        set => SetValue(SizeRatioProperty, value);
+    }
+
     public static readonly StyledProperty<ICommand> SwitchLayerProperty =
         AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(SwitchLayerCommand));
 
@@ -66,10 +92,42 @@ public partial class DesignLayoutControl : UserControl
         InitializeComponent();
         DataContext = this;
         SwitchLayerCommand = new RelayCommand<bool>(SwitchLayers);
+        canvasRoot.SizeChanged += PhotoCanvas_SizeChanged;
+        LayoutBackgroundPathProperty.Changed.Subscribe(e => TryLoadImage(e.NewValue.Value));
+        TryLoadImage(LayoutBackgroundPath);
+    }
+
+    private void PhotoCanvas_SizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        SetHeight(e.NewSize.Width);
+    }
+
+    private void Loaded(object? sender, RoutedEventArgs e)
+    {
+        var width = canvasRoot.Bounds.Width;
+        SetHeight(width);
+    }
+
+    private void SetHeight(double width)
+    {
+        var height = width / SizeRatio;
+        foreach (var child in canvasRoot.Children)
+        {
+            child.Width = width;
+            child.Height = height;
+        }
     }
 
     private void SwitchLayers(bool state)
     {
         ActiveLayerSwitch = state;
+    }
+
+    private void TryLoadImage(string path)
+    {
+        if (String.IsNullOrEmpty(path) || !File.Exists(path))
+        {
+            return;
+        }
     }
 }

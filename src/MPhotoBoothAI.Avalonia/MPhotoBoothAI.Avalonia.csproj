@@ -21,6 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\background.jpg" />
+    <None Remove="Assets\templatedBackground10x15.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -57,5 +62,11 @@
     <ProjectReference Include="..\MPhotoBoothAI.Avalonia.Design\MPhotoBoothAI.Avalonia.Design.csproj" />
     <ProjectReference Include="..\MPhotoBoothAI.Infrastructure\MPhotoBoothAI.Infrastructure.csproj" />
     <ProjectReference Include="..\MPhotoBoothAI.Models\MPhotoBoothAI.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Update="Assets\templatedBackground10x15.jpg">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </AvaloniaResource>
   </ItemGroup>
 </Project>

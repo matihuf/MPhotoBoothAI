@@ -24,5 +24,8 @@
 
         <x:Double x:Key="TouchItemHeight">40</x:Double>
         <SolidColorBrush x:Key="ActiveColor">#2a9d8f</SolidColorBrush>
+		
+		<!--FontSize-->
+		<x:Double x:Key="CanvasFontSize">30</x:Double>
     </Application.Resources>
 </Application>

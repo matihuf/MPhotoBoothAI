@@ -70,6 +70,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dodaj.
+        /// </summary>
+        public static string add {
+            get {
+                return ResourceManager.GetString("add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dodaj grupę.
         /// </summary>
         public static string addGroup {
@@ -169,11 +178,29 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Projekt wydruku. Aby wyświetlić tło dodaj obraz do powyższej listy.
+        /// </summary>
+        public static string designCanvasText {
+            get {
+                return ResourceManager.GetString("designCanvasText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edytuj.
         /// </summary>
         public static string edit {
             get {
                 return ResourceManager.GetString("edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angielski.
+        /// </summary>
+        public static string en_EN {
+            get {
+                return ResourceManager.GetString("en-EN", resourceCulture);
             }
         }
         
@@ -277,11 +304,20 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Layout wydruku.
+        ///   Looks up a localized string similar to Layout wydruku.
         /// </summary>
         public static string printLayout {
             get {
                 return ResourceManager.GetString("printLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usuń.
+        /// </summary>
+        public static string remove {
+            get {
+                return ResourceManager.GetString("remove", resourceCulture);
             }
         }
         
@@ -372,6 +408,24 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string whiteBalance {
             get {
                 return ResourceManager.GetString("whiteBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Niewłaściwa proporcja obrazu, dodanie może spowodować zniekształcenie tła. Czy mimo to chcesz dodać obraz do listy teł?.
+        /// </summary>
+        public static string wrongImageRatioMessage {
+            get {
+                return ResourceManager.GetString("wrongImageRatioMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Niewłaściwe proporcję obrazu.
+        /// </summary>
+        public static string wrongImageRatioTitle {
+            get {
+                return ResourceManager.GetString("wrongImageRatioTitle", resourceCulture);
             }
         }
         

@@ -225,4 +225,22 @@
   <data name="photoLayer" xml:space="preserve">
     <value>Photo layer</value>
   </data>
+  <data name="add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="en-US" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="wrongImageRatioTitle" xml:space="preserve">
+    <value>Wrong image ratio</value>
+  </data>
+  <data name="wrongImageRatioMessage" xml:space="preserve">
+    <value>Incorrect aspect ratio of the image, the addition may cause distortion of the background. Do you still want to add an image to the backgrounds list?</value>
+  </data>
+  <data name="designCanvasText" xml:space="preserve">
+    <value>Print design. To display the background add the image to the list above.</value>
+  </data>
 </root>

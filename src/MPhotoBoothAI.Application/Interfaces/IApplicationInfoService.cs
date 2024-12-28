@@ -5,4 +5,6 @@ public interface IApplicationInfoService
     string Product { get; }
     string UserProfilePath { get; }
     string Version { get; }
+    string PostcardBackgroundPath { get; }
+    string StripeBackgroundPath { get; }
 }

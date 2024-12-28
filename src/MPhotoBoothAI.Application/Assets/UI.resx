@@ -202,7 +202,7 @@
     <value>Tak</value>
   </data>
   <data name="printLayout" xml:space="preserve">
-    <value> Layout wydruku</value>
+    <value>Layout wydruku</value>
   </data>
   <data name="nextBackground" xml:space="preserve">
     <value>Następne tło</value>
@@ -224,5 +224,23 @@
   </data>
   <data name="photoLayer" xml:space="preserve">
     <value>Warstwa zdjęć</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>Dodaj</value>
+  </data>
+  <data name="remove" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="en-EN" xml:space="preserve">
+    <value>Angielski</value>
+  </data>
+  <data name="wrongImageRatioTitle" xml:space="preserve">
+    <value>Niewłaściwe proporcję obrazu</value>
+  </data>
+  <data name="wrongImageRatioMessage" xml:space="preserve">
+    <value>Niewłaściwa proporcja obrazu, dodanie może spowodować zniekształcenie tła. Czy mimo to chcesz dodać obraz do listy teł?</value>
+  </data>
+  <data name="designCanvasText" xml:space="preserve">
+    <value>Projekt wydruku. Aby wyświetlić tło dodaj obraz do powyższej listy</value>
   </data>
 </root>

@@ -18,10 +18,9 @@ public class MessageBoxService : IMessageBoxService
             WindowStartupLocation = WindowStartupLocation.CenterScreen,
             CanResize = false,
             Width = 500,
-            Height = 150,
             ShowInCenter = true,
             Topmost = true,
-            SystemDecorations = SystemDecorations.None,
+            SystemDecorations = SystemDecorations.BorderOnly,
             ButtonDefinitions =
             [
                 new ButtonDefinition { Name = Application.Assets.UI.yes, IsCancel = false},
@@ -41,10 +40,9 @@ public class MessageBoxService : IMessageBoxService
             WindowStartupLocation = WindowStartupLocation.CenterScreen,
             CanResize = false,
             Width = 500,
-            Height = 180,
             ShowInCenter = true,
             Topmost = true,
-            SystemDecorations = SystemDecorations.None,
+            SystemDecorations = SystemDecorations.BorderOnly,
             ButtonDefinitions =
             [
                 new ButtonDefinition { Name = Application.Assets.UI.yes, IsCancel = false},

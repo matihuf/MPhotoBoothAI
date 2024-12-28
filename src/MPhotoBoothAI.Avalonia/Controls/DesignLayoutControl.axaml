@@ -4,9 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:assets="using:MPhotoBoothAI.Application.Assets"
     xmlns:controls="using:MPhotoBoothAI.Avalonia.Controls"
+    xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    x:DataType="controls:DesignLayoutControl">
+    Name="root"
+    x:DataType="controls:DesignLayoutControl"
+    Loaded="Loaded">
 
     <UserControl.Styles>
         <Style Selector="Button">
@@ -14,7 +17,7 @@
             <Setter Property="Height" Value="{Binding ButtonHeight}" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="Margin" Value="0 0 10 0" />
+            <Setter Property="Margin" Value="0 0 10 10" />
         </Style>
         <Style Selector="Border">
             <Setter Property="Background" Value="{StaticResource ActiveColor}" />
@@ -25,20 +28,34 @@
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush" Value="{StaticResource ActiveColor}" />
         </Style>
-
+        <Style Selector="Canvas">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
     </UserControl.Styles>
     <StackPanel>
-        <Canvas
-            Name="canvas"
-            Width="{Binding CanvasWidth}"
-            Height="{Binding CanvasHeight}"
-            HorizontalAlignment="Left"
-            Background="" />
+        <Grid Name="canvasRoot" MinWidth="400">
+            <Border
+                Margin="0"
+                Background="#20202020"
+                BorderThickness="0"
+                CornerRadius="0">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="{StaticResource CanvasFontSize}"
+                    Text="{x:Static assets:UI.designCanvasText}" />
+            </Border>
+            <Image
+                Name="canvasBackground"
+                Stretch="Fill"
+                StretchDirection="Both" />
+            <Canvas Name="photoCanvas" />
+            <Canvas Name="frameCanvas" />
+        </Grid>
         <WrapPanel
             Margin="0,10,0,10"
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
-
             <Button Content="{x:Static assets:UI.nextBackground}" />
             <Button Command="{Binding SwitchLayerCommand}" CommandParameter="{StaticResource True}">
                 <Button.Content>
