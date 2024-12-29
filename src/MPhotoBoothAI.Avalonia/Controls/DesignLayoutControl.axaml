@@ -78,8 +78,8 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button Content="{x:Static assets:UI.addPhoto}" />
-            <Button Content="{x:Static assets:UI.removePhoto}" />
+            <Button Content="{x:Static assets:UI.addPhoto}" IsEnabled="{Binding ActiveLayerSwitch, ElementName=root}" />
+            <Button Content="{x:Static assets:UI.removePhoto}" IsEnabled="{Binding ActiveLayerSwitch, ElementName=root}" />
             <Button Content="{x:Static assets:UI.saveLayout}" />
             <Button Content="{x:Static assets:UI.clearLayout}" />
 

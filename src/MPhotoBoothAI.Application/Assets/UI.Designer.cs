@@ -304,6 +304,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pocztówka.
+        /// </summary>
+        public static string postcardFormat {
+            get {
+                return ResourceManager.GetString("postcardFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Layout wydruku.
         /// </summary>
         public static string printLayout {
@@ -381,6 +390,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string startLiveView {
             get {
                 return ResourceManager.GetString("startLiveView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Listek.
+        /// </summary>
+        public static string stripeFormat {
+            get {
+                return ResourceManager.GetString("stripeFormat", resourceCulture);
             }
         }
         

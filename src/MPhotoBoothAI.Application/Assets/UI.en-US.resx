@@ -243,4 +243,10 @@
   <data name="designCanvasText" xml:space="preserve">
     <value>Print design. To display the background add the image to the list above.</value>
   </data>
+  <data name="stripeFormat" xml:space="preserve">
+    <value>Stripe</value>
+  </data>
+  <data name="postcardFormat" xml:space="preserve">
+    <value>Postcard</value>
+  </data>
 </root>
