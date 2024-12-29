@@ -238,7 +238,7 @@
     <value>Niewłaściwe proporcję obrazu</value>
   </data>
   <data name="wrongImageRatioMessage" xml:space="preserve">
-    <value>Niewłaściwa proporcja obrazu, dodanie może spowodować zniekształcenie tła. Czy mimo to chcesz dodać obraz do listy teł?</value>
+    <value>Niewłaściwe proporcje obrazu, obraz zostanie rozciągnięty, aby dopasować się do obszaru wydruku. Czy mimo to chcesz dodać obraz do listy teł?</value>
   </data>
   <data name="designCanvasText" xml:space="preserve">
     <value>Projekt wydruku. Aby wyświetlić tło dodaj obraz do powyższej listy</value>

@@ -412,7 +412,7 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Niewłaściwa proporcja obrazu, dodanie może spowodować zniekształcenie tła. Czy mimo to chcesz dodać obraz do listy teł?.
+        ///   Looks up a localized string similar to Niewłaściwe proporcje obrazu, obraz zostanie rozciągnięty, aby dopasować się do obszaru wydruku. Czy mimo to chcesz dodać obraz do listy teł?.
         /// </summary>
         public static string wrongImageRatioMessage {
             get {
