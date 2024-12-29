@@ -3,9 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
-             xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+             xmlns:vm="using:MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates"
              xmlns:con="using:MPhotoBoothAI.Avalonia.Converters"
-             x:DataType="vm:FaceSwapTemplatesViewModel"
+             x:DataType="vm:FaceSwapGroupTemplatesViewModel"
              xmlns:entities="using:MPhotoBoothAI.Models.Entities"
              xmlns:models="using:MPhotoBoothAI.Models.FaceSwaps"
              xmlns:interfaces="using:MPhotoBoothAI.Application.Interfaces"
@@ -14,7 +14,7 @@
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
 			       xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="MPhotoBoothAI.Avalonia.Views.FaceSwapTemplatesView">
+             x:Class="MPhotoBoothAI.Avalonia.Views.FaceSwapTemplates.FaceSwapGroupTemplatesView">
   <Design.DataContext>
     <dvm:DesignFaceSwapTemplatesViewModel/>
   </Design.DataContext>
@@ -22,6 +22,9 @@
   <UserControl.Resources>
     <con:PathBitmapConverter x:Key="pathBitmapConverter"/>
     <con:TupleConverter x:Key="tupleConverter"/>
+    <con:CursorConverter x:Key="cursorConverter"/>
+    <sys:Boolean x:Key="True">True</sys:Boolean>
+    <sys:Boolean x:Key="False">False</sys:Boolean>
   </UserControl.Resources>
 
   <SplitView IsPaneOpen="True" DisplayMode="Inline">
@@ -60,7 +63,7 @@
                   <CheckBox Grid.Row="1" IsChecked="{Binding IsEnabled, Mode=TwoWay}" HorizontalAlignment="Right">
                     <i:Interaction.Behaviors>
                       <ia:EventTriggerBehavior EventName="Click">
-                        <ia:InvokeCommandAction Command="{Binding $parent[ListBox].((vm:FaceSwapTemplatesViewModel)DataContext).SaveChangesCommand}" />
+                        <ia:InvokeCommandAction Command="{Binding $parent[ListBox].((vm:FaceSwapGroupTemplatesViewModel)DataContext).SaveChangesCommand}" />
                       </ia:EventTriggerBehavior>
                     </i:Interaction.Behaviors>
                   </CheckBox>
@@ -133,11 +136,30 @@
             <ListBox.ItemTemplate>
               <DataTemplate DataType="{x:Type models:FaceSwapTemplateId}">
                 <StackPanel>
-                  <Image Width="300" Height="250" Source="{Binding FilePath, Converter={StaticResource pathBitmapConverter}}" />
+                  <Image Width="300" Height="250" Cursor="{Binding $parent[ListBox].((vm:FaceSwapGroupTemplatesViewModel)DataContext).TemplateImageCursor, Converter={StaticResource cursorConverter}}" Source="{Binding FilePath, Converter={StaticResource pathBitmapConverter}}">
+                    <i:Interaction.Behaviors>
+                      <ia:EventTriggerBehavior EventName="PointerPressed">
+                        <ia:InvokeCommandAction Command="{Binding $parent[ListBox].((vm:FaceSwapGroupTemplatesViewModel)DataContext).OpenTemplateCommand}">
+                          <ia:InvokeCommandAction.CommandParameter>
+                            <MultiBinding Converter="{StaticResource tupleConverter}">
+                              <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                              <Binding />
+                            </MultiBinding>
+                          </ia:InvokeCommandAction.CommandParameter>
+                        </ia:InvokeCommandAction>
+                      </ia:EventTriggerBehavior>
+                      <ia:EventTriggerBehavior EventName="PointerEntered">
+                        <ia:InvokeCommandAction Command="{Binding $parent[ListBox].((vm:FaceSwapGroupTemplatesViewModel)DataContext).OpenTemplatePointerCommand}" CommandParameter="{StaticResource True}" />
+                      </ia:EventTriggerBehavior>
+                      <ia:EventTriggerBehavior EventName="PointerExited">
+                        <ia:InvokeCommandAction Command="{Binding $parent[ListBox].((vm:FaceSwapGroupTemplatesViewModel)DataContext).OpenTemplatePointerCommand}" CommandParameter="{StaticResource False}" />
+                      </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                  </Image>
                   <DockPanel>
                     <PathIcon Data="{StaticResource person_regular}" />
                     <TextBlock Margin="10 0 0 0" Text="{Binding Faces}" VerticalAlignment="Center" />
-                    <Button HorizontalAlignment="Right" Command="{Binding $parent[ListBox].((vm:FaceSwapTemplatesViewModel)DataContext).DeleteTemplateCommand}">
+                    <Button HorizontalAlignment="Right" Command="{Binding $parent[ListBox].((vm:FaceSwapGroupTemplatesViewModel)DataContext).DeleteTemplateCommand}">
                       <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource tupleConverter}">
                           <Binding RelativeSource="{RelativeSource AncestorType=Window}" />

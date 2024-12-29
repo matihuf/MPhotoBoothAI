@@ -7,6 +7,7 @@ using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Managers;
 using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
 using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
 using MPhotoBoothAI.Infrastructure.CameraDevices;
@@ -77,8 +78,9 @@ public static class DependencyInjection
         services.AddTransient<FaceDetectionViewModel>();
         services.AddTransient<LanguageViewModel>();
         services.AddTransient<CameraSettingsViewModel>();
-        services.AddTransient<FaceSwapTemplatesViewModel>();
+        services.AddTransient<FaceSwapGroupTemplatesViewModel>();
         services.AddTransient<AddFaceSwapTemplateViewModel>();
+        services.AddTransient<PreviewFaceSwapTemplateViewModel>();
     }
 
     private static void AddServices(IServiceCollection services)

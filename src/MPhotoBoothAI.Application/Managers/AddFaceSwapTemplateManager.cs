@@ -7,11 +7,10 @@ using MPhotoBoothAI.Models.FaceSwaps;
 
 namespace MPhotoBoothAI.Application.Managers;
 public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IFaceDetectionService faceDetectionService,
-    IFaceMultiSwapManager faceMultiSwapManager, IFaceSwapTemplateFileManager faceSwapTemplateFileManager, IDatabaseContext databaseContext) : IAddFaceSwapTemplateManager
+    IFaceSwapTemplateFileManager faceSwapTemplateFileManager, IDatabaseContext databaseContext) : IAddFaceSwapTemplateManager
 {
     private readonly IFilePickerService _filePickerService = filePickerService;
     private readonly IFaceDetectionService _faceDetectionService = faceDetectionService;
-    private readonly IFaceMultiSwapManager _faceMultiSwapManager = faceMultiSwapManager;
     private readonly IFaceSwapTemplateFileManager _faceSwapTemplateFileManager = faceSwapTemplateFileManager;
     private readonly IDatabaseContext _databaseContext = databaseContext;
 
@@ -38,8 +37,6 @@ public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IF
         }
         return faceIndex;
     }
-
-    public Mat SwapFaces(Mat source, Mat target) => _faceMultiSwapManager.Swap(source, target);
 
     public int SaveTemplate(int groupId, FaceSwapTemplate faceSwapTemplate)
     {

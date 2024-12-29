@@ -3,13 +3,14 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Models.Entities;
+using MPhotoBoothAI.Models.Enums;
 using MPhotoBoothAI.Models.FaceSwaps;
 using MPhotoBoothAI.Models.WindowParameters;
 using MPhotoBoothAI.Models.WindowResults;
 using System.Collections.ObjectModel;
 
-namespace MPhotoBoothAI.Application.ViewModels;
-public partial class FaceSwapTemplatesViewModel : ViewModelBase
+namespace MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
+public partial class FaceSwapGroupTemplatesViewModel : ViewModelBase
 {
     public ObservableCollection<FaceSwapTemplateGroupEntity> Groups { get; set; }
     public ObservableCollection<FaceSwapTemplateId> Templates { get; set; } = [];
@@ -20,13 +21,16 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isGroupInEdit;
 
+    [ObservableProperty]
+    private Cursor _templateImageCursor;
+
     private readonly IDatabaseContext _databaseContext;
     private readonly IMessageBoxService _messageBoxService;
     private readonly IWindowService _windowsService;
     private readonly IFaceSwapTemplateFileManager _faceSwapTemplateFileManager;
     private FaceSwapTemplateGroupEntity? _beforeEditGroup;
 
-    public FaceSwapTemplatesViewModel(IDatabaseContext databaseContext, IMessageBoxService messageBoxService, IWindowService windowService,
+    public FaceSwapGroupTemplatesViewModel(IDatabaseContext databaseContext, IMessageBoxService messageBoxService, IWindowService windowService,
         IFaceSwapTemplateFileManager faceSwapTemplateFileManager)
     {
         _databaseContext = databaseContext;
@@ -144,4 +148,23 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
 
     [RelayCommand]
     private Task<int> SaveChanges() => _databaseContext.SaveChangesAsync();
+
+    [RelayCommand]
+    private async Task OpenTemplate((object MainWindow, object FaceSwapTemplateId) parameters)
+    {
+        if (SelectedGroup == null)
+        {
+            return;
+        }
+        var template = (FaceSwapTemplateId)parameters.FaceSwapTemplateId;
+        var templateFilePath = _faceSwapTemplateFileManager.GetFullTemplatePath(SelectedGroup.Id, template.Id);
+        if (File.Exists(templateFilePath))
+        {
+            await _windowsService.Open<object, PreviewFaceSwapTemplateParameters>(typeof(PreviewFaceSwapTemplateViewModel),
+                 (IMainWindow)parameters.MainWindow, new PreviewFaceSwapTemplateParameters(SelectedGroup.Id, template.Id, templateFilePath, template.Faces));
+        }
+    }
+
+    [RelayCommand]
+    private void OpenTemplatePointer(bool isEntered) => TemplateImageCursor = isEntered ? Cursor.Hand : Cursor.Arrow;
 }

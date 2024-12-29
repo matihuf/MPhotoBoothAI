@@ -5,11 +5,11 @@ using MPhotoBoothAI.Models.Entities;
 namespace MPhotoBooth.Unit.Tests.Application.ViewModels;
 public class FaceSwapTemplatesViewModelTests
 {
-    private readonly FaceSwapTemplatesViewModelBuilder _builder;
+    private readonly FaceSwapGroupTemplatesViewModelBuilder _builder;
 
     public FaceSwapTemplatesViewModelTests()
     {
-        _builder = new FaceSwapTemplatesViewModelBuilder();
+        _builder = new FaceSwapGroupTemplatesViewModelBuilder();
     }
 
     [Fact]
