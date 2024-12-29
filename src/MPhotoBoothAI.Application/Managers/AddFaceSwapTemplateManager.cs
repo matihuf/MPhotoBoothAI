@@ -7,12 +7,12 @@ using MPhotoBoothAI.Models.FaceSwaps;
 
 namespace MPhotoBoothAI.Application.Managers;
 public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IFaceDetectionService faceDetectionService,
-    IFaceMultiSwapManager faceMultiSwapManager, IFaceSwapTemplateFileService faceSwapTemplateFileService, IDatabaseContext databaseContext) : IAddFaceSwapTemplateManager
+    IFaceMultiSwapManager faceMultiSwapManager, IFaceSwapTemplateFileManager faceSwapTemplateFileManager, IDatabaseContext databaseContext) : IAddFaceSwapTemplateManager
 {
     private readonly IFilePickerService _filePickerService = filePickerService;
     private readonly IFaceDetectionService _faceDetectionService = faceDetectionService;
     private readonly IFaceMultiSwapManager _faceMultiSwapManager = faceMultiSwapManager;
-    private readonly IFaceSwapTemplateFileService _faceSwapTemplateFileService = faceSwapTemplateFileService;
+    private readonly IFaceSwapTemplateFileManager _faceSwapTemplateFileManager = faceSwapTemplateFileManager;
     private readonly IDatabaseContext _databaseContext = databaseContext;
 
     public async Task<FaceSwapTemplate?> PickTemplate()
@@ -50,7 +50,7 @@ public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IF
         };
         _databaseContext.FaceSwapTemplates.Add(entity);
         _databaseContext.SaveChanges();
-        _faceSwapTemplateFileService.Save(groupId, entity.Id, faceSwapTemplate.FilePath);
+        _faceSwapTemplateFileManager.Save(groupId, entity.Id, faceSwapTemplate.FilePath);
         return entity.Id;
     }
 }

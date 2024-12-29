@@ -8,7 +8,9 @@
              x:DataType="vm:FaceSwapTemplatesViewModel"
              xmlns:entities="using:MPhotoBoothAI.Models.Entities"
              xmlns:models="using:MPhotoBoothAI.Models.FaceSwaps"
+             xmlns:interfaces="using:MPhotoBoothAI.Application.Interfaces"
              xmlns:assets="using:MPhotoBoothAI.Application.Assets"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
 			       xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -19,6 +21,7 @@
 
   <UserControl.Resources>
     <con:PathBitmapConverter x:Key="pathBitmapConverter"/>
+    <con:TupleConverter x:Key="tupleConverter"/>
   </UserControl.Resources>
 
   <SplitView IsPaneOpen="True" DisplayMode="Inline">
@@ -128,13 +131,22 @@
               </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
-              <DataTemplate DataType="{x:Type models:FaceSwapTemplate}">
+              <DataTemplate DataType="{x:Type models:FaceSwapTemplateId}">
                 <StackPanel>
                   <Image Width="300" Height="250" Source="{Binding FilePath, Converter={StaticResource pathBitmapConverter}}" />
-                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                  <DockPanel>
                     <PathIcon Data="{StaticResource person_regular}" />
                     <TextBlock Margin="10 0 0 0" Text="{Binding Faces}" VerticalAlignment="Center" />
-                  </StackPanel>
+                    <Button HorizontalAlignment="Right" Command="{Binding $parent[ListBox].((vm:FaceSwapTemplatesViewModel)DataContext).DeleteTemplateCommand}">
+                      <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource tupleConverter}">
+                          <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                          <Binding />
+                        </MultiBinding>
+                      </Button.CommandParameter>
+                      <PathIcon Data="{StaticResource delete_regular}" />
+                    </Button>
+                  </DockPanel>
                 </StackPanel>
               </DataTemplate>
             </ListBox.ItemTemplate>

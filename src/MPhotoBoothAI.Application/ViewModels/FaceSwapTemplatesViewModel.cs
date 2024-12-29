@@ -12,7 +12,7 @@ namespace MPhotoBoothAI.Application.ViewModels;
 public partial class FaceSwapTemplatesViewModel : ViewModelBase
 {
     public ObservableCollection<FaceSwapTemplateGroupEntity> Groups { get; set; }
-    public ObservableCollection<FaceSwapTemplate> Templates { get; set; } = [];
+    public ObservableCollection<FaceSwapTemplateId> Templates { get; set; } = [];
 
     [ObservableProperty]
     private FaceSwapTemplateGroupEntity? _selectedGroup;
@@ -23,16 +23,16 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     private readonly IDatabaseContext _databaseContext;
     private readonly IMessageBoxService _messageBoxService;
     private readonly IWindowService _windowsService;
-    private readonly IFaceSwapTemplateFileService _faceSwapTemplateFileService;
+    private readonly IFaceSwapTemplateFileManager _faceSwapTemplateFileManager;
     private FaceSwapTemplateGroupEntity? _beforeEditGroup;
 
     public FaceSwapTemplatesViewModel(IDatabaseContext databaseContext, IMessageBoxService messageBoxService, IWindowService windowService,
-        IFaceSwapTemplateFileService faceSwapTemplateFileService)
+        IFaceSwapTemplateFileManager faceSwapTemplateFileManager)
     {
         _databaseContext = databaseContext;
         _messageBoxService = messageBoxService;
         _windowsService = windowService;
-        _faceSwapTemplateFileService = faceSwapTemplateFileService;
+        _faceSwapTemplateFileManager = faceSwapTemplateFileManager;
         _databaseContext.FaceSwapTemplateGroups.OrderBy(x => x.CreatedAt).Load();
         Groups = _databaseContext.FaceSwapTemplateGroups.Local.ToObservableCollection();
         SelectedGroup = Groups.FirstOrDefault();
@@ -59,11 +59,7 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     {
         if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteGroup, Assets.UI.deleteGroupDesc, mainWindow))
         {
-            string groupPath = _faceSwapTemplateFileService.GetGroupDirectoryPath(SelectedGroup.Id);
-            if (Directory.Exists(groupPath))
-            {
-                Directory.Delete(_faceSwapTemplateFileService.GetGroupDirectoryPath(SelectedGroup.Id), true);
-            }
+            _faceSwapTemplateFileManager.DeleteGroup(SelectedGroup.Id);
             Groups.Remove(SelectedGroup);
             await SaveChanges();
             SelectedGroup = Groups.FirstOrDefault();
@@ -98,6 +94,18 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task DeleteTemplate((object MainWindow, object FaceSwapTemplateId) parameters)
+    {
+        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteGroup, Assets.UI.deleteGroupDesc, (IMainWindow)parameters.MainWindow) &&
+            parameters.FaceSwapTemplateId is FaceSwapTemplateId faceSwapTemplateId)
+        {
+            _faceSwapTemplateFileManager.DeleteTemplate(SelectedGroup.Id, faceSwapTemplateId.Id);
+            Templates.Remove(faceSwapTemplateId);
+            await _databaseContext.FaceSwapTemplates.Where(x => x.Id == faceSwapTemplateId.Id).ExecuteDeleteAsync();
+        }
+    }
+
+    [RelayCommand]
     private async Task AddTemplate(IMainWindow mainWindow)
     {
         if (SelectedGroup == null)
@@ -114,10 +122,10 @@ public partial class FaceSwapTemplatesViewModel : ViewModelBase
 
     private void AddTemplate(int groupId, int templateId, int faces)
     {
-        string templatePath = _faceSwapTemplateFileService.GetFullTemplateThumbnailPath(groupId, templateId);
+        string templatePath = _faceSwapTemplateFileManager.GetFullTemplateThumbnailPath(groupId, templateId);
         if (File.Exists(templatePath))
         {
-            Templates.Add(new FaceSwapTemplate(templatePath, faces));
+            Templates.Add(new FaceSwapTemplateId(templateId, templatePath, faces));
         }
     }
 

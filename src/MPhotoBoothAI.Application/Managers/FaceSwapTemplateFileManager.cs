@@ -3,7 +3,7 @@ using Emgu.CV.CvEnum;
 using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
-public class FaceSwapTemplateFileService(IApplicationInfoService applicationInfoService, IResizeImageService resizeImageService) : IFaceSwapTemplateFileService
+public class FaceSwapTemplateFileManager(IApplicationInfoService applicationInfoService, IResizeImageService resizeImageService) : IFaceSwapTemplateFileManager
 {
     private readonly IApplicationInfoService _applicationInfoService = applicationInfoService;
     private readonly IResizeImageService _resizeImageService = resizeImageService;
@@ -27,12 +27,29 @@ public class FaceSwapTemplateFileService(IApplicationInfoService applicationInfo
         CvInvoke.Imwrite($"{templatePath}{_thumbnailSuffix}{_imageExtension}", thumbnail, new KeyValuePair<ImwriteFlags, int>(ImwriteFlags.JpegQuality, 100));
     }
 
+    public void DeleteGroup(int groupId)
+    {
+        string groupPath = GetGroupDirectoryPath(groupId);
+        if (Directory.Exists(groupPath))
+        {
+            Directory.Delete(groupPath, true);
+        }
+    }
 
-    public string GetFullTemplatePath(int groupId, int templateId) => Path.Combine(GetDirectoryPath(groupId, templateId), $"{templateId}{_imageExtension}");
+    public void DeleteTemplate(int groupId, int templateId)
+    {
+        string templatePath = GetTemplateDirectoryPath(groupId, templateId);
+        if (Directory.Exists(templatePath))
+        {
+            Directory.Delete(templatePath, true);
+        }
+    }
 
-    public string GetFullTemplateThumbnailPath(int groupId, int templateId) => Path.Combine(GetDirectoryPath(groupId, templateId), $"{templateId}{_thumbnailSuffix}{_imageExtension}");
+    public string GetFullTemplatePath(int groupId, int templateId) => Path.Combine(GetTemplateDirectoryPath(groupId, templateId), $"{templateId}{_imageExtension}");
 
-    public string GetGroupDirectoryPath(int groupId) => Path.Combine(_applicationInfoService.UserProfilePath, _baseFolder, groupId.ToString());
+    public string GetFullTemplateThumbnailPath(int groupId, int templateId) => Path.Combine(GetTemplateDirectoryPath(groupId, templateId), $"{templateId}{_thumbnailSuffix}{_imageExtension}");
 
-    private string GetDirectoryPath(int groupId, int templateId) => Path.Combine(_applicationInfoService.UserProfilePath, _baseFolder, groupId.ToString(), templateId.ToString());
+    private string GetGroupDirectoryPath(int groupId) => Path.Combine(_applicationInfoService.UserProfilePath, _baseFolder, groupId.ToString());
+
+    private string GetTemplateDirectoryPath(int groupId, int templateId) => Path.Combine(_applicationInfoService.UserProfilePath, _baseFolder, groupId.ToString(), templateId.ToString());
 }
