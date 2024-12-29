@@ -7,6 +7,7 @@
     xmlns:converter="using:MPhotoBoothAI.Avalonia.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
+    xmlns:format="using:MPhotoBoothAI.Application.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
     d:DesignHeight="1080"
@@ -20,6 +21,8 @@
         <x:Double x:Key="stripeRatio">3</x:Double>
         <x:Double x:Key="postcardRatio">2</x:Double>
         <converter:FullPathToFileNameConverter x:Key="fullPathToName" />
+        <format:FormatTypes x:Key="stripe">Stripe</format:FormatTypes>
+        <format:FormatTypes x:Key="postcard">PostCard</format:FormatTypes>
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="ListBox">
@@ -55,14 +58,14 @@
                         Content="{x:Static assets:UI.add}" />
                     <Button
                         Command="{Binding RemoveBackgroundFromListCommand}"
-                        CommandParameter="{StaticResource False}"
+                        CommandParameter="{StaticResource stripe}"
                         Content="{x:Static assets:UI.remove}" />
                 </StackPanel>
                 <ListBox
                     Grid.Row="1"
                     Grid.Column="0"
-                    ItemsSource="{Binding StripeBackgroundInfo.BackgroundPathsList}"
-                    SelectedValue="{Binding StripeSelectedItem}">
+                    ItemsSource="{Binding Formats[Stripe].BackgroundPathsList}"
+                    SelectedValue="{Binding Formats[Stripe].SelectedItem}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding ., Converter={StaticResource fullPathToName}}" />
@@ -81,14 +84,14 @@
                         Content="{x:Static assets:UI.add}" />
                     <Button
                         Command="{Binding RemoveBackgroundFromListCommand}"
-                        CommandParameter="{StaticResource True}"
+                        CommandParameter="{StaticResource postcard}"
                         Content="{x:Static assets:UI.remove}" />
                 </StackPanel>
                 <ListBox
                     Grid.Row="1"
                     Grid.Column="2"
-                    ItemsSource="{Binding PostcardBackgroundInfo.BackgroundPathsList}"
-                    SelectedValue="{Binding PostcardSelectedItem}">
+                    ItemsSource="{Binding Formats[PostCard].BackgroundPathsList}"
+                    SelectedValue="{Binding Formats[PostCard].SelectedItem}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding ., Converter={StaticResource fullPathToName}}" />
@@ -99,12 +102,12 @@
             <control:DesignLayoutControl
                 ButtonHeight="60"
                 ButtonWidth="150"
-                LayoutBackgroundPath="{Binding StripeBackgroundInfo.BackgroundPath}"
+                LayoutBackgroundPath="{Binding Formats[Stripe].BackgroundPath}"
                 SizeRatio="{StaticResource stripeRatio}" />
             <control:DesignLayoutControl
                 ButtonHeight="60"
                 ButtonWidth="150"
-                LayoutBackgroundPath="{Binding PostcardBackgroundInfo.BackgroundPath}"
+                LayoutBackgroundPath="{Binding Formats[PostCard].BackgroundPath}"
                 SizeRatio="{StaticResource postcardRatio}" />
         </StackPanel>
     </ScrollViewer>

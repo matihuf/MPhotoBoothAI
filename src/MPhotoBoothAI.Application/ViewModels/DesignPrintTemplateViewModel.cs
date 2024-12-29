@@ -16,17 +16,12 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
 
     private readonly IMessageBoxService _messageBoxService;
 
-    [ObservableProperty]
-    private BackgroundInfo _stripeBackgroundInfo;
+    private readonly Dictionary<FormatTypes, double> _ratios = [];
+
+    private readonly Dictionary<FormatTypes, string> _backgroundDir = [];
 
     [ObservableProperty]
-    private BackgroundInfo _postcardBackgroundInfo;
-
-    [ObservableProperty]
-    private string? _postcardSelectedItem;
-
-    [ObservableProperty]
-    private string? _stripeSelectedItem;
+    private Dictionary<FormatTypes, BackgroundInfo> _formats = [];
 
     public DesignPrintTemplateViewModel(IFilePickerService filePickerService,
         IFilesManager filesManager,
@@ -39,75 +34,24 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         _applicationInfoService = applicationInfoService;
         _imageManager = imageManager;
         _messageBoxService = messageBoxService;
-        PostcardBackgroundInfo = new();
-        StripeBackgroundInfo = new();
-        PopulateBackgroundList(_applicationInfoService.PostcardBackgroundPath, PostcardBackgroundInfo);
-        PopulateBackgroundList(_applicationInfoService.StripeBackgroundPath, StripeBackgroundInfo);
+        foreach (FormatTypes format in Enum.GetValues(typeof(FormatTypes)))
+        {
+            Formats.Add(format, new BackgroundInfo());
+            _backgroundDir.Add(format, Path.Combine(_applicationInfoService.BackgroundDirectory, format.ToString()));
+            PopulateBackgroundList(_backgroundDir[format], Formats[format]);
+        }
+        _ratios.Add(FormatTypes.Stripe, Consts.Background.StripeBackgroundRatio);
+        _ratios.Add(FormatTypes.PostCard, Consts.Background.PostcardBackgroundRatio);
     }
 
-    private async Task AddBackgroundToList(bool isPostcard, IMainWindow mainWindow)
+    private void DeleteItem(BackgroundInfo backgroundInfo)
     {
-        var pickFile = await _filePickerService.PickFilePath(Models.FileTypes.NonTransparentImages);
-        var pathToCopy = isPostcard ? _applicationInfoService.PostcardBackgroundPath : _applicationInfoService.StripeBackgroundPath;
-        var imageSize = _imageManager.GetImageSizeFromFile(pickFile);
-        if (imageSize.HasValue)
+        if (backgroundInfo.SelectedItem != null)
         {
-            var ratio = (double)imageSize.Value.Width / imageSize.Value.Height;
-            if (((isPostcard && ratio != Consts.Background.PostcardBackgroundRatio)
-                || (!isPostcard && ratio != Consts.Background.StripeBackgroundRatio))
-                && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, mainWindow))
-            {
-                return;
-            }
-        }
-        else
-        {
-            return;
-        }
-        _filesManager.CopyFile(pickFile, pathToCopy);
-        if (isPostcard)
-        {
-            PopulateBackgroundList(pathToCopy, PostcardBackgroundInfo);
-        }
-        else
-        {
-            PopulateBackgroundList(pathToCopy, StripeBackgroundInfo);
-        }
-    }
-
-    [RelayCommand]
-    private Task AddPostcardBackgroundToList(IMainWindow mainWindow)
-    {
-        return AddBackgroundToList(true, mainWindow);
-    }
-
-    [RelayCommand]
-    private Task AddStripeBackgroundToList(IMainWindow mainWindow)
-    {
-        return AddBackgroundToList(false, mainWindow);
-    }
-
-    [RelayCommand]
-    private void RemoveBackgroundFromList(bool postcardList)
-    {
-        if (postcardList)
-        {
-            DeleteItem(PostcardSelectedItem, PostcardBackgroundInfo);
-        }
-        else
-        {
-            DeleteItem(StripeSelectedItem, StripeBackgroundInfo);
-        }
-    }
-
-    private void DeleteItem(string? selectedItem, BackgroundInfo backgroundInfo)
-    {
-        if (selectedItem != null)
-        {
-            _filesManager.DeleteFile(selectedItem);
-            backgroundInfo.BackgroundPathsList.Remove(selectedItem);
-
-            if (backgroundInfo.BackgroundPath == selectedItem)
+            var selectedValueCopy = backgroundInfo.SelectedItem;
+            _filesManager.DeleteFile(backgroundInfo.SelectedItem);
+            backgroundInfo.BackgroundPathsList.Remove(backgroundInfo.SelectedItem);
+            if (backgroundInfo.BackgroundPath == selectedValueCopy)
             {
                 if (backgroundInfo.BackgroundPathsList.Count > 0)
                 {
@@ -129,6 +73,66 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         if (String.IsNullOrEmpty(backgroundInfo.BackgroundPath) && backgroundInfo.BackgroundPathsList.Count > 0)
         {
             backgroundInfo.BackgroundPath = backgroundInfo.BackgroundPathsList[0];
+        }
+    }
+
+    private async Task AddBackgroundToList(FormatTypes format, IMainWindow mainWindow)
+    {
+        var pickFile = await _filePickerService.PickFilePath(Models.FileTypes.NonTransparentImages);
+        var pathToCopy = _backgroundDir[format];
+        var imageSize = _imageManager.GetImageSizeFromFile(pickFile);
+        if (imageSize.HasValue)
+        {
+            var ratio = (double)imageSize.Value.Width / imageSize.Value.Height;
+            if (ratio != _ratios[format] && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, mainWindow))
+            {
+                return;
+            }
+        }
+        else
+        {
+            return;
+        }
+        _filesManager.CopyFile(pickFile, pathToCopy);
+        PopulateBackgroundList(pathToCopy, Formats[format]);
+    }
+
+    [RelayCommand]
+    private Task AddPostcardBackgroundToList(IMainWindow mainWindow)
+    {
+        return AddBackgroundToList(FormatTypes.PostCard, mainWindow);
+    }
+
+    [RelayCommand]
+    private Task AddStripeBackgroundToList(IMainWindow mainWindow)
+    {
+        return AddBackgroundToList(FormatTypes.Stripe, mainWindow);
+    }
+
+    [RelayCommand]
+    private void RemoveBackgroundFromList(FormatTypes format)
+    {
+        DeleteItem(Formats[format]);
+    }
+
+    [RelayCommand]
+    private void LoadNextBackground(FormatTypes format)
+    {
+        LoadNextBackground(Formats[format]);
+    }
+
+    private void LoadNextBackground(BackgroundInfo backgroundInfo)
+    {
+        var count = backgroundInfo.BackgroundPathsList.Count;
+        if (count > 0 && !String.IsNullOrEmpty(backgroundInfo.BackgroundPath))
+        {
+            var index = backgroundInfo.BackgroundPathsList.IndexOf(backgroundInfo.BackgroundPath);
+            index++;
+            if (index == count)
+            {
+                index = 0;
+            }
+            backgroundInfo.BackgroundPath = backgroundInfo.BackgroundPathsList[index];
         }
     }
 }
