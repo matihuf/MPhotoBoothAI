@@ -122,6 +122,8 @@
                 CommandParameter="{StaticResource stripe}"
                 LayoutBackgroundPath="{Binding Formats[Stripe].BackgroundPath}"
                 NextBackground="{Binding LoadNextBackgroundCommand}"
+                OverlayImages="{Binding OverlayImages[Stripe]}"
+                PhotoImages="{Binding PhotoImages[Stripe]}"
                 SizeRatio="{StaticResource stripeRatio}" />
             <control:DesignLayoutControl
                 ButtonHeight="60"
@@ -129,6 +131,8 @@
                 CommandParameter="{StaticResource postcard}"
                 LayoutBackgroundPath="{Binding Formats[PostCard].BackgroundPath}"
                 NextBackground="{Binding LoadNextBackgroundCommand}"
+                OverlayImages="{Binding OverlayImages[PostCard]}"
+                PhotoImages="{Binding PhotoImages[PostCard]}"
                 SizeRatio="{StaticResource postcardRatio}" />
         </StackPanel>
     </ScrollViewer>

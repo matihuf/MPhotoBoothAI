@@ -21,6 +21,12 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     private readonly Dictionary<FormatTypes, string> _backgroundDir = [];
 
     [ObservableProperty]
+    private Dictionary<FormatTypes, List<LayoutImageEntity>> _photoImages = [];
+
+    [ObservableProperty]
+    private Dictionary<FormatTypes, List<OverlayLayoutImage>> _overlayImages = [];
+
+    [ObservableProperty]
     private Dictionary<FormatTypes, BackgroundInfo> _formats = [];
 
     public DesignPrintTemplateViewModel(IFilePickerService filePickerService,
@@ -38,6 +44,8 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         {
             Formats.Add(format, new BackgroundInfo());
             _backgroundDir.Add(format, Path.Combine(_applicationInfoService.BackgroundDirectory, format.ToString()));
+            PhotoImages.Add(format, []);
+            OverlayImages.Add(format, []);
             PopulateBackgroundList(_backgroundDir[format], Formats[format]);
         }
         _ratios.Add(FormatTypes.Stripe, Consts.Background.StripeBackgroundRatio);

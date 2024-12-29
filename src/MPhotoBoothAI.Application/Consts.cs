@@ -12,10 +12,11 @@ public static class Consts
         public const string VggGender = "vgg_ilsvrc_16_gender_imdb_wiki";
     }
 
-    public static class Photo
+    public static class Sizes
     {
         public const int Width = 3000;
         public const int Height = 2000;
+        public const int BasicPrintWidth = 3000;
     }
 
     public static class Background

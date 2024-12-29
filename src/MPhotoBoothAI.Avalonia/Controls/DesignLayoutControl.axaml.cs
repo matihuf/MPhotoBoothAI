@@ -1,9 +1,14 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
+using MPhotoBoothAI.Application;
+using MPhotoBoothAI.Application.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reactive.Linq;
 using System.Windows.Input;
@@ -12,6 +17,8 @@ namespace MPhotoBoothAI.Avalonia.Controls;
 
 public partial class DesignLayoutControl : UserControl
 {
+    private const double StartScale = 0.25;
+
     public static readonly StyledProperty<double> CanvasWidthProperty =
         AvaloniaProperty.Register<DesignLayoutControl, double>(nameof(CanvasWidth));
 
@@ -102,10 +109,48 @@ public partial class DesignLayoutControl : UserControl
         set => SetValue(CommandParameterProperty, value);
     }
 
+    public static readonly StyledProperty<ICommand> AddPhotoCommandProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(AddPhotoCommand));
+
+    public ICommand AddPhotoCommand
+    {
+        get => this.GetValue(AddPhotoCommandProperty);
+        set => SetValue(AddPhotoCommandProperty, value);
+    }
+
+    public static readonly StyledProperty<IList<LayoutImageEntity>> PhotoImagesProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, IList<LayoutImageEntity>>(nameof(PhotoImages));
+
+    public static readonly StyledProperty<ICommand> RemovePhotoCommandProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(RemovePhotoCommand));
+
+    public ICommand RemovePhotoCommand
+    {
+        get => this.GetValue(RemovePhotoCommandProperty);
+        set => SetValue(RemovePhotoCommandProperty, value);
+    }
+
+    public IList<LayoutImageEntity> PhotoImages
+    {
+        get => this.GetValue(PhotoImagesProperty);
+        set => SetValue(PhotoImagesProperty, value);
+    }
+
+    public static readonly StyledProperty<IList<OverlayLayoutImage>> OverlayImagesProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, IList<OverlayLayoutImage>>(nameof(OverlayImages));
+
+    public IList<OverlayLayoutImage> OverlayImages
+    {
+        get => this.GetValue(OverlayImagesProperty);
+        set => SetValue(OverlayImagesProperty, value);
+    }
+
     public DesignLayoutControl()
     {
         InitializeComponent();
         SwitchLayerCommand = new RelayCommand<bool>(SwitchLayers);
+        AddPhotoCommand = new RelayCommand(AddPhoto);
+        RemovePhotoCommand = new RelayCommand(RemovePhoto);
         canvasRoot.SizeChanged += PhotoCanvas_SizeChanged;
         this.GetObservable(LayoutBackgroundPathProperty).Subscribe(path =>
         {
@@ -147,5 +192,51 @@ public partial class DesignLayoutControl : UserControl
             return;
         }
         canvasBackground.Source = new Bitmap(path);
+    }
+
+    private void AddPhoto()
+    {
+        var index = (photoCanvas.Children.Count + 1).ToString();
+        var image = new Grid()
+        {
+            Tag = index,
+            Width = Consts.Sizes.Width * StartScale * (photoCanvas.Width / Consts.Sizes.BasicPrintWidth),
+            Height = Consts.Sizes.Height * StartScale * (photoCanvas.Width / Consts.Sizes.BasicPrintWidth),
+            Background = RandomColor(),
+        };
+        var indexText = new TextBlock()
+        {
+            Text = index.ToString(),
+            FontSize = 30,
+            Foreground = Brushes.White,
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center,
+        };
+        SetTransformWithStartAngle(indexText, 270);
+        SetTransformWithStartAngle(image, 90);
+        Canvas.SetTop(image, 50);
+        Canvas.SetLeft(image, 50);
+        image.Children.Add(indexText);
+        photoCanvas.Children.Add(image);
+    }
+
+    private void RemovePhoto()
+    {
+        if (photoCanvas.Children.Count > 0)
+        {
+            photoCanvas.Children.Remove(photoCanvas.Children[^1]);
+        }
+    }
+
+    private void SetTransformWithStartAngle(Control control, double angle)
+    {
+        control.RenderTransformOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative);
+        control.RenderTransform = new RotateTransform(angle);
+    }
+
+    private SolidColorBrush RandomColor()
+    {
+        Random rand = new Random();
+        return new SolidColorBrush(Color.FromRgb((byte)rand.Next(50, 255), (byte)rand.Next(50, 255), (byte)rand.Next(50, 255)));
     }
 }
