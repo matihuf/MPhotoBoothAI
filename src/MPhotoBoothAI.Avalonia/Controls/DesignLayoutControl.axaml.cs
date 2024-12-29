@@ -89,9 +89,9 @@ public partial class DesignLayoutControl : UserControl
         InitializeComponent();
         SwitchLayerCommand = new RelayCommand<bool>(SwitchLayers);
         canvasRoot.SizeChanged += PhotoCanvas_SizeChanged;
-        this.GetObservable(LayoutBackgroundPathProperty).Subscribe(x =>
+        this.GetObservable(LayoutBackgroundPathProperty).Subscribe(path =>
         {
-            LoadBackgroundImage(x);
+            LoadBackgroundImage(path);
         });
     }
 

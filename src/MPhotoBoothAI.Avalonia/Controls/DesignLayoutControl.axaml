@@ -57,22 +57,22 @@
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
             <Button Content="{x:Static assets:UI.nextBackground}" />
-            <Button Command="{Binding SwitchLayerCommand}" CommandParameter="{StaticResource True}">
+            <Button Command="{Binding SwitchLayerCommand, ElementName=root}" CommandParameter="{StaticResource True}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Bottom" Text="{x:Static assets:UI.photoLayer}" />
                         <Border Background="Transparent">
-                            <Border Margin="0" IsVisible="{Binding ActiveLayerSwitch}" />
+                            <Border Margin="0" IsVisible="{Binding ActiveLayerSwitch, ElementName=root}" />
                         </Border>
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button Command="{Binding SwitchLayerCommand}" CommandParameter="{StaticResource False}">
+            <Button Command="{Binding SwitchLayerCommand, ElementName=root}" CommandParameter="{StaticResource False}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Text="{x:Static assets:UI.frameLayer}" />
                         <Border Background="Transparent">
-                            <Border Margin="0" IsVisible="{Binding !ActiveLayerSwitch}" />
+                            <Border Margin="0" IsVisible="{Binding !ActiveLayerSwitch, ElementName=root}" />
                         </Border>
                     </StackPanel>
                 </Button.Content>
