@@ -102,12 +102,16 @@
             <control:DesignLayoutControl
                 ButtonHeight="60"
                 ButtonWidth="150"
+                CommandParameter="{StaticResource stripe}"
                 LayoutBackgroundPath="{Binding Formats[Stripe].BackgroundPath}"
+                NextBackground="{Binding LoadNextBackgroundCommand}"
                 SizeRatio="{StaticResource stripeRatio}" />
             <control:DesignLayoutControl
                 ButtonHeight="60"
                 ButtonWidth="150"
+                CommandParameter="{StaticResource postcard}"
                 LayoutBackgroundPath="{Binding Formats[PostCard].BackgroundPath}"
+                NextBackground="{Binding LoadNextBackgroundCommand}"
                 SizeRatio="{StaticResource postcardRatio}" />
         </StackPanel>
     </ScrollViewer>

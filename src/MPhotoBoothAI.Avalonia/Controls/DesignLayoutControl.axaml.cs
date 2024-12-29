@@ -84,7 +84,6 @@ public partial class DesignLayoutControl : UserControl
         set => SetValue(SwitchLayerProperty, value);
     }
 
-
     public static readonly StyledProperty<ICommand> NextBackgroundProperty =
         AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(NextBackground));
 
@@ -92,6 +91,15 @@ public partial class DesignLayoutControl : UserControl
     {
         get => this.GetValue(NextBackgroundProperty);
         set => SetValue(NextBackgroundProperty, value);
+    }
+
+    public static readonly StyledProperty<object> CommandParameterProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, object>(nameof(CommandParameter));
+
+    public object CommandParameter
+    {
+        get => this.GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
     }
 
     public DesignLayoutControl()
