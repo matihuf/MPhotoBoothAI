@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.IO;
@@ -35,11 +36,7 @@ public partial class DesignLayoutControl : UserControl
     public string LayoutBackgroundPath
     {
         get => this.GetValue(LayoutBackgroundPathProperty);
-        set
-        {
-            SetValue(LayoutBackgroundPathProperty, value);
-            LoadBackgroundImage(value);
-        }
+        set => SetValue(LayoutBackgroundPathProperty, value);
     }
 
     public static readonly StyledProperty<double> ButtonWidthProperty =
@@ -90,11 +87,12 @@ public partial class DesignLayoutControl : UserControl
     public DesignLayoutControl()
     {
         InitializeComponent();
-        DataContext = this;
         SwitchLayerCommand = new RelayCommand<bool>(SwitchLayers);
         canvasRoot.SizeChanged += PhotoCanvas_SizeChanged;
-        LayoutBackgroundPathProperty.Changed.Subscribe(e => LoadBackgroundImage(e.NewValue.Value));
-        LoadBackgroundImage(LayoutBackgroundPath);
+        this.GetObservable(LayoutBackgroundPathProperty).Subscribe(x =>
+        {
+            LoadBackgroundImage(x);
+        });
     }
 
     private void PhotoCanvas_SizeChanged(object? sender, SizeChangedEventArgs e)
@@ -128,6 +126,8 @@ public partial class DesignLayoutControl : UserControl
         if (String.IsNullOrEmpty(path) || !File.Exists(path))
         {
             canvasBackground.Source = null;
+            return;
         }
+        canvasBackground.Source = new Bitmap(path);
     }
 }

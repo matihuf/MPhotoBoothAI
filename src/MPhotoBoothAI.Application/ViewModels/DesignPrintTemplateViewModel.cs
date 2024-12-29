@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MPhotoBoothAI.Application.Interfaces;
-using System.Collections.ObjectModel;
+using MPhotoBoothAI.Application.Models;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 public partial class DesignPrintTemplateViewModel : ViewModelBase
@@ -17,22 +17,16 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     private readonly IMessageBoxService _messageBoxService;
 
     [ObservableProperty]
-    private ObservableCollection<string> _stripeBackgroundsPaths = [];
+    private BackgroundInfo _stripeBackgroundInfo;
 
     [ObservableProperty]
-    private ObservableCollection<string> _postcardBackgroundsPaths = [];
+    private BackgroundInfo _postcardBackgroundInfo;
 
     [ObservableProperty]
-    private string _postcardSelectedItem = string.Empty;
+    private string? _postcardSelectedItem;
 
     [ObservableProperty]
-    private string _stripeSelectedItem = string.Empty;
-
-    [ObservableProperty]
-    private string _stripeBackgroundPath;
-
-    [ObservableProperty]
-    private string _postcardBackgroundPath;
+    private string? _stripeSelectedItem;
 
     public DesignPrintTemplateViewModel(IFilePickerService filePickerService,
         IFilesManager filesManager,
@@ -45,10 +39,10 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         _applicationInfoService = applicationInfoService;
         _imageManager = imageManager;
         _messageBoxService = messageBoxService;
-        PopulateBackgroundList(_applicationInfoService.PostcardBackgroundPath, PostcardBackgroundsPaths);
-        PopulateBackgroundList(_applicationInfoService.StripeBackgroundPath, StripeBackgroundsPaths);
-        StripeBackgroundPath = StripeBackgroundsPaths.Count > 0 ? StripeBackgroundsPaths[0] : string.Empty;
-        PostcardBackgroundPath = PostcardBackgroundsPaths.Count > 0 ? PostcardBackgroundsPaths[0] : string.Empty;
+        PostcardBackgroundInfo = new();
+        StripeBackgroundInfo = new();
+        PopulateBackgroundList(_applicationInfoService.PostcardBackgroundPath, PostcardBackgroundInfo);
+        PopulateBackgroundList(_applicationInfoService.StripeBackgroundPath, StripeBackgroundInfo);
     }
 
     private async Task AddBackgroundToList(bool isPostcard, IMainWindow mainWindow)
@@ -73,19 +67,11 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         _filesManager.CopyFile(pickFile, pathToCopy);
         if (isPostcard)
         {
-            PopulateBackgroundList(pathToCopy, PostcardBackgroundsPaths);
-            if (String.IsNullOrEmpty(PostcardBackgroundPath) && PostcardBackgroundsPaths.Count > 0)
-            {
-                PostcardBackgroundPath = PostcardBackgroundsPaths[^1];
-            }
+            PopulateBackgroundList(pathToCopy, PostcardBackgroundInfo);
         }
         else
         {
-            PopulateBackgroundList(pathToCopy, StripeBackgroundsPaths);
-            if (String.IsNullOrEmpty(StripeBackgroundPath) && StripeBackgroundsPaths.Count > 0)
-            {
-                StripeBackgroundPath = StripeBackgroundsPaths[^1];
-            }
+            PopulateBackgroundList(pathToCopy, StripeBackgroundInfo);
         }
     }
 
@@ -106,29 +92,43 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     {
         if (postcardList)
         {
-            DeleteItem(PostcardSelectedItem, PostcardBackgroundsPaths);
+            DeleteItem(PostcardSelectedItem, PostcardBackgroundInfo);
         }
         else
         {
-            DeleteItem(StripeSelectedItem, StripeBackgroundsPaths);
+            DeleteItem(StripeSelectedItem, StripeBackgroundInfo);
         }
     }
 
-    private void DeleteItem(string selectedItem, ObservableCollection<string> collection)
+    private void DeleteItem(string? selectedItem, BackgroundInfo backgroundInfo)
     {
         if (selectedItem != null)
         {
             _filesManager.DeleteFile(selectedItem);
-            collection.Remove(selectedItem);
+            backgroundInfo.BackgroundPathsList.Remove(selectedItem);
+
+            if (backgroundInfo.BackgroundPath == selectedItem)
+            {
+                if (backgroundInfo.BackgroundPathsList.Count > 0)
+                {
+                    backgroundInfo.BackgroundPath = backgroundInfo.BackgroundPathsList[0];
+                    return;
+                }
+                backgroundInfo.BackgroundPath = null;
+            }
         }
     }
 
-    private void PopulateBackgroundList(string pathToCopy, ObservableCollection<string> collection)
+    private void PopulateBackgroundList(string pathToCopy, BackgroundInfo backgroundInfo)
     {
-        collection.Clear();
+        backgroundInfo.BackgroundPathsList.Clear();
         foreach (var path in _filesManager.GetFiles(pathToCopy))
         {
-            collection.Add(path);
+            backgroundInfo.BackgroundPathsList.Add(path);
+        }
+        if (String.IsNullOrEmpty(backgroundInfo.BackgroundPath) && backgroundInfo.BackgroundPathsList.Count > 0)
+        {
+            backgroundInfo.BackgroundPath = backgroundInfo.BackgroundPathsList[0];
         }
     }
 }

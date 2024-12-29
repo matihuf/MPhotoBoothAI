@@ -61,7 +61,7 @@
                 <ListBox
                     Grid.Row="1"
                     Grid.Column="0"
-                    ItemsSource="{Binding StripeBackgroundsPaths}"
+                    ItemsSource="{Binding StripeBackgroundInfo.BackgroundPathsList}"
                     SelectedValue="{Binding StripeSelectedItem}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -87,7 +87,7 @@
                 <ListBox
                     Grid.Row="1"
                     Grid.Column="2"
-                    ItemsSource="{Binding PostcardBackgroundsPaths}"
+                    ItemsSource="{Binding PostcardBackgroundInfo.BackgroundPathsList}"
                     SelectedValue="{Binding PostcardSelectedItem}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -99,12 +99,12 @@
             <control:DesignLayoutControl
                 ButtonHeight="60"
                 ButtonWidth="150"
-                LayoutBackgroundPath="{Binding StripeBackgroundPath}"
+                LayoutBackgroundPath="{Binding StripeBackgroundInfo.BackgroundPath}"
                 SizeRatio="{StaticResource stripeRatio}" />
             <control:DesignLayoutControl
                 ButtonHeight="60"
                 ButtonWidth="150"
-                LayoutBackgroundPath="{Binding PostcardBackgroundPath}"
+                LayoutBackgroundPath="{Binding PostcardBackgroundInfo.BackgroundPath}"
                 SizeRatio="{StaticResource postcardRatio}" />
         </StackPanel>
     </ScrollViewer>

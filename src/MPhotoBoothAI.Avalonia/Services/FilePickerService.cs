@@ -51,7 +51,7 @@ public class FilePickerService : IFilePickerService
         var file = await PickFileInternal(fileTypes);
         if (file != null)
         {
-            return file.Path.AbsolutePath;
+            return file.Path.LocalPath;
         }
         return string.Empty;
     }
