@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -12,12 +13,31 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using Key = Avalonia.Input.Key;
 
 namespace MPhotoBoothAI.Avalonia.Controls;
 
 public partial class DesignLayoutControl : UserControl
 {
     private const double StartScale = 0.25;
+
+    private const double StartAngle = 0;
+
+    private Random _rand = new Random();
+
+    private bool _isDraged;
+
+    private Point _originTranslateTransform;
+
+    private Point _startDragPosition;
+
+    private bool _resizeModifier;
+
+    private bool _resizeMultiplier;
+
+    private double _scaleDividor = 5000;
+
+    private readonly Point _startPivot = new Point(0, 0);
 
     public static readonly StyledProperty<double> CanvasWidthProperty =
         AvaloniaProperty.Register<DesignLayoutControl, double>(nameof(CanvasWidth));
@@ -156,6 +176,31 @@ public partial class DesignLayoutControl : UserControl
         {
             LoadBackgroundImage(path);
         });
+        AddHandler(DragDrop.DropEvent, Drop);
+    }
+
+    private void ModifierPressed(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.LeftCtrl)
+        {
+            _resizeModifier = true;
+        }
+        if (e.Key == Key.LeftShift)
+        {
+            _resizeMultiplier = true;
+        }
+    }
+
+    private void ModifierReleased(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.LeftCtrl)
+        {
+            _resizeModifier = false;
+        }
+        if (e.Key == Key.LeftShift)
+        {
+            _resizeMultiplier = false;
+        }
     }
 
     private void PhotoCanvas_SizeChanged(object? sender, SizeChangedEventArgs e)
@@ -163,7 +208,7 @@ public partial class DesignLayoutControl : UserControl
         SetHeight(e.NewSize.Width);
     }
 
-    private void Loaded(object? sender, RoutedEventArgs e)
+    private void LoadedControl(object? sender, RoutedEventArgs e)
     {
         var width = canvasRoot.Bounds.Width;
         SetHeight(width);
@@ -194,17 +239,47 @@ public partial class DesignLayoutControl : UserControl
         canvasBackground.Source = new Bitmap(path);
     }
 
+    private void Drop(object? sender, DragEventArgs e)
+    {
+
+    }
+
     private void AddPhoto()
     {
-        var index = (photoCanvas.Children.Count + 1).ToString();
-        var image = new Grid()
+        var gridRect = GetImageGrid();
+        CreateItemOnLayer(gridRect, photoCanvas, new Point(gridRect.Height / 2, gridRect.Width / 2));
+    }
+
+    private void CreateItemOnLayer(Control control, Canvas canvas, Point position, bool addIndex = false)
+    {
+        var index = (canvas.Children.Count + 1).ToString();
+        var imageRoot = new Grid() { Width = 1, Height = 1, RenderTransform = new TranslateTransform() };
+        Canvas.SetTop(imageRoot, position.Y);
+        Canvas.SetLeft(imageRoot, position.X);
+        RegisterEvents(control);
+        if (control is Grid grid && addIndex)
         {
-            Tag = index,
-            Width = Consts.Sizes.Width * StartScale * (photoCanvas.Width / Consts.Sizes.BasicPrintWidth),
-            Height = Consts.Sizes.Height * StartScale * (photoCanvas.Width / Consts.Sizes.BasicPrintWidth),
+            var indexText = GetIndexText(index);
+            grid.Children.Add(indexText);
+        }
+        imageRoot.Children.Add(control);
+        canvas.Children.Add(imageRoot);
+    }
+
+    private Grid GetImageGrid()
+    {
+        return new Grid()
+        {
+            Width = Consts.Sizes.Height * StartScale * (photoCanvas.Width / Consts.Sizes.BasicPrintWidth),
+            Height = Consts.Sizes.Width * StartScale * (photoCanvas.Width / Consts.Sizes.BasicPrintWidth),
+            RenderTransform = new RotateTransform(StartAngle, _startPivot.X, _startPivot.Y),
             Background = RandomColor(),
         };
-        var indexText = new TextBlock()
+    }
+
+    private static TextBlock GetIndexText(string index)
+    {
+        return new TextBlock()
         {
             Text = index.ToString(),
             FontSize = 30,
@@ -212,31 +287,108 @@ public partial class DesignLayoutControl : UserControl
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Center,
         };
-        SetTransformWithStartAngle(indexText, 270);
-        SetTransformWithStartAngle(image, 90);
-        Canvas.SetTop(image, 50);
-        Canvas.SetLeft(image, 50);
-        image.Children.Add(indexText);
-        photoCanvas.Children.Add(image);
     }
 
     private void RemovePhoto()
     {
         if (photoCanvas.Children.Count > 0)
         {
+            var lastChild = photoCanvas.Children[^1] as Grid;
+            UnregisterEvents(lastChild.Children[0]);
             photoCanvas.Children.Remove(photoCanvas.Children[^1]);
         }
     }
 
-    private void SetTransformWithStartAngle(Control control, double angle)
+    private void RegisterEvents(Control control)
     {
-        control.RenderTransformOrigin = new RelativePoint(0.5, 0.5, RelativeUnit.Relative);
-        control.RenderTransform = new RotateTransform(angle);
+        control.PointerPressed += StartMoveControl;
+        control.PointerMoved += MoveControl;
+        control.PointerReleased += EndMoveControl;
+        control.PointerWheelChanged += RotateResizeControl;
+    }
+
+    private void UnregisterEvents(Control control)
+    {
+        control.PointerPressed -= StartMoveControl;
+        control.PointerMoved -= MoveControl;
+        control.PointerReleased -= EndMoveControl;
+        control.PointerWheelChanged -= RotateResizeControl;
+    }
+
+    private void StartMoveControl(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is Control control
+            && control.Parent is Control parentControl
+            && parentControl.RenderTransform is TranslateTransform translate)
+        {
+            _startDragPosition = e.GetPosition(this);
+            _originTranslateTransform = new Point(translate.X, translate.Y);
+            _isDraged = true;
+        }
+    }
+
+    private void MoveControl(object? sender, PointerEventArgs e)
+    {
+        if (_isDraged && sender is Control control
+            && control.Parent is Control parentControl
+            && parentControl.RenderTransform is TranslateTransform translate)
+        {
+            var currentPosition = e.GetPosition(this);
+            translate.X = _originTranslateTransform.X + (currentPosition.X - _startDragPosition.X);
+            translate.Y = _originTranslateTransform.Y + (currentPosition.Y - _startDragPosition.Y);
+        }
+    }
+
+    private void EndMoveControl(object? sender, PointerReleasedEventArgs e)
+    {
+        _isDraged = false;
+    }
+
+    private void RotateResizeControl(object? sender, PointerWheelEventArgs e)
+    {
+        if (sender is Control control)
+        {
+            var delta = e.Delta.Y;
+            if (_resizeModifier)
+            {
+                double width = Consts.Sizes.Height;
+                double height = Consts.Sizes.Width;
+                if (control is Image image)
+                {
+                    width = image.Source.Size.Width;
+                    height = image.Source.Size.Height;
+                }
+                var canvasToOriginalSizeRatio = photoCanvas.Width / Consts.Sizes.BasicPrintWidth;
+                var currentScale = control.Width / (width * canvasToOriginalSizeRatio);
+                var newScale = (currentScale - (delta / _scaleDividor * (_resizeMultiplier ? 5 : 1)));
+                if (newScale > 0)
+                {
+                    control.Width = width * canvasToOriginalSizeRatio * newScale;
+                    control.Height = height * canvasToOriginalSizeRatio * newScale;
+                }
+            }
+            else
+            {
+                if (control.RenderTransform is RotateTransform rotate)
+                {
+                    var angle = rotate.Angle;
+                    if (delta >= 0)
+                    {
+                        angle--;
+                    }
+                    else
+                    {
+                        angle++;
+                    }
+                    rotate.Angle = angle % 360;
+                }
+            }
+            e.Handled = true;
+        }
     }
 
     private SolidColorBrush RandomColor()
     {
-        Random rand = new Random();
-        return new SolidColorBrush(Color.FromRgb((byte)rand.Next(50, 255), (byte)rand.Next(50, 255), (byte)rand.Next(50, 255)));
+        return new SolidColorBrush(Color.FromRgb((byte)_rand.Next(50, 255), (byte)_rand.Next(50, 255), (byte)_rand.Next(50, 255)));
     }
 }
