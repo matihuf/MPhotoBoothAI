@@ -36,6 +36,10 @@
             <Setter Property="ClipToBounds" Value="True" />
         </Style>
     </UserControl.Styles>
+    <UserControl.Resources>
+        <converters:BoolToOpacityLevelConverter x:Key="boolToOpacity" />
+        <x:Double x:Key="OpacityValue">0.8</x:Double>
+    </UserControl.Resources>
     <StackPanel>
         <Grid Name="canvasRoot" MinWidth="400">
             <Border
@@ -56,8 +60,11 @@
             <Canvas Name="photoCanvas" IsHitTestVisible="{Binding ActiveLayerSwitch, ElementName=root}" />
             <Canvas
                 Name="frameCanvas"
+                Background="Transparent"
                 DragDrop.AllowDrop="True"
-                IsHitTestVisible="{Binding !ActiveLayerSwitch, ElementName=root}" />
+                DragDrop.Drop="Drop"
+                IsHitTestVisible="{Binding !ActiveLayerSwitch, ElementName=root}"
+                Opacity="{Binding ActiveLayerSwitch, ElementName=root, Converter={StaticResource boolToOpacity}, ConverterParameter={StaticResource OpacityValue}}" />
         </Grid>
         <WrapPanel
             Margin="0,10,0,10"

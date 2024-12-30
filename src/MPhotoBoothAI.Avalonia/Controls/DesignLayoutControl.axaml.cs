@@ -11,6 +11,7 @@ using MPhotoBoothAI.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Key = Avalonia.Input.Key;
@@ -38,6 +39,8 @@ public partial class DesignLayoutControl : UserControl
     private double _scaleDividor = 5000;
 
     private readonly Point _startPivot = new Point(0, 0);
+
+    private string[] _imageExtensions = [".tif", ".tiff", ".bmp", ".jpg", ".jpeg", ".png"];
 
     public static readonly StyledProperty<double> CanvasWidthProperty =
         AvaloniaProperty.Register<DesignLayoutControl, double>(nameof(CanvasWidth));
@@ -176,7 +179,6 @@ public partial class DesignLayoutControl : UserControl
         {
             LoadBackgroundImage(path);
         });
-        AddHandler(DragDrop.DropEvent, Drop);
     }
 
     private void ModifierPressed(object? sender, KeyEventArgs e)
@@ -241,13 +243,46 @@ public partial class DesignLayoutControl : UserControl
 
     private void Drop(object? sender, DragEventArgs e)
     {
+        foreach (var file in e.Data.GetFiles())
+        {
+            var ratio = photoCanvas.Width / Consts.Sizes.BasicPrintWidth;
+            var path = file.Path.LocalPath;
+            var point = e.GetPosition(this);
+            var extension = Path.GetExtension(path).ToLower();
+            if (_imageExtensions.Contains(extension))
+            {
+                var bitmap = new Bitmap(path);
+                var image = new Image()
+                {
+                    Source = bitmap,
+                    Width = bitmap.Size.Width * ratio,
+                    Height = bitmap.Size.Height * ratio,
+                    RenderTransform = new RotateTransform(StartAngle, _startPivot.X, _startPivot.Y),
+                };
+                var context = new ContextMenu()
+                {
+                    Background = Brushes.DarkGray,
+                    BorderBrush = Brushes.Transparent,
+                    Width = 200,
+                    Height = 200,
+                };
+                var items = new List<MenuItem>
+                {
+                    new MenuItem { Header = "Usuñ", Foreground= Brushes.White}
+                };
 
+                context.ItemsSource = items;
+                image.ContextMenu = context;
+
+                CreateItemOnLayer(image, frameCanvas, point);
+            }
+        }
     }
 
     private void AddPhoto()
     {
         var gridRect = GetImageGrid();
-        CreateItemOnLayer(gridRect, photoCanvas, new Point(gridRect.Height / 2, gridRect.Width / 2));
+        CreateItemOnLayer(gridRect, photoCanvas, new Point(gridRect.Height / 2, gridRect.Width / 2), true);
     }
 
     private void CreateItemOnLayer(Control control, Canvas canvas, Point position, bool addIndex = false)
