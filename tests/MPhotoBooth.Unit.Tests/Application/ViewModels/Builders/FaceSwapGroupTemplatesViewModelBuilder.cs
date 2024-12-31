@@ -6,9 +6,9 @@ using MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
 namespace MPhotoBooth.Unit.Tests.Application.ViewModels.Builders;
 public class FaceSwapGroupTemplatesViewModelBuilder
 {
-    private readonly Mock<IMessageBoxService> MessageBoxService = new();
     private readonly Mock<IWindowService> WindowService = new();
-    private readonly Mock<IFaceSwapTemplateFileManager> FaceSwapTemplateFileService = new();
+    public readonly Mock<IMessageBoxService> MessageBoxService = new();
+    public readonly Mock<IFaceSwapTemplateFileManager> FaceSwapTemplateFileService = new();
 
     public FaceSwapGroupTemplatesViewModel Build(IDatabaseContext databaseContext) => new(databaseContext, MessageBoxService.Object, WindowService.Object,
         FaceSwapTemplateFileService.Object);
@@ -22,6 +22,12 @@ public class FaceSwapGroupTemplatesViewModelBuilder
     internal FaceSwapGroupTemplatesViewModelBuilder WithGroupName(string groupName)
     {
         MessageBoxService.Setup(x => x.ShowInput(UI.addGroup, UI.name, It.IsAny<IMainWindow>())).ReturnsAsync(groupName);
+        return this;
+    }
+
+    internal FaceSwapGroupTemplatesViewModelBuilder WithDeleteTemplateConfirmation(bool confirmed)
+    {
+        MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteGroup, UI.deleteGroupDesc, It.IsAny<IMainWindow>())).ReturnsAsync(confirmed);
         return this;
     }
 }
