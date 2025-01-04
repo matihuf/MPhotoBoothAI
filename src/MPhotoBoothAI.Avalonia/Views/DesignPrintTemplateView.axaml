@@ -117,6 +117,7 @@
                 </ListBox>
             </Grid>
             <control:DesignLayoutControl
+                MinWidth="600"
                 ButtonHeight="60"
                 ButtonWidth="150"
                 CommandParameter="{StaticResource stripe}"
@@ -126,6 +127,7 @@
                 PhotoImages="{Binding PhotoImages[Stripe]}"
                 SizeRatio="{StaticResource stripeRatio}" />
             <control:DesignLayoutControl
+                MinWidth="600"
                 ButtonHeight="60"
                 ButtonWidth="150"
                 CommandParameter="{StaticResource postcard}"

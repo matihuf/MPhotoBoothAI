@@ -249,4 +249,13 @@
   <data name="postcardFormat" xml:space="preserve">
     <value>Postcard</value>
   </data>
+  <data name="clone" xml:space="preserve">
+    <value>Clone</value>
+  </data>
+  <data name="addFrame" xml:space="preserve">
+    <value>Add frame</value>
+  </data>
+  <data name="openFile" xml:space="preserve">
+    <value>Open File</value>
+  </data>
 </root>

@@ -3,16 +3,20 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using MPhotoBoothAI.Application;
+using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
+using MPhotoBoothAI.Avalonia.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Key = Avalonia.Input.Key;
 
@@ -24,13 +28,13 @@ public partial class DesignLayoutControl : UserControl
 
     private const double StartAngle = 0;
 
+    private double _mainRatio = 1;
+
     private Random _rand = new Random();
 
     private bool _isDraged;
 
-    private Point _originTranslateTransform;
-
-    private Point _startDragPosition;
+    private Point _startDragOffset;
 
     private bool _resizeModifier;
 
@@ -41,6 +45,8 @@ public partial class DesignLayoutControl : UserControl
     private readonly Point _startPivot = new Point(0, 0);
 
     private string[] _imageExtensions = [".tif", ".tiff", ".bmp", ".jpg", ".jpeg", ".png"];
+
+    private IFilePickerService _filesPicker;
 
     public static readonly StyledProperty<double> CanvasWidthProperty =
         AvaloniaProperty.Register<DesignLayoutControl, double>(nameof(CanvasWidth));
@@ -153,6 +159,15 @@ public partial class DesignLayoutControl : UserControl
         set => SetValue(RemovePhotoCommandProperty, value);
     }
 
+    public static readonly StyledProperty<ICommand> AddFrameCommandProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(AddFrameCommand));
+
+    public ICommand AddFrameCommand
+    {
+        get => this.GetValue(AddFrameCommandProperty);
+        set => SetValue(AddFrameCommandProperty, value);
+    }
+
     public IList<LayoutImageEntity> PhotoImages
     {
         get => this.GetValue(PhotoImagesProperty);
@@ -174,11 +189,13 @@ public partial class DesignLayoutControl : UserControl
         SwitchLayerCommand = new RelayCommand<bool>(SwitchLayers);
         AddPhotoCommand = new RelayCommand(AddPhoto);
         RemovePhotoCommand = new RelayCommand(RemovePhoto);
+        AddFrameCommand = new RelayCommand(async () => await AddFrame());
         canvasRoot.SizeChanged += PhotoCanvas_SizeChanged;
         this.GetObservable(LayoutBackgroundPathProperty).Subscribe(path =>
         {
             LoadBackgroundImage(path);
         });
+        _filesPicker = new FilePickerService();
     }
 
     private void ModifierPressed(object? sender, KeyEventArgs e)
@@ -207,12 +224,30 @@ public partial class DesignLayoutControl : UserControl
 
     private void PhotoCanvas_SizeChanged(object? sender, SizeChangedEventArgs e)
     {
-        SetHeight(e.NewSize.Width);
+        var width = e.NewSize.Width;
+        var ratio = width / e.PreviousSize.Width;
+        _mainRatio = width / Consts.Sizes.BasicPrintWidth;
+        SetHeight(width);
+        ResizeReposiztionChildren(ratio, photoCanvas);
+        ResizeReposiztionChildren(ratio, frameCanvas);
+    }
+
+    private void ResizeReposiztionChildren(double ratio, Canvas canvas)
+    {
+        foreach (Grid photoGrid in canvas.Children)
+        {
+            Control control = photoGrid.Children[0];
+            control.Width *= ratio;
+            control.Height *= ratio;
+            Canvas.SetLeft(photoGrid, Canvas.GetLeft(photoGrid) * ratio);
+            Canvas.SetTop(photoGrid, Canvas.GetTop(photoGrid) * ratio);
+        }
     }
 
     private void LoadedControl(object? sender, RoutedEventArgs e)
     {
         var width = canvasRoot.Bounds.Width;
+        _mainRatio = width / Consts.Sizes.BasicPrintWidth;
         SetHeight(width);
     }
 
@@ -241,78 +276,85 @@ public partial class DesignLayoutControl : UserControl
         canvasBackground.Source = new Bitmap(path);
     }
 
+    private async Task AddFrame()
+    {
+        var file = await _filesPicker.PickFilePath(FileTypes.AllImages);
+        LoadImageFromPath(new Point(50, 50), file);
+    }
+
     private void Drop(object? sender, DragEventArgs e)
     {
-        foreach (var file in e.Data.GetFiles())
+        var files = e.Data.GetFiles();
+        if (files != null)
         {
-            var ratio = photoCanvas.Width / Consts.Sizes.BasicPrintWidth;
-            var path = file.Path.LocalPath;
-            var point = e.GetPosition(this);
-            var extension = Path.GetExtension(path).ToLower();
-            if (_imageExtensions.Contains(extension))
+            foreach (var file in files)
             {
-                var bitmap = new Bitmap(path);
-                var image = new Image()
-                {
-                    Source = bitmap,
-                    Width = bitmap.Size.Width * ratio,
-                    Height = bitmap.Size.Height * ratio,
-                    RenderTransform = new RotateTransform(StartAngle, _startPivot.X, _startPivot.Y),
-                };
-                var context = new ContextMenu()
-                {
-                    Background = Brushes.DarkGray,
-                    BorderBrush = Brushes.Transparent,
-                    Width = 200,
-                    Height = 200,
-                };
-                var items = new List<MenuItem>
-                {
-                    new MenuItem { Header = "Usuñ", Foreground= Brushes.White}
-                };
-
-                context.ItemsSource = items;
-                image.ContextMenu = context;
-
-                CreateItemOnLayer(image, frameCanvas, point);
+                LoadImageFromPath(e.GetPosition(this), file.Path.LocalPath);
             }
+        }
+    }
+
+    private void LoadImageFromPath(Point position, string path)
+    {
+        var ratio = photoCanvas.Width / Consts.Sizes.BasicPrintWidth;
+        var extension = Path.GetExtension(path).ToLower();
+        if (_imageExtensions.Contains(extension))
+        {
+            var bitmap = new Bitmap(path);
+            Image image = BuildImage(ratio, bitmap);
+            AddItemOnLayer(image, frameCanvas, position);
         }
     }
 
     private void AddPhoto()
     {
-        var gridRect = GetImageGrid();
-        CreateItemOnLayer(gridRect, photoCanvas, new Point(gridRect.Height / 2, gridRect.Width / 2), true);
+        var gridRect = BuildImageGrid();
+        AddItemOnLayer(gridRect, photoCanvas, new Point(gridRect.Height / 2, gridRect.Width / 2), true);
     }
 
-    private void CreateItemOnLayer(Control control, Canvas canvas, Point position, bool addIndex = false)
+    private void AddItemOnLayer(Control control, Canvas canvas, Point position, bool addIndex = false)
     {
         var index = (canvas.Children.Count + 1).ToString();
-        var imageRoot = new Grid() { Width = 1, Height = 1, RenderTransform = new TranslateTransform() };
+        var imageRoot = new Grid() { Width = 0, Height = 0 };
         Canvas.SetTop(imageRoot, position.Y);
         Canvas.SetLeft(imageRoot, position.X);
         RegisterEvents(control);
         if (control is Grid grid && addIndex)
         {
-            var indexText = GetIndexText(index);
+            var indexText = BuildIndexText(index);
             grid.Children.Add(indexText);
         }
         imageRoot.Children.Add(control);
         canvas.Children.Add(imageRoot);
     }
 
-    private Grid GetImageGrid()
+    private ContextMenu BuildContextMenu()
     {
-        return new Grid()
+        var clone = new MenuItem() { Header = Application.Assets.UI.clone };
+        var remove = new MenuItem() { Header = Application.Assets.UI.remove };
+        clone.Click += CloneItem;
+        remove.Click += RemoveItem;
+        return new ContextMenu()
         {
-            Width = Consts.Sizes.Height * StartScale * (photoCanvas.Width / Consts.Sizes.BasicPrintWidth),
-            Height = Consts.Sizes.Width * StartScale * (photoCanvas.Width / Consts.Sizes.BasicPrintWidth),
-            RenderTransform = new RotateTransform(StartAngle, _startPivot.X, _startPivot.Y),
-            Background = RandomColor(),
+            ItemsSource = new List<MenuItem>
+            {
+                clone, remove
+            }
         };
     }
 
-    private static TextBlock GetIndexText(string index)
+    private Grid BuildImageGrid()
+    {
+        return new Grid()
+        {
+            Width = Consts.Sizes.PhotoHeight * StartScale * _mainRatio,
+            Height = Consts.Sizes.PhotoWidth * StartScale * _mainRatio,
+            RenderTransform = new RotateTransform(StartAngle, _startPivot.X, _startPivot.Y),
+            Background = RandomColor()
+        };
+    }
+
+    private static TextBlock BuildIndexText(string index)
     {
         return new TextBlock()
         {
@@ -324,13 +366,65 @@ public partial class DesignLayoutControl : UserControl
         };
     }
 
+    private Image BuildImage(double ratio, Bitmap bitmap)
+    {
+        return new Image()
+        {
+            Source = bitmap,
+            Width = bitmap.Size.Width * ratio,
+            Height = bitmap.Size.Height * ratio,
+            RenderTransform = new RotateTransform(StartAngle, _startPivot.X, _startPivot.Y),
+            ClipToBounds = false,
+            ContextMenu = BuildContextMenu()
+        };
+    }
+
+    private void RemoveItem(object? sender, RoutedEventArgs e)
+    {
+        if (sender is MenuItem menuItem)
+        {
+            menuItem.Click -= RemoveItem;
+            var contextMenu = menuItem.GetLogicalParent<ContextMenu>();
+            if (contextMenu != null && contextMenu.Items[0] is MenuItem clone)
+            {
+                clone.Click -= CloneItem;
+                if (contextMenu.Parent?.Parent?.Parent is Grid rootGrid)
+                {
+                    RemoveItemFromLayer(rootGrid, frameCanvas);
+                }
+            }
+        }
+    }
+
+    private void CloneItem(object? sender, RoutedEventArgs e)
+    {
+        if (sender is MenuItem menuItem)
+        {
+            var contextMenu = menuItem.GetLogicalParent<ContextMenu>();
+            if (contextMenu != null && contextMenu.Parent?.Parent is Image image && image.Parent is Grid rootGrid && image.Source is Bitmap bitmap)
+            {
+                var ratio = image.Width / image.Source.Size.Width;
+                var cloneImage = BuildImage(ratio, bitmap);
+                Point position = new(Canvas.GetLeft(rootGrid) + 50, Canvas.GetTop(rootGrid) + 50);
+                AddItemOnLayer(cloneImage, frameCanvas, position);
+            }
+        }
+    }
+
     private void RemovePhoto()
     {
-        if (photoCanvas.Children.Count > 0)
+        if (photoCanvas.Children.Count > 0 && photoCanvas.Children[^1] is Grid item)
         {
-            var lastChild = photoCanvas.Children[^1] as Grid;
-            UnregisterEvents(lastChild.Children[0]);
-            photoCanvas.Children.Remove(photoCanvas.Children[^1]);
+            RemoveItemFromLayer(item, photoCanvas);
+        }
+    }
+
+    private void RemoveItemFromLayer(Control item, Canvas layer)
+    {
+        if (layer.Children.Contains(item))
+        {
+            UnregisterEvents(item);
+            layer.Children.Remove(item);
         }
     }
 
@@ -352,12 +446,12 @@ public partial class DesignLayoutControl : UserControl
 
     private void StartMoveControl(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is Control control
-            && control.Parent is Control parentControl
-            && parentControl.RenderTransform is TranslateTransform translate)
+        if (e.GetCurrentPoint(null).Properties.PointerUpdateKind != PointerUpdateKind.RightButtonPressed
+            && sender is Control control
+            && control.Parent is Control parentControl)
         {
-            _startDragPosition = e.GetPosition(this);
-            _originTranslateTransform = new Point(translate.X, translate.Y);
+            var positionOnCanvas = e.GetPosition(photoCanvas);
+            _startDragOffset = new Point(Canvas.GetLeft(parentControl) - positionOnCanvas.X, Canvas.GetTop(parentControl) - positionOnCanvas.Y);
             _isDraged = true;
         }
     }
@@ -365,12 +459,11 @@ public partial class DesignLayoutControl : UserControl
     private void MoveControl(object? sender, PointerEventArgs e)
     {
         if (_isDraged && sender is Control control
-            && control.Parent is Control parentControl
-            && parentControl.RenderTransform is TranslateTransform translate)
+            && control.Parent is Control parentControl)
         {
-            var currentPosition = e.GetPosition(this);
-            translate.X = _originTranslateTransform.X + (currentPosition.X - _startDragPosition.X);
-            translate.Y = _originTranslateTransform.Y + (currentPosition.Y - _startDragPosition.Y);
+            var currentPosition = e.GetPosition(photoCanvas);
+            Canvas.SetTop(parentControl, currentPosition.Y + _startDragOffset.Y);
+            Canvas.SetLeft(parentControl, currentPosition.X + _startDragOffset.X);
         }
     }
 
@@ -386,20 +479,19 @@ public partial class DesignLayoutControl : UserControl
             var delta = e.Delta.Y;
             if (_resizeModifier)
             {
-                double width = Consts.Sizes.Height;
-                double height = Consts.Sizes.Width;
-                if (control is Image image)
+                double width = Consts.Sizes.PhotoHeight;
+                double height = Consts.Sizes.PhotoWidth;
+                if (control is Image image && image.Source != null)
                 {
                     width = image.Source.Size.Width;
                     height = image.Source.Size.Height;
                 }
-                var canvasToOriginalSizeRatio = photoCanvas.Width / Consts.Sizes.BasicPrintWidth;
-                var currentScale = control.Width / (width * canvasToOriginalSizeRatio);
+                var currentScale = control.Width / (width * _mainRatio);
                 var newScale = (currentScale - (delta / _scaleDividor * (_resizeMultiplier ? 5 : 1)));
                 if (newScale > 0)
                 {
-                    control.Width = width * canvasToOriginalSizeRatio * newScale;
-                    control.Height = height * canvasToOriginalSizeRatio * newScale;
+                    control.Width = width * _mainRatio * newScale;
+                    control.Height = height * _mainRatio * newScale;
                 }
             }
             else

@@ -249,4 +249,13 @@
   <data name="postcardFormat" xml:space="preserve">
     <value>Pocztówka</value>
   </data>
+  <data name="clone" xml:space="preserve">
+    <value>Powiel</value>
+  </data>
+  <data name="addFrame" xml:space="preserve">
+    <value>Dodaj ramkę</value>
+  </data>
+  <data name="openFile" xml:space="preserve">
+    <value>Otwórz plik</value>
+  </data>
 </root>

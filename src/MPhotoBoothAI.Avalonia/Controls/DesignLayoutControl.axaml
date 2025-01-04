@@ -22,7 +22,7 @@
             <Setter Property="Margin" Value="0 0 10 10" />
             <Setter Property="CommandParameter" Value="{Binding CommandParameter, ElementName=root}" />
         </Style>
-        <Style Selector="Border">
+        <Style Selector="Border.LayerButton">
             <Setter Property="Background" Value="{StaticResource ActiveColor}" />
             <Setter Property="Width" Value="15" />
             <Setter Property="Height" Value="15" />
@@ -34,6 +34,31 @@
         <Style Selector="Canvas">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="ClipToBounds" Value="True" />
+        </Style>
+        <Style Selector="ContextMenu">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Height" Value="90" />
+            <Setter Property="Width" Value="150" />
+            <Setter Property="Background" Value="DarkGray" />
+            <Setter Property="CornerRadius" Value="10" />
+        </Style>
+        <Style Selector="MenuItem">
+            <Setter Property="Width" Value="150" />
+            <Setter Property="Height" Value="{StaticResource TouchItemHeight}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Padding" Value="20 0 0 0" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="MenuItem:pointerover">
+            <Setter Property="Background" Value="#333333" />
+        </Style>
+        <Style Selector="MenuItem:pressed">
+            <Setter Property="Background" Value="#555555" />
         </Style>
     </UserControl.Styles>
     <UserControl.Resources>
@@ -75,8 +100,11 @@
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Bottom" Text="{x:Static assets:UI.photoLayer}" />
-                        <Border Background="Transparent">
-                            <Border Margin="0" IsVisible="{Binding ActiveLayerSwitch, ElementName=root}" />
+                        <Border Background="Transparent" Classes="LayerButton">
+                            <Border
+                                Margin="0"
+                                Classes="LayerButton"
+                                IsVisible="{Binding ActiveLayerSwitch, ElementName=root}" />
                         </Border>
                     </StackPanel>
                 </Button.Content>
@@ -85,8 +113,11 @@
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Text="{x:Static assets:UI.frameLayer}" />
-                        <Border Background="Transparent">
-                            <Border Margin="0" IsVisible="{Binding !ActiveLayerSwitch, ElementName=root}" />
+                        <Border Background="Transparent" Classes="LayerButton">
+                            <Border
+                                Margin="0"
+                                Classes="LayerButton"
+                                IsVisible="{Binding !ActiveLayerSwitch, ElementName=root}" />
                         </Border>
                     </StackPanel>
                 </Button.Content>
@@ -99,6 +130,10 @@
                 Command="{Binding RemovePhotoCommand, ElementName=root}"
                 Content="{x:Static assets:UI.removePhoto}"
                 IsEnabled="{Binding ActiveLayerSwitch, ElementName=root}" />
+            <Button
+                Command="{Binding AddFrameCommand, ElementName=root}"
+                Content="{x:Static assets:UI.addFrame}"
+                IsEnabled="{Binding !ActiveLayerSwitch, ElementName=root}" />
             <Button Content="{x:Static assets:UI.saveLayout}" />
             <Button Content="{x:Static assets:UI.clearLayout}" />
 

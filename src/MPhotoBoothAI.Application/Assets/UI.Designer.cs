@@ -79,6 +79,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dodaj ramkę.
+        /// </summary>
+        public static string addFrame {
+            get {
+                return ResourceManager.GetString("addFrame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dodaj grupę.
         /// </summary>
         public static string addGroup {
@@ -147,6 +156,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string clearLayout {
             get {
                 return ResourceManager.GetString("clearLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Powiel.
+        /// </summary>
+        public static string clone {
+            get {
+                return ResourceManager.GetString("clone", resourceCulture);
             }
         }
         
@@ -282,6 +300,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string no {
             get {
                 return ResourceManager.GetString("no", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Otwórz plik.
+        /// </summary>
+        public static string openFile {
+            get {
+                return ResourceManager.GetString("openFile", resourceCulture);
             }
         }
         

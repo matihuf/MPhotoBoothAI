@@ -69,7 +69,7 @@ public class FilePickerService : IFilePickerService
         }
         var files = await provider.OpenFilePickerAsync(new FilePickerOpenOptions()
         {
-            Title = "Open File",
+            Title = Application.Assets.UI.openFile,
             AllowMultiple = false,
             FileTypeFilter = filters
         });

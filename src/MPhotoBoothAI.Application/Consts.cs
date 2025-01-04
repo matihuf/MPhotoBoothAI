@@ -14,8 +14,8 @@ public static class Consts
 
     public static class Sizes
     {
-        public const int Width = 3000;
-        public const int Height = 2000;
+        public const int PhotoWidth = 3000;
+        public const int PhotoHeight = 2000;
         public const int BasicPrintWidth = 3000;
     }
 
