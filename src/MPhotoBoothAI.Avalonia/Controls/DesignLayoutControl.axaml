@@ -73,10 +73,11 @@
                 BorderThickness="0"
                 CornerRadius="0">
                 <TextBlock
-                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="{StaticResource CanvasFontSize}"
-                    Text="{x:Static assets:UI.designCanvasText}" />
+					TextAlignment="Center"
+                    Text="{x:Static assets:UI.designCanvasText}"
+                    TextWrapping="Wrap" />
             </Border>
             <Image
                 Name="canvasBackground"
@@ -136,7 +137,6 @@
                 IsEnabled="{Binding !ActiveLayerSwitch, ElementName=root}" />
             <Button Content="{x:Static assets:UI.saveLayout}" />
             <Button Content="{x:Static assets:UI.clearLayout}" />
-
         </WrapPanel>
     </StackPanel>
 </UserControl>

@@ -11,6 +11,7 @@ using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
 using MPhotoBoothAI.Avalonia.Services;
+using MPhotoBoothAI.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,8 @@ public partial class DesignLayoutControl : UserControl
     private const double StartScale = 0.25;
 
     private const double StartAngle = 0;
+
+    private const double ConstImageRotation = 90;
 
     private double _mainRatio = 1;
 
@@ -147,8 +150,8 @@ public partial class DesignLayoutControl : UserControl
         set => SetValue(AddPhotoCommandProperty, value);
     }
 
-    public static readonly StyledProperty<IList<LayoutImageEntity>> PhotoImagesProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, IList<LayoutImageEntity>>(nameof(PhotoImages));
+    public static readonly StyledProperty<IList<PhotoLayoutDataEntity>> PhotoImagesProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, IList<PhotoLayoutDataEntity>>(nameof(PhotoImages));
 
     public static readonly StyledProperty<ICommand> RemovePhotoCommandProperty =
         AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(RemovePhotoCommand));
@@ -168,16 +171,34 @@ public partial class DesignLayoutControl : UserControl
         set => SetValue(AddFrameCommandProperty, value);
     }
 
-    public IList<LayoutImageEntity> PhotoImages
+    public static readonly StyledProperty<ICommand> SaveLayoutCommandProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(SaveLayoutCommand), default);
+
+    public ICommand SaveLayoutCommand
+    {
+        get => this.GetValue(SaveLayoutCommandProperty);
+        set => SetValue(SaveLayoutCommandProperty, value);
+    }
+
+    public static readonly StyledProperty<ICommand> ResetLayoutCommandProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(ResetLayoutCommand), default);
+
+    public ICommand ResetLayoutCommand
+    {
+        get => this.GetValue(ResetLayoutCommandProperty);
+        set => SetValue(ResetLayoutCommandProperty, value);
+    }
+
+    public IList<PhotoLayoutDataEntity> PhotoImages
     {
         get => this.GetValue(PhotoImagesProperty);
         set => SetValue(PhotoImagesProperty, value);
     }
 
-    public static readonly StyledProperty<IList<OverlayLayoutImage>> OverlayImagesProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, IList<OverlayLayoutImage>>(nameof(OverlayImages));
+    public static readonly StyledProperty<IList<OverlayImageDataEnitity>> OverlayImagesProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, IList<OverlayImageDataEnitity>>(nameof(OverlayImages));
 
-    public IList<OverlayLayoutImage> OverlayImages
+    public IList<OverlayImageDataEnitity> OverlayImages
     {
         get => this.GetValue(OverlayImagesProperty);
         set => SetValue(OverlayImagesProperty, value);
@@ -222,6 +243,13 @@ public partial class DesignLayoutControl : UserControl
         }
     }
 
+    private void LoadedControl(object? sender, RoutedEventArgs e)
+    {
+        var width = canvasRoot.Bounds.Width;
+        _mainRatio = width / Consts.Sizes.BasicPrintWidth;
+        SetHeight(width);
+    }
+
     private void PhotoCanvas_SizeChanged(object? sender, SizeChangedEventArgs e)
     {
         var width = e.NewSize.Width;
@@ -242,13 +270,6 @@ public partial class DesignLayoutControl : UserControl
             Canvas.SetLeft(photoGrid, Canvas.GetLeft(photoGrid) * ratio);
             Canvas.SetTop(photoGrid, Canvas.GetTop(photoGrid) * ratio);
         }
-    }
-
-    private void LoadedControl(object? sender, RoutedEventArgs e)
-    {
-        var width = canvasRoot.Bounds.Width;
-        _mainRatio = width / Consts.Sizes.BasicPrintWidth;
-        SetHeight(width);
     }
 
     private void SetHeight(double width)
@@ -309,7 +330,16 @@ public partial class DesignLayoutControl : UserControl
     private void AddPhoto()
     {
         var gridRect = BuildImageGrid();
-        AddItemOnLayer(gridRect, photoCanvas, new Point(gridRect.Height / 2, gridRect.Width / 2), true);
+        var position = new Point(gridRect.Width / 2, gridRect.Height / 2);
+        var photo = new PhotoLayoutDataEntity
+        {
+            Left = position.X,
+            Top = position.Y,
+            Angle = -ConstImageRotation,
+            Scale = gridRect.Height / Consts.Sizes.PhotoWidth / StartScale
+        };
+        PhotoImages.Add(photo);
+        AddItemOnLayer(gridRect, photoCanvas, position, true);
     }
 
     private void AddItemOnLayer(Control control, Canvas canvas, Point position, bool addIndex = false)

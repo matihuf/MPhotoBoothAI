@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
+using MPhotoBoothAI.Models.Entities;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 public partial class DesignPrintTemplateViewModel : ViewModelBase
@@ -21,10 +22,10 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     private readonly Dictionary<FormatTypes, string> _backgroundDir = [];
 
     [ObservableProperty]
-    private Dictionary<FormatTypes, List<LayoutImageEntity>> _photoImages = [];
+    private Dictionary<FormatTypes, List<PhotoLayoutDataEntity>> _photoImages = [];
 
     [ObservableProperty]
-    private Dictionary<FormatTypes, List<OverlayLayoutImage>> _overlayImages = [];
+    private Dictionary<FormatTypes, List<OverlayImageDataEnitity>> _overlayImages = [];
 
     [ObservableProperty]
     private Dictionary<FormatTypes, BackgroundInfo> _formats = [];

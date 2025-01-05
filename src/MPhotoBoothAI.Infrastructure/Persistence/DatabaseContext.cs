@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Application.Models;
 using MPhotoBoothAI.Models.Entities;
 
 namespace MPhotoBoothAI.Infrastructure.Persistence;
@@ -10,6 +11,9 @@ public class DatabaseContext : DbContext, IDatabaseContext
     public DbSet<FaceSwapTemplateEntity> FaceSwapTemplates { get; set; }
 
     public DbSet<CameraSettingsEntity> CameraSettings { get; set; }
+
+    public DbSet<PhotoLayoutDataEntity> PhotosLayoutData { get; set; }
+    public DbSet<OverlayImageDataEnitity> OverlayImagesData { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
