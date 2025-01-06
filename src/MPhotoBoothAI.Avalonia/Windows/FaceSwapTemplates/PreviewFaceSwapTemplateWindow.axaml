@@ -17,7 +17,6 @@
 
   <Window.Resources>
     <con:MatConverter x:Key="matConverter"/>
-    <con:PathBitmapConverter x:Key="pathBitmapConverter"/>
   </Window.Resources>
 
   <Window.Styles>
@@ -56,7 +55,7 @@
             </Style>
           </Border.Styles>
           <Panel>
-            <Image Source="{Binding Parameters.FilePath, Converter={StaticResource pathBitmapConverter}}" Opacity="{Binding TemplateImageOpacity}" />
+            <Image Source="{Binding Preview, Converter={StaticResource matConverter}}" Opacity="{Binding TemplateImageOpacity}" />
             <Image Source="{Binding Image, Converter={StaticResource matConverter}}" IsVisible="{Binding Image, Converter={x:Static ObjectConverters.IsNotNull}}"/>
             <fa:ProgressRing IsIndeterminate="{Binding IsProgressActive}" IsVisible="{Binding IsProgressActive}" BorderThickness="10" Width="100" Height="100" />
           </Panel>

@@ -7,40 +7,6 @@ namespace MPhotoBoothAI.Avalonia.Tests.Extensions
 {
     public class ImageExtensionsTests
     {
-        [Fact]
-        public void ToSKBitmap_ShouldReturnNull_WhenStreamIsNull()
-        {
-            // Arrange
-            Stream? nullStream = null;
-
-            // Act
-            var result = nullStream.ToSKBitmap();
-
-            // Assert
-            Assert.Null(result);
-        }
-
-        [Fact]
-        public void ToSKBitmap_ShouldReturnSKBitmap_WhenStreamContainsImageData()
-        {
-            // Arrange
-            using var stream = new MemoryStream();
-            using (var skBitmap = new SKBitmap(100, 100))
-            {
-                skBitmap.Encode(stream, SKEncodedImageFormat.Png, 100);
-            }
-            stream.Seek(0, SeekOrigin.Begin);
-
-            // Act
-            var result = stream.ToSKBitmap();
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.IsType<SKBitmap>(result);
-            Assert.Equal(100, result.Width);
-            Assert.Equal(100, result.Height);
-        }
-
         [Theory]
         [InlineData(SKColorType.Bgra8888)]
         [InlineData(SKColorType.Rgba8888)]
@@ -52,7 +18,7 @@ namespace MPhotoBoothAI.Avalonia.Tests.Extensions
             using var bitmap = new SKBitmap(new SKImageInfo(100, 100, colorType));
 
             // Act
-            var mat = bitmap.ToMat();
+            using var mat = bitmap.ToMat();
 
             // Assert
             Assert.NotNull(mat);
@@ -78,7 +44,7 @@ namespace MPhotoBoothAI.Avalonia.Tests.Extensions
             using var mat = new Mat(100, 100, DepthType.Cv8U, 4);
 
             // Act
-            var skBitmap = mat.ToSKBitmap();
+            using var skBitmap = mat.ToSKBitmap();
 
             // Assert
             Assert.NotNull(skBitmap);
@@ -95,7 +61,7 @@ namespace MPhotoBoothAI.Avalonia.Tests.Extensions
             using var mat = new Mat(100, 100, DepthType.Cv8U, 3);
 
             // Act
-            var skBitmap = mat.ToSKBitmap();
+            using var skBitmap = mat.ToSKBitmap();
 
             // Assert
             Assert.NotNull(skBitmap);

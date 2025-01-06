@@ -1,16 +1,15 @@
 ﻿using Emgu.CV;
-using Emgu.CV.Structure;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Models.Entities;
 using MPhotoBoothAI.Models.Enums;
 using MPhotoBoothAI.Models.FaceSwaps;
 
 namespace MPhotoBoothAI.Application.Managers;
-public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IFaceDetectionService faceDetectionService,
+public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IFaceDetectionManager faceDetectionManager,
     IFaceSwapTemplateFileManager faceSwapTemplateFileManager, IDatabaseContext databaseContext) : IAddFaceSwapTemplateManager
 {
     private readonly IFilePickerService _filePickerService = filePickerService;
-    private readonly IFaceDetectionService _faceDetectionService = faceDetectionService;
+    private readonly IFaceDetectionManager _faceDetectionManager = faceDetectionManager;
     private readonly IFaceSwapTemplateFileManager _faceSwapTemplateFileManager = faceSwapTemplateFileManager;
     private readonly IDatabaseContext _databaseContext = databaseContext;
 
@@ -21,21 +20,9 @@ public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IF
         {
             return null;
         }
-        using var image = CvInvoke.Imread(filePath);
-        int faces = DetectFaces(image);
-        return new FaceSwapTemplate(filePath, faces);
-    }
-
-    private int DetectFaces(Mat frame)
-    {
-        int faceIndex = 0;
-        foreach (var face in _faceDetectionService.Detect(frame, 0.8f, 0.5f))
-        {
-            CvInvoke.Rectangle(frame, face.Box, new MCvScalar(0, 0, 255));
-            faceIndex++;
-            face.Dispose();
-        }
-        return faceIndex;
+        var image = CvInvoke.Imread(filePath);
+        int faces = _faceDetectionManager.Mark(image, 0.8f, 0.5f);
+        return new FaceSwapTemplate(filePath, faces, image);
     }
 
     public int SaveTemplate(int groupId, FaceSwapTemplate faceSwapTemplate)

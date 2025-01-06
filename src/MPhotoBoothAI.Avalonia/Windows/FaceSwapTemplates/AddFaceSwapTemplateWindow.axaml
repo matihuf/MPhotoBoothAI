@@ -21,7 +21,6 @@
 
   <Window.Resources>
     <con:MatConverter x:Key="matConverter"/>
-    <con:PathBitmapConverter x:Key="pathBitmapConverter"/>
   </Window.Resources>
 
   <Window.Styles>
@@ -60,7 +59,7 @@
             </Style>
           </Border.Styles>
           <Panel>
-            <Image Source="{Binding FaceSwapTemplate.FilePath, Converter={StaticResource pathBitmapConverter}}" Opacity="{Binding TemplateImageOpacity}" />
+            <Image Source="{Binding FaceSwapTemplate.MarkedFaces, Converter={StaticResource matConverter}}" Opacity="{Binding TemplateImageOpacity}" />
             <Image Source="{Binding Image, Converter={StaticResource matConverter}}" IsVisible="{Binding Image, Converter={x:Static ObjectConverters.IsNotNull}}"/>
             <TextBlock Text="Szablon" IsVisible="{Binding FaceSwapTemplate, Converter={x:Static ObjectConverters.IsNull}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <fa:ProgressRing IsIndeterminate="{Binding IsProgressActive}" IsVisible="{Binding IsProgressActive}" BorderThickness="10" Width="100" Height="100" />

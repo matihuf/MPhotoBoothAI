@@ -34,6 +34,7 @@ public partial class AddFaceSwapTemplateViewModel(IAddFaceSwapTemplateManager ad
         {
             ClearImage();
             IsFaceDetectionProgressActive = true;
+            FaceSwapTemplate?.Dispose();
             FaceSwapTemplate = null;
             Topmost = false;
             FaceSwapTemplate = await _addFaceSwapTemplateManager.PickTemplate();
@@ -70,5 +71,14 @@ public partial class AddFaceSwapTemplateViewModel(IAddFaceSwapTemplateManager ad
     {
         SaveButtonIsEnabled = newValue != null && newValue.Faces > 0;
         SwapButtonIsEnabled = SaveButtonIsEnabled && CameraFrame != null;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            FaceSwapTemplate?.Dispose();
+        }
     }
 }

@@ -55,6 +55,7 @@ public static class DependencyInjection
         services.AddSingleton<ICameraManager, CameraManager>();
         services.AddTransient<IAddFaceSwapTemplateManager, AddFaceSwapTemplateManager>();
         services.AddTransient<IFaceSwapTemplateFileManager, FaceSwapTemplateFileManager>();
+        services.AddTransient<IFaceDetectionManager, FaceDetectionManager>();
     }
 
     private static void AddAiModels(IServiceCollection services)
