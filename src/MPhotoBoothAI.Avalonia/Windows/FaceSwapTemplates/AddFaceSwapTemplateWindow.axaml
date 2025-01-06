@@ -7,6 +7,7 @@
         xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
         x:Class="MPhotoBoothAI.Avalonia.Windows.FaceSwapTemplates.AddFaceSwapTemplateWindow"
         xmlns:vm="using:MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates"
+        xmlns:assets="using:MPhotoBoothAI.Application.Assets"
         x:DataType="vm:AddFaceSwapTemplateViewModel"
         xmlns:fa="using:FluentAvalonia.UI.Controls"
         Title="AddFaceSwapTemplateWindow"
@@ -61,7 +62,7 @@
           <Panel>
             <Image Source="{Binding FaceSwapTemplate.MarkedFaces, Converter={StaticResource matConverter}}" Opacity="{Binding TemplateImageOpacity}" />
             <Image Source="{Binding Image, Converter={StaticResource matConverter}}" IsVisible="{Binding Image, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-            <TextBlock Text="Szablon" IsVisible="{Binding FaceSwapTemplate, Converter={x:Static ObjectConverters.IsNull}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static assets:UI.template}" IsVisible="{Binding FaceSwapTemplate, Converter={x:Static ObjectConverters.IsNull}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <fa:ProgressRing IsIndeterminate="{Binding IsProgressActive}" IsVisible="{Binding IsProgressActive}" BorderThickness="10" Width="100" Height="100" />
           </Panel>
         </Border>
@@ -70,7 +71,7 @@
             <PathIcon Data="{StaticResource person_regular}" />
             <TextBlock Margin="10 0 0 0" Text="{Binding FaceSwapTemplate.Faces}" VerticalAlignment="Center" IsVisible="{Binding FaceSwapTemplate, Converter={x:Static ObjectConverters.IsNotNull}}"/>
           </StackPanel>
-          <Button Command="{Binding PickTemplateCommand}" Content="Pick" HorizontalAlignment="Center"/>
+          <Button Command="{Binding PickTemplateCommand}" Content="{x:Static assets:UI.pick}" HorizontalAlignment="Center"/>
         </Panel>
         <Border Grid.Column="1"  Grid.Row="0" CornerRadius="20">
           <Border.Styles>
@@ -81,14 +82,14 @@
           </Border.Styles>
           <Panel>
             <Image Source="{Binding CameraFrame, Converter={StaticResource matConverter}}" />
-            <TextBlock Text="Podlgąd z kamery" IsVisible="{Binding CameraFrame, Converter={x:Static ObjectConverters.IsNull}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static assets:UI.cameraPreview}" IsVisible="{Binding CameraFrame, Converter={x:Static ObjectConverters.IsNull}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Panel>
         </Border>
-        <Button Grid.Column="1" Grid.Row="1" Command="{Binding SwapCommand}" IsEnabled="{Binding SwapButtonIsEnabled}" Content="Swap" HorizontalAlignment="Center"/>
+        <Button Grid.Column="1" Grid.Row="1" Command="{Binding SwapCommand}" IsEnabled="{Binding SwapButtonIsEnabled}" Content="{x:Static assets:UI.swap}" HorizontalAlignment="Center"/>
       </Grid>
       <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Spacing="10" Margin="10">
-        <Button Content="Save" Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" IsEnabled="{Binding SaveButtonIsEnabled}"/>
-        <Button Content="Close" Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <Button Content="{x:Static assets:UI.save}" Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" IsEnabled="{Binding SaveButtonIsEnabled}"/>
+        <Button Content="{x:Static assets:UI.close}" Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
       </StackPanel>
     </Grid>
   </Border>

@@ -106,6 +106,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Podgląd z kamery.
+        /// </summary>
+        public static string cameraPreview {
+            get {
+                return ResourceManager.GetString("cameraPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aparat.
         /// </summary>
         public static string cameraSettings {
@@ -120,6 +129,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string cancel {
             get {
                 return ResourceManager.GetString("cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zamknij.
+        /// </summary>
+        public static string close {
+            get {
+                return ResourceManager.GetString("close", resourceCulture);
             }
         }
         
@@ -223,6 +241,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wybierz.
+        /// </summary>
+        public static string pick {
+            get {
+                return ResourceManager.GetString("pick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Polski.
         /// </summary>
         public static string pl_PL {
@@ -277,11 +304,29 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zamiana.
+        /// </summary>
+        public static string swap {
+            get {
+                return ResourceManager.GetString("swap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zrób zdjęcie.
         /// </summary>
         public static string takePhoto {
             get {
                 return ResourceManager.GetString("takePhoto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Szablon.
+        /// </summary>
+        public static string template {
+            get {
+                return ResourceManager.GetString("template", resourceCulture);
             }
         }
         

@@ -150,9 +150,6 @@
   <data name="edit" xml:space="preserve">
     <value>Edit</value>
   </data>
-  <data name="en-EN" xml:space="preserve">
-    <value>English</value>
-  </data>
   <data name="iso" xml:space="preserve">
     <value>Iso</value>
   </data>
@@ -200,5 +197,23 @@
   </data>
   <data name="yes" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="en-EN" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="template" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="pick" xml:space="preserve">
+    <value>Pick</value>
+  </data>
+  <data name="cameraPreview" xml:space="preserve">
+    <value>Camera preview</value>
+  </data>
+  <data name="swap" xml:space="preserve">
+    <value>Swap</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Close</value>
   </data>
 </root>
