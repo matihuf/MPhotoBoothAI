@@ -24,7 +24,7 @@ public partial class PreviewFaceSwapTemplateViewModel(IFaceMultiSwapManager face
             {
                 ClearPreview();
                 var frame = CvInvoke.Imread(_parameters.FilePath);
-                _faceDetectionManager.Mark(frame, 0.8f, 0.5f);
+                _faceDetectionManager.Mark(frame);
                 Preview = frame;
             }
             OnPropertyChanged(nameof(Parameters));

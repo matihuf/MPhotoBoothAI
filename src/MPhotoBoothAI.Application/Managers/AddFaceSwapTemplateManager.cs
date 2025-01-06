@@ -21,7 +21,7 @@ public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IF
             return null;
         }
         var image = CvInvoke.Imread(filePath);
-        int faces = _faceDetectionManager.Mark(image, 0.8f, 0.5f);
+        int faces = _faceDetectionManager.Mark(image);
         return new FaceSwapTemplate(filePath, faces, image);
     }
 

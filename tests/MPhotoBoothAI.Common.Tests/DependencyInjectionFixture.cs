@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using MPhotoBoothAI.Application.Interfaces;
@@ -12,8 +13,9 @@ public class DependencyInjectionFixture : IDisposable
 
     public DependencyInjectionFixture()
     {
+        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
         var serviceCollection = new ServiceCollection();
-        serviceCollection.Configure();
+        serviceCollection.Configure(configuration);
         serviceCollection.Replace(ServiceDescriptor.Singleton(s => new Mock<ICameraDevice>().Object));
         serviceCollection.Replace(ServiceDescriptor.Transient(s => new DatabaseContextBuilder().Build()));
         ServiceProvider = serviceCollection.BuildServiceProvider();

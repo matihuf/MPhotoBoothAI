@@ -4,15 +4,15 @@ using MPhotoBoothAI.Application.Models;
 
 namespace MPhotoBoothAI.Application.Managers;
 
-public class FaceAlignManager(IFaceDetectionService faceDetectionService, IFaceAlignService faceAlignService, IFaceGenderService faceGenderService) : IFaceAlignManager
+public class FaceAlignManager(IFaceDetectionManager faceDetectionManager, IFaceAlignService faceAlignService, IFaceGenderService faceGenderService) : IFaceAlignManager
 {
-    private readonly IFaceDetectionService _faceDetectionService = faceDetectionService;
+    private readonly IFaceDetectionManager _faceDetectionManager = faceDetectionManager;
     private readonly IFaceAlignService _faceAlignService = faceAlignService;
     private readonly IFaceGenderService _faceGenderService = faceGenderService;
 
     public FaceAlign? GetAlign(Mat frame)
     {
-        using var face = _faceDetectionService.Detect(frame, 0.8f, 0.5f).FirstOrDefault();
+        using var face = _faceDetectionManager.Detect(frame).FirstOrDefault();
         if (face == null)
         {
             return null;
@@ -22,7 +22,7 @@ public class FaceAlignManager(IFaceDetectionService faceDetectionService, IFaceA
 
     public IEnumerable<FaceAlignDetails> GetAligns(Mat frame)
     {
-        foreach (var face in _faceDetectionService.Detect(frame, 0.8f, 0.5f))
+        foreach (var face in _faceDetectionManager.Detect(frame))
         {
             var faceAlign = _faceAlignService.Align(frame, face.Landmarks);
             face.Dispose();
