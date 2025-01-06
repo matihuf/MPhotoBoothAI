@@ -61,7 +61,7 @@ public partial class FaceSwapGroupTemplatesViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteGroup(IMainWindow mainWindow)
     {
-        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteGroup, Assets.UI.deleteGroupDesc, mainWindow))
+        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteQuestion, Assets.UI.deleteGroupDesc, mainWindow))
         {
             _faceSwapTemplateFileManager.DeleteGroup(SelectedGroup.Id);
             Groups.Remove(SelectedGroup);
@@ -100,7 +100,7 @@ public partial class FaceSwapGroupTemplatesViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteTemplate((object MainWindow, object FaceSwapTemplateId) parameters)
     {
-        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteGroup, Assets.UI.deleteGroupDesc, (IMainWindow)parameters.MainWindow) &&
+        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteQuestion, Assets.UI.deleteTemplate, (IMainWindow)parameters.MainWindow) &&
             parameters.FaceSwapTemplateId is FaceSwapTemplateId faceSwapTemplateId)
         {
             _faceSwapTemplateFileManager.DeleteTemplate(SelectedGroup.Id, faceSwapTemplateId.Id);

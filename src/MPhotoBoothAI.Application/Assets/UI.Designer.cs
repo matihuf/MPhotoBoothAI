@@ -151,15 +151,6 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Usunąć grupę?.
-        /// </summary>
-        public static string deleteGroup {
-            get {
-                return ResourceManager.GetString("deleteGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Usunąć grupę i wszystkie szablony?.
         /// </summary>
         public static string deleteGroupDesc {
@@ -169,11 +160,38 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Usunąć?.
+        /// </summary>
+        public static string deleteQuestion {
+            get {
+                return ResourceManager.GetString("deleteQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usunąć szablon?.
+        /// </summary>
+        public static string deleteTemplate {
+            get {
+                return ResourceManager.GetString("deleteTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edytuj.
         /// </summary>
         public static string edit {
             get {
                 return ResourceManager.GetString("edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angielski.
+        /// </summary>
+        public static string en_EN {
+            get {
+                return ResourceManager.GetString("en-EN", resourceCulture);
             }
         }
         

@@ -15,7 +15,7 @@ public class FaceSwapGroupTemplatesViewModelBuilder
 
     internal FaceSwapGroupTemplatesViewModelBuilder WithDeleteGroupConfirmation(bool confirmed)
     {
-        MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteGroup, UI.deleteGroupDesc, It.IsAny<IMainWindow>())).ReturnsAsync(confirmed);
+        MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteQuestion, UI.deleteGroupDesc, It.IsAny<IMainWindow>())).ReturnsAsync(confirmed);
         return this;
     }
 
@@ -27,7 +27,7 @@ public class FaceSwapGroupTemplatesViewModelBuilder
 
     internal FaceSwapGroupTemplatesViewModelBuilder WithDeleteTemplateConfirmation(bool confirmed)
     {
-        MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteGroup, UI.deleteGroupDesc, It.IsAny<IMainWindow>())).ReturnsAsync(confirmed);
+        MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteQuestion, UI.deleteTemplate, It.IsAny<IMainWindow>())).ReturnsAsync(confirmed);
         return this;
     }
 

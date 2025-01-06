@@ -141,14 +141,17 @@
   <data name="delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="deleteGroup" xml:space="preserve">
-    <value>Delete Group?</value>
+  <data name="deleteQuestion" xml:space="preserve">
+    <value>Delete?</value>
   </data>
   <data name="deleteGroupDesc" xml:space="preserve">
     <value>Delete group and all templates?</value>
   </data>
   <data name="edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="en-US" xml:space="preserve">
+    <value>English</value>
   </data>
   <data name="iso" xml:space="preserve">
     <value>Iso</value>
@@ -215,5 +218,8 @@
   </data>
   <data name="close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="deleteTemplate" xml:space="preserve">
+    <value>Delete template?</value>
   </data>
 </root>
