@@ -166,7 +166,7 @@ public class FaceSwapTemplatesViewModelTests
         databaseContext.FaceSwapTemplateGroups.Add(group);
         databaseContext.FaceSwapTemplateGroups.Add(secondGroup);
         await databaseContext.SaveChangesAsync();
-        var viewModel = _builder.Build(databaseContext);
+        var viewModel = _builder.WithFullTemplateThumbnailPath("TestData/square.png").Build(databaseContext);
         //act
         viewModel.SelectedGroup = viewModel.Groups[index];
         //assert

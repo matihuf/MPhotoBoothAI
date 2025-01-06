@@ -30,4 +30,10 @@ public class FaceSwapGroupTemplatesViewModelBuilder
         MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteGroup, UI.deleteGroupDesc, It.IsAny<IMainWindow>())).ReturnsAsync(confirmed);
         return this;
     }
+
+    internal FaceSwapGroupTemplatesViewModelBuilder WithFullTemplateThumbnailPath(string path)
+    {
+        FaceSwapTemplateFileService.Setup(x => x.GetFullTemplateThumbnailPath(It.IsAny<int>(), It.IsAny<int>())).Returns(path);
+        return this;
+    }
 }
