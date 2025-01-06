@@ -4,7 +4,7 @@ using MPhotoBoothAI.Models.Entities;
 using MPhotoBoothAI.Models.Enums;
 using MPhotoBoothAI.Models.FaceSwaps;
 
-namespace MPhotoBoothAI.Application.Managers;
+namespace MPhotoBoothAI.Application.Managers.FaceSwapTemplates;
 public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IFaceDetectionManager faceDetectionManager,
     IFaceSwapTemplateFileManager faceSwapTemplateFileManager, IDatabaseContext databaseContext) : IAddFaceSwapTemplateManager
 {

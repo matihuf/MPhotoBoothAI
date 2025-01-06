@@ -2,7 +2,7 @@
 using Emgu.CV.CvEnum;
 using MPhotoBoothAI.Application.Interfaces;
 
-namespace MPhotoBoothAI.Infrastructure.Services;
+namespace MPhotoBoothAI.Application.Managers.FaceSwapTemplates;
 public class FaceSwapTemplateFileManager(IApplicationInfoService applicationInfoService, IResizeImageService resizeImageService) : IFaceSwapTemplateFileManager
 {
     private readonly IApplicationInfoService _applicationInfoService = applicationInfoService;
@@ -11,6 +11,8 @@ public class FaceSwapTemplateFileManager(IApplicationInfoService applicationInfo
     private readonly string _baseFolder = "Templates";
     private readonly string _thumbnailSuffix = "_thumbnail";
     private readonly string _imageExtension = ".jpg";
+    private readonly KeyValuePair<ImwriteFlags, int> _imageOptions = new(ImwriteFlags.JpegQuality, 100);
+    private readonly float _thumbnailSize = 0.5f;
 
     public void Save(int groupId, int templateId, string filePath)
     {
@@ -21,10 +23,10 @@ public class FaceSwapTemplateFileManager(IApplicationInfoService applicationInfo
         }
         string templatePath = Path.Combine(directoryPath, templateId.ToString());
         using var image = CvInvoke.Imread(filePath);
-        CvInvoke.Imwrite($"{templatePath}{_imageExtension}", image, new KeyValuePair<ImwriteFlags, int>(ImwriteFlags.JpegQuality, 100));
+        CvInvoke.Imwrite($"{templatePath}{_imageExtension}", image, _imageOptions);
 
-        using var thumbnail = _resizeImageService.GetThumbnail(image, 0.6f);
-        CvInvoke.Imwrite($"{templatePath}{_thumbnailSuffix}{_imageExtension}", thumbnail, new KeyValuePair<ImwriteFlags, int>(ImwriteFlags.JpegQuality, 100));
+        using var thumbnail = _resizeImageService.GetThumbnail(image, _thumbnailSize);
+        CvInvoke.Imwrite($"{templatePath}{_thumbnailSuffix}{_imageExtension}", thumbnail, _imageOptions);
     }
 
     public void DeleteGroup(int groupId)

@@ -1,7 +1,7 @@
 ﻿using Emgu.CV;
 using Moq;
 using MPhotoBoothAI.Application.Interfaces;
-using MPhotoBoothAI.Infrastructure.Services;
+using MPhotoBoothAI.Application.Managers.FaceSwapTemplates;
 
 namespace MPhotoBooth.Unit.Tests.Application.Managers.Builders;
 internal class FaceSwapTemplateFileManagerBuilder

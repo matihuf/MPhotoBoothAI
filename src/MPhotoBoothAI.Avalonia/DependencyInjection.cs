@@ -7,6 +7,7 @@ using Microsoft.ML.OnnxRuntime;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Managers;
+using MPhotoBoothAI.Application.Managers.FaceSwapTemplates;
 using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
 using MPhotoBoothAI.Avalonia.Navigation;
