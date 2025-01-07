@@ -16,7 +16,6 @@ using MPhotoBoothAI.Infrastructure.CameraDevices;
 using MPhotoBoothAI.Infrastructure.Persistence;
 using MPhotoBoothAI.Infrastructure.Services;
 using MPhotoBoothAI.Infrastructure.Services.Swap;
-using MPhotoBoothAI.Models.Configurations;
 using Serilog;
 using System.IO;
 using System.Reflection;
@@ -35,7 +34,6 @@ public static class DependencyInjection
         AddNavigation(services);
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
         AddDatabase(services);
-        AddConfigurations(services, configuration);
         return services;
     }
 
@@ -112,10 +110,5 @@ public static class DependencyInjection
     {
         services.AddSingleton<ICameraDevice, WebCameraDevice>();
         services.AddSingleton<ICameraDevice, CanonCameraDevice>();
-    }
-
-    private static void AddConfigurations(IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<FaceDetectionConfiguration>(configuration.GetSection(nameof(FaceDetectionConfiguration)));
     }
 }
