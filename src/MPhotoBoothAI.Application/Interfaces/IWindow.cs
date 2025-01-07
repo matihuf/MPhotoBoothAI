@@ -1,5 +1,5 @@
 ﻿namespace MPhotoBoothAI.Application.Interfaces;
-public interface IMainWindow
+public interface IWindow
 {
     bool IsEnabled { get; set; }
     void Close();

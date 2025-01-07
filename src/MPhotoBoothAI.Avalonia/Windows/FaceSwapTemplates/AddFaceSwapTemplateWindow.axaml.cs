@@ -3,7 +3,7 @@ using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Avalonia.Windows.FaceSwapTemplates;
 
-public partial class AddFaceSwapTemplateWindow : Window, IMainWindow
+public partial class AddFaceSwapTemplateWindow : Window, IWindow
 {
     public AddFaceSwapTemplateWindow()
     {

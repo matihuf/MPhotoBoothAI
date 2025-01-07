@@ -57,7 +57,7 @@ public partial class AddFaceSwapTemplateViewModel(IAddFaceSwapTemplateManager ad
     }
 
     [RelayCommand]
-    private void Save(IMainWindow mainWindow)
+    private void Save(IWindow mainWindow)
     {
         if (FaceSwapTemplate != null && Parameters != null)
         {

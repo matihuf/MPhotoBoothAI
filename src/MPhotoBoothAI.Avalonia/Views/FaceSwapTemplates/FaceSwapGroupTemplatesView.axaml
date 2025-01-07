@@ -120,7 +120,7 @@
             </StackPanel>
           </Grid>
           <Panel Grid.Row="2" Margin="0,10,0,0" IsEnabled="{Binding !IsGroupInEdit}">
-            <Button Command="{Binding AddTemplateCommand}" CommandParameter="{Binding $parent[Window]}">
+            <Button x:Name="addTemplateBtn" Command="{Binding AddTemplateCommand}" CommandParameter="{Binding $parent[Window]}">
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <PathIcon Data="{StaticResource add_circle_regular}" />
                 <TextBlock Text="{x:Static assets:UI.addTemplate}" />

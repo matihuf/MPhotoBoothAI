@@ -221,7 +221,7 @@ public class AddFaceSwapTemplateViewModelTests
         var viewModel = _builder.Build();
         viewModel.Parameters = new AddFaceSwapTemplateParameters(1);
         viewModel.FaceSwapTemplate = faceSwapTemplate;
-        var mainWindow = new Mock<IMainWindow>();
+        var mainWindow = new Mock<IWindow>();
         //act
         viewModel.SaveCommand.Execute(mainWindow.Object);
         //assert
@@ -237,7 +237,7 @@ public class AddFaceSwapTemplateViewModelTests
         var viewModel = _builder.WithSaveTemplate(templateId).Build();
         viewModel.Parameters = new AddFaceSwapTemplateParameters(1);
         viewModel.FaceSwapTemplate = faceSwapTemplate;
-        var mainWindow = new Mock<IMainWindow>();
+        var mainWindow = new Mock<IWindow>();
         //act
         viewModel.SaveCommand.Execute(mainWindow.Object);
         //assert
@@ -255,7 +255,7 @@ public class AddFaceSwapTemplateViewModelTests
         var viewModel = _builder.WithSaveTemplate(templateId).Build();
         viewModel.Parameters = new AddFaceSwapTemplateParameters(1);
         viewModel.FaceSwapTemplate = faceSwapTemplate;
-        var mainWindow = new Mock<IMainWindow>();
+        var mainWindow = new Mock<IWindow>();
         //act
         viewModel.SaveCommand.Execute(mainWindow.Object);
         //assert

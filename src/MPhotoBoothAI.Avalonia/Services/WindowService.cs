@@ -9,19 +9,25 @@ public class WindowService(IServiceProvider serviceProvider) : IWindowService
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
-    public Task<Y?> Open<Y, T>(Type viewModel, IMainWindow mainWindow, T parameters) where T : class where Y : class
+    public Task<Y?> Open<Y, T>(Type viewModel, IWindow mainWindow, T parameters, out IWindow? openedWindow, bool wait = true) where T : class where Y : class
     {
+        openedWindow = null;
         if (viewModel is null)
         {
             return Task.FromResult<Y?>(null);
         }
         var tcs = new TaskCompletionSource<Y?>();
+        if (!wait)
+        {
+            tcs.SetResult(null);
+        }
         var name = viewModel.FullName!.Replace("Application", "Avalonia", StringComparison.Ordinal).Replace("ViewModel", "Window", StringComparison.Ordinal);
         var type = Type.GetType(name);
 
         if (type != null && _serviceProvider != null)
         {
             var window = (Window)Activator.CreateInstance(type)!;
+            openedWindow = (IWindow)window;
             var service = _serviceProvider.GetRequiredService(viewModel);
             if (service is IWindowParam<T> serviceParam)
             {

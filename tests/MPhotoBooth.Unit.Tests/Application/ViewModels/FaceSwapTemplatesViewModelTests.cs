@@ -213,7 +213,7 @@ public class FaceSwapTemplatesViewModelTests
         var viewModel = _builder.WithDeleteTemplateConfirmation(true).Build(databaseContext);
         viewModel.SelectedGroup = group;
         //act
-        await viewModel.DeleteTemplateCommand.ExecuteAsync(ValueTuple.Create(It.IsAny<IMainWindow>(), new FaceSwapTemplateId(template.Id, "", 0)));
+        await viewModel.DeleteTemplateCommand.ExecuteAsync(ValueTuple.Create(It.IsAny<IWindow>(), new FaceSwapTemplateId(template.Id, "", 0)));
         //assert
         var deletedTemplate = databaseContext.FaceSwapTemplates.FirstOrDefault(x => x.Id == template.Id);
         Assert.Null(deletedTemplate);
@@ -234,7 +234,7 @@ public class FaceSwapTemplatesViewModelTests
         var viewModel = _builder.WithDeleteTemplateConfirmation(false).Build(databaseContext);
         viewModel.SelectedGroup = group;
         //act
-        await viewModel.DeleteTemplateCommand.ExecuteAsync(ValueTuple.Create(It.IsAny<IMainWindow>(), new FaceSwapTemplateId(template.Id, "", 0)));
+        await viewModel.DeleteTemplateCommand.ExecuteAsync(ValueTuple.Create(It.IsAny<IWindow>(), new FaceSwapTemplateId(template.Id, "", 0)));
         //assert
         var deletedTemplate = databaseContext.FaceSwapTemplates.FirstOrDefault(x => x.Id == template.Id);
         Assert.NotNull(deletedTemplate);

@@ -61,7 +61,7 @@ public partial class BaseFaceSwapTemplateViewModel(IFaceMultiSwapManager faceMul
     }
 
     [RelayCommand]
-    protected static void Close(IMainWindow mainWindow) => mainWindow.Close();
+    protected static void Close(IWindow mainWindow) => mainWindow.Close();
 
     protected void ClearImage()
     {

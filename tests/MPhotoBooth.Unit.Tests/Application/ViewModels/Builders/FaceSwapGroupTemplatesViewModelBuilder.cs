@@ -15,19 +15,19 @@ public class FaceSwapGroupTemplatesViewModelBuilder
 
     internal FaceSwapGroupTemplatesViewModelBuilder WithDeleteGroupConfirmation(bool confirmed)
     {
-        MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteQuestion, UI.deleteGroupDesc, It.IsAny<IMainWindow>())).ReturnsAsync(confirmed);
+        MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteQuestion, UI.deleteGroupDesc, It.IsAny<IWindow>())).ReturnsAsync(confirmed);
         return this;
     }
 
     internal FaceSwapGroupTemplatesViewModelBuilder WithGroupName(string groupName)
     {
-        MessageBoxService.Setup(x => x.ShowInput(UI.addGroup, UI.name, It.IsAny<IMainWindow>())).ReturnsAsync(groupName);
+        MessageBoxService.Setup(x => x.ShowInput(UI.addGroup, UI.name, It.IsAny<IWindow>())).ReturnsAsync(groupName);
         return this;
     }
 
     internal FaceSwapGroupTemplatesViewModelBuilder WithDeleteTemplateConfirmation(bool confirmed)
     {
-        MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteQuestion, UI.deleteTemplate, It.IsAny<IMainWindow>())).ReturnsAsync(confirmed);
+        MessageBoxService.Setup(x => x.ShowYesNo(UI.deleteQuestion, UI.deleteTemplate, It.IsAny<IWindow>())).ReturnsAsync(confirmed);
         return this;
     }
 

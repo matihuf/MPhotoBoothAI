@@ -71,7 +71,7 @@
             <PathIcon Data="{StaticResource person_regular}" />
             <TextBlock Margin="10 0 0 0" Text="{Binding FaceSwapTemplate.Faces}" VerticalAlignment="Center" IsVisible="{Binding FaceSwapTemplate, Converter={x:Static ObjectConverters.IsNotNull}}"/>
           </StackPanel>
-          <Button Command="{Binding PickTemplateCommand}" Content="{x:Static assets:UI.pick}" HorizontalAlignment="Center"/>
+          <Button x:Name="btnPick" Command="{Binding PickTemplateCommand}" Content="{x:Static assets:UI.pick}" HorizontalAlignment="Center"/>
         </Panel>
         <Border Grid.Column="1"  Grid.Row="0" CornerRadius="20">
           <Border.Styles>
@@ -89,7 +89,7 @@
       </Grid>
       <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Spacing="10" Margin="10">
         <Button Content="{x:Static assets:UI.save}" Command="{Binding SaveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" IsEnabled="{Binding SaveButtonIsEnabled}"/>
-        <Button Content="{x:Static assets:UI.close}" Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <Button x:Name="btnClose" Content="{x:Static assets:UI.close}" Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
       </StackPanel>
     </Grid>
   </Border>

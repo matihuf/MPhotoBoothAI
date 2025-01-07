@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace MPhotoBoothAI.Avalonia.Services;
 public class MessageBoxService : IMessageBoxService
 {
-    public async Task<bool> ShowYesNo(string title, string text, IMainWindow mainWindow)
+    public async Task<bool> ShowYesNo(string title, string text, IWindow mainWindow)
     {
         var box = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
         {
@@ -32,7 +32,7 @@ public class MessageBoxService : IMessageBoxService
         return result == Application.Assets.UI.yes;
     }
 
-    public async Task<string> ShowInput(string title, string text, IMainWindow mainWindow)
+    public async Task<string> ShowInput(string title, string text, IWindow mainWindow)
     {
         var box = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
         {

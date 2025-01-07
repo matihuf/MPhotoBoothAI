@@ -45,7 +45,7 @@ public partial class FaceSwapGroupTemplatesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task AddGroup(IMainWindow mainWindow)
+    private async Task AddGroup(IWindow mainWindow)
     {
         string groupName = await _messageBoxService.ShowInput(Assets.UI.addGroup, Assets.UI.name, mainWindow);
         if (string.IsNullOrEmpty(groupName))
@@ -59,7 +59,7 @@ public partial class FaceSwapGroupTemplatesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task DeleteGroup(IMainWindow mainWindow)
+    private async Task DeleteGroup(IWindow mainWindow)
     {
         if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteQuestion, Assets.UI.deleteGroupDesc, mainWindow))
         {
@@ -100,7 +100,7 @@ public partial class FaceSwapGroupTemplatesViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteTemplate((object MainWindow, object FaceSwapTemplateId) parameters)
     {
-        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteQuestion, Assets.UI.deleteTemplate, (IMainWindow)parameters.MainWindow) &&
+        if (SelectedGroup != null && await _messageBoxService.ShowYesNo(Assets.UI.deleteQuestion, Assets.UI.deleteTemplate, (IWindow)parameters.MainWindow) &&
             parameters.FaceSwapTemplateId is FaceSwapTemplateId faceSwapTemplateId)
         {
             _faceSwapTemplateFileManager.DeleteTemplate(SelectedGroup.Id, faceSwapTemplateId.Id);
@@ -110,14 +110,14 @@ public partial class FaceSwapGroupTemplatesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task AddTemplate(IMainWindow mainWindow)
+    private async Task AddTemplate(IWindow mainWindow)
     {
         if (SelectedGroup == null)
         {
             return;
         }
         var result = await _windowsService.Open<AddFaceSwapTemplateResults, AddFaceSwapTemplateParameters>(typeof(AddFaceSwapTemplateViewModel),
-             mainWindow, new AddFaceSwapTemplateParameters(SelectedGroup.Id));
+             mainWindow, new AddFaceSwapTemplateParameters(SelectedGroup.Id), out _);
         if (result != null)
         {
             AddTemplate(SelectedGroup.Id, result.TemplateId, result.Faces);
@@ -161,7 +161,7 @@ public partial class FaceSwapGroupTemplatesViewModel : ViewModelBase
         if (File.Exists(templateFilePath))
         {
             await _windowsService.Open<object, PreviewFaceSwapTemplateParameters>(typeof(PreviewFaceSwapTemplateViewModel),
-                 (IMainWindow)parameters.MainWindow, new PreviewFaceSwapTemplateParameters(SelectedGroup.Id, template.Id, templateFilePath, template.Faces));
+                 (IWindow)parameters.MainWindow, new PreviewFaceSwapTemplateParameters(SelectedGroup.Id, template.Id, templateFilePath, template.Faces), out _);
         }
     }
 
