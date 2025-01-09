@@ -75,8 +75,8 @@
                 <TextBlock
                     VerticalAlignment="Center"
                     FontSize="{StaticResource CanvasFontSize}"
-					TextAlignment="Center"
                     Text="{x:Static assets:UI.designCanvasText}"
+                    TextAlignment="Center"
                     TextWrapping="Wrap" />
             </Border>
             <Image
@@ -97,7 +97,7 @@
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
             <Button Command="{Binding NextBackground, ElementName=root}" Content="{x:Static assets:UI.nextBackground}" />
-            <Button Command="{Binding SwitchLayerCommand, ElementName=root}" CommandParameter="{StaticResource True}">
+            <Button Click="SwitchToPhotoLayer">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Bottom" Text="{x:Static assets:UI.photoLayer}" />
@@ -110,7 +110,7 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button Command="{Binding SwitchLayerCommand, ElementName=root}" CommandParameter="{StaticResource False}">
+            <Button Click="SwitchToFrameLayer">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Text="{x:Static assets:UI.frameLayer}" />
@@ -124,19 +124,19 @@
                 </Button.Content>
             </Button>
             <Button
-                Command="{Binding AddPhotoCommand, ElementName=root}"
+                Click="AddPhoto"
                 Content="{x:Static assets:UI.addPhoto}"
                 IsEnabled="{Binding ActiveLayerSwitch, ElementName=root}" />
             <Button
-                Command="{Binding RemovePhotoCommand, ElementName=root}"
+                Click="RemovePhoto"
                 Content="{x:Static assets:UI.removePhoto}"
                 IsEnabled="{Binding ActiveLayerSwitch, ElementName=root}" />
             <Button
-                Command="{Binding AddFrameCommand, ElementName=root}"
+                Click="AddFrame"
                 Content="{x:Static assets:UI.addFrame}"
                 IsEnabled="{Binding !ActiveLayerSwitch, ElementName=root}" />
-            <Button Content="{x:Static assets:UI.saveLayout}" />
-            <Button Content="{x:Static assets:UI.clearLayout}" />
+            <Button Click="SaveLayout" Content="{x:Static assets:UI.saveLayout}" />
+            <Button Click="ClearLayout" Content="{x:Static assets:UI.clearLayout}" />
         </WrapPanel>
     </StackPanel>
 </UserControl>

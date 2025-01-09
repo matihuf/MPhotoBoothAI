@@ -9,6 +9,7 @@ public interface IDatabaseContext : IDisposable
     public DbSet<CameraSettingsEntity> CameraSettings { get;}
     public DbSet<FaceSwapTemplateGroupEntity> FaceSwapTemplateGroups { get; }
     public DbSet<FaceSwapTemplateEntity> FaceSwapTemplates { get; }
+    public DbSet<LayoutDataEntity> LayoutDatas { get;}
 
     public DatabaseFacade Database { get; }
 

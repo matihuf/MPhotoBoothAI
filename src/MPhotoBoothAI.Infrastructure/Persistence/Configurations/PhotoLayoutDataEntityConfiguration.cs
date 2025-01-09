@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MPhotoBoothAI.Application.Models;
+using MPhotoBoothAI.Models.Entities;
 
 namespace MPhotoBoothAI.Infrastructure.Persistence.Configurations;
 public class PhotoLayoutDataEntityConfiguration : IEntityTypeConfiguration<PhotoLayoutDataEntity>

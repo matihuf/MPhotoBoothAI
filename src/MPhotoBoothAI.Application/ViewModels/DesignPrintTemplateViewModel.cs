@@ -11,6 +11,8 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
 
     private readonly IFilesManager _filesManager;
 
+    private readonly IDatabaseContext _dbContext;
+
     private readonly IApplicationInfoService _applicationInfoService;
 
     private readonly IImageManager _imageManager;
@@ -25,28 +27,40 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     private Dictionary<FormatTypes, List<PhotoLayoutDataEntity>> _photoImages = [];
 
     [ObservableProperty]
-    private Dictionary<FormatTypes, List<OverlayImageDataEnitity>> _overlayImages = [];
+    private Dictionary<FormatTypes, List<OverlayImageDataEntity>> _overlayImages = [];
 
     [ObservableProperty]
     private Dictionary<FormatTypes, BackgroundInfo> _formats = [];
 
     public DesignPrintTemplateViewModel(IFilePickerService filePickerService,
         IFilesManager filesManager,
+        IDatabaseContext dbContext,
         IApplicationInfoService applicationInfoService,
         IImageManager imageManager,
         IMessageBoxService messageBoxService)
     {
         _filePickerService = filePickerService;
         _filesManager = filesManager;
+        _dbContext = dbContext;
         _applicationInfoService = applicationInfoService;
         _imageManager = imageManager;
         _messageBoxService = messageBoxService;
+        BuildProperties();
+    }
+
+    private void BuildProperties()
+    {
         foreach (FormatTypes format in Enum.GetValues(typeof(FormatTypes)))
         {
+            if (!_dbContext.LayoutDatas.Any(x => x.Id == (int)format))
+            {
+                _dbContext.LayoutDatas.Add(new LayoutDataEntity { Id = (int)format });
+                _dbContext.SaveChanges();
+            }
             Formats.Add(format, new BackgroundInfo());
             _backgroundDir.Add(format, Path.Combine(_applicationInfoService.BackgroundDirectory, format.ToString()));
-            PhotoImages.Add(format, []);
-            OverlayImages.Add(format, []);
+            PhotoImages.Add(format, _dbContext.LayoutDatas.FirstOrDefault(x => x.Id == (int)format).PhotoLayoutData);
+            OverlayImages.Add(format, _dbContext.LayoutDatas.FirstOrDefault(x => x.Id == (int)format).OverlayImageData);
             PopulateBackgroundList(_backgroundDir[format], Formats[format]);
         }
         _ratios.Add(FormatTypes.Stripe, Consts.Background.StripeBackgroundRatio);
@@ -128,6 +142,12 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     private void LoadNextBackground(FormatTypes format)
     {
         LoadNextBackground(Formats[format]);
+    }
+
+    [RelayCommand]
+    private void SaveLayout()
+    {
+        _dbContext.SaveChanges();
     }
 
     private void LoadNextBackground(BackgroundInfo backgroundInfo)

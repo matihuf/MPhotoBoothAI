@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MPhotoBoothAI.Models.Entities;
 
 namespace MPhotoBoothAI.Infrastructure.Persistence.Configurations;
-public class OverlayImageDataEnitityConfiguration : IEntityTypeConfiguration<OverlayImageDataEnitity>
+public class OverlayImageDataEnitityConfiguration : IEntityTypeConfiguration<OverlayImageDataEntity>
 {
-    public void Configure(EntityTypeBuilder<OverlayImageDataEnitity> builder)
+    public void Configure(EntityTypeBuilder<OverlayImageDataEntity> builder)
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Left).HasColumnType("REAL").IsRequired();
