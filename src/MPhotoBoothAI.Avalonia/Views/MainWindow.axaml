@@ -25,7 +25,7 @@
 
   <Grid Margin="15">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="15*" />
+      <ColumnDefinition Width="15*" MinWidth="70" />
       <ColumnDefinition Width="85*" />
     </Grid.ColumnDefinitions>
     <ListBox x:Name="ListBoxPage" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}" Grid.Column="0" Theme="{StaticResource ListBoxCard}" Margin="0,0,5,0">
