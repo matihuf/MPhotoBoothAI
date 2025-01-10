@@ -2,12 +2,11 @@ using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
 using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Tests.Extensions;
-using MPhotoBoothAI.Common.Tests;
 using MPhotoBoothAI.Models.UI;
 
 namespace MPhotoBoothAI.Avalonia.Tests.Views;
 
-public class MainWindowTests(DependencyInjectionFixture dependencyInjectionFixture) : BaseMainWindowTests(dependencyInjectionFixture)
+public class MainWindowTests(DependencyInjectionAvaloniaFixture dependencyInjectionFixture) : BaseMainWindowTests(dependencyInjectionFixture)
 {
     [AvaloniaFact]
     public void DefaultPage_Home()

@@ -24,12 +24,15 @@ namespace MPhotoBoothAI.Avalonia;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection Configure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection Configure(this IServiceCollection services, IConfiguration configuration, bool addAiModels = true)
     {
         AddViewModels(services);
         AddServices(services);
         AddCamera(services);
-        AddAiModels(services);
+        if (addAiModels)
+        {
+            AddAiModels(services);
+        }
         AddManagers(services);
         AddNavigation(services);
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));

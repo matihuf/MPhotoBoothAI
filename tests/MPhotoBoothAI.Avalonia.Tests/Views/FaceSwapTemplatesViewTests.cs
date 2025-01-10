@@ -3,12 +3,11 @@ using Avalonia.Headless.XUnit;
 using MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
 using MPhotoBoothAI.Avalonia.Tests.Extensions;
 using MPhotoBoothAI.Avalonia.Views;
-using MPhotoBoothAI.Common.Tests;
 using MPhotoBoothAI.Models.Entities;
 
 namespace MPhotoBoothAI.Avalonia.Tests.Views;
 
-public class FaceSwapTemplatesViewTests(DependencyInjectionFixture dependencyInjectionFixture) : BaseMainWindowTests(dependencyInjectionFixture)
+public class FaceSwapTemplatesViewTests(DependencyInjectionAvaloniaFixture dependencyInjectionFixture) : BaseMainWindowTests(dependencyInjectionFixture)
 {
     private static readonly string _groupName = "groupName";
 

@@ -4,15 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
 using MPhotoBoothAI.Avalonia.Windows.FaceSwapTemplates;
-using MPhotoBoothAI.Common.Tests;
 using MPhotoBoothAI.Models.WindowParameters;
 using MPhotoBoothAI.Models.WindowResults;
 
 namespace MPhotoBoothAI.Avalonia.Tests.Windows;
 
-public class AddFaceSwapTemplateWindowTests(DependencyInjectionFixture dependencyInjectionFixture) : BaseMainWindowTests(dependencyInjectionFixture)
+public class AddFaceSwapTemplateWindowTests(DependencyInjectionAvaloniaFixture dependencyInjectionFixture) : BaseMainWindowTests(dependencyInjectionFixture)
 {
-    private readonly DependencyInjectionFixture _dependencyInjectionFixture = dependencyInjectionFixture;
+    private readonly DependencyInjectionAvaloniaFixture _dependencyInjectionFixture = dependencyInjectionFixture;
 
     [AvaloniaFact]
     public async Task Close_MainWindowShouldNotHaveOwnedWindows()

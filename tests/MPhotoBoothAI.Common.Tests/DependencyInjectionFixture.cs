@@ -11,14 +11,22 @@ public class DependencyInjectionFixture : IDisposable
 {
     public ServiceProvider ServiceProvider { get; private set; }
 
+    public virtual bool AddAiModels { get; set; } = true;
+
     public DependencyInjectionFixture()
     {
         var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
         var serviceCollection = new ServiceCollection();
-        serviceCollection.Configure(configuration);
-        serviceCollection.Replace(ServiceDescriptor.Singleton(s => new Mock<ICameraDevice>().Object));
-        serviceCollection.Replace(ServiceDescriptor.Transient(s => new DatabaseContextBuilder().Build()));
+        serviceCollection.Configure(configuration, AddAiModels);
+        ReplaceService(serviceCollection);
         ServiceProvider = serviceCollection.BuildServiceProvider();
+    }
+
+
+    public virtual void ReplaceService(IServiceCollection services)
+    {
+        services.Replace(ServiceDescriptor.Singleton(s => new Mock<ICameraDevice>().Object));
+        services.Replace(ServiceDescriptor.Transient(s => new DatabaseContextBuilder().Build()));
     }
 
     public void Dispose()

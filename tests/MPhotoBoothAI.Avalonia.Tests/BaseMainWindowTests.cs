@@ -1,10 +1,9 @@
 ﻿using Avalonia.Controls;
 using MPhotoBoothAI.Avalonia.Tests.Builders;
 using MPhotoBoothAI.Avalonia.Tests.Extensions;
-using MPhotoBoothAI.Common.Tests;
 
 namespace MPhotoBoothAI.Avalonia.Tests;
-public abstract class BaseMainWindowTests(DependencyInjectionFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionFixture>, IDisposable
+public abstract class BaseMainWindowTests(DependencyInjectionAvaloniaFixture dependencyInjectionFixture) : IClassFixture<DependencyInjectionAvaloniaFixture>, IDisposable
 {
     protected readonly MainWindowBuilder _builder = new(dependencyInjectionFixture);
 
