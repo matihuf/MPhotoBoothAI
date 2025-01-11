@@ -8,8 +8,8 @@ public abstract class BaseMainWindowTests(DependencyInjectionFixture dependencyI
 {
     protected readonly MainWindowBuilder _builder = new(dependencyInjectionFixture);
 
-    protected static Button GetMessageBoxButtonNo(Window messageBoxWindow) => messageBoxWindow.FindControls<Button>().ElementAt(1);
-    protected static Button GetMessageBoxButtonYes(Window messageBoxWindow) => messageBoxWindow.FindControls<Button>().ElementAt(0);
+    protected static Button GetMessageBoxButtonNo(Window messageBoxWindow) => messageBoxWindow.FindControls<Button>().ElementAt(9);
+    protected static Button GetMessageBoxButtonYes(Window messageBoxWindow) => messageBoxWindow.FindControls<Button>().ElementAt(8);
 
     public void Dispose()
     {
