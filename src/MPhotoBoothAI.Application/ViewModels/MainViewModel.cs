@@ -19,10 +19,10 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
     private readonly List<ListItemTemplate> _pages =
     [
-        new ListItemTemplate(typeof(HomeViewModel), "home_regular", "Home"),
-        new ListItemTemplate(typeof(CameraSettingsViewModel), "camera_regular", "cameraSettings"),
-        new ListItemTemplate(typeof(FaceSwapTemplatesViewModel), "image_copy_regular", Assets.UI.templates),
-        new ListItemTemplate(typeof(FaceDetectionViewModel), "person_swap_regular", "FaceDetection")
+        new ListItemTemplate(typeof(HomeViewModel), "Home", "Home"),
+        new ListItemTemplate(typeof(CameraSettingsViewModel), "Camera", "cameraSettings"),
+        new ListItemTemplate(typeof(FaceSwapTemplatesViewModel), "ImageEditOutline", Assets.UI.templates),
+        new ListItemTemplate(typeof(FaceDetectionViewModel), "FaceRecognition", "FaceDetection")
     ];
 
     public MainViewModel(INavigationService<ViewModelBase> navigationService)

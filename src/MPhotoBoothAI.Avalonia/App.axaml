@@ -2,6 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="MPhotoBoothAI.Avalonia.App"
              xmlns:local="using:MPhotoBoothAI.Avalonia"
+             xmlns:themes="clr-namespace:Avalonia.Themes.Neumorphism;assembly=Avalonia.Themes.Neumorphism"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              RequestedThemeVariant="Default">
   <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -10,9 +12,10 @@
   </Application.DataTemplates>
 
   <Application.Styles>
-    <FluentTheme />
+    <materialIcons:MaterialIconStyles />
     <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Icons.axaml" />
     <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/MessageBox.axaml" />
+    <themes:NeumorphismTheme BaseTheme="Light" PrimaryColor="Purple" SecondaryColor="Lime" />
     <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Styles.axaml" />
   </Application.Styles>
 </Application>
