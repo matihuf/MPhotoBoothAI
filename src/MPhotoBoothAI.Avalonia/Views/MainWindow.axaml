@@ -6,41 +6,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="using:MPhotoBoothAI.Models.UI"
         xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:controls="clr-namespace:Avalonia.Themes.Neumorphism.Controls;assembly=Avalonia.Themes.Neumorphism"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="MPhotoBoothAI.Avalonia.Views.MainWindow"
         x:DataType="vm:MainViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="MPhotoBoothAI"
-		WindowState="Maximized">
+		    WindowState="Maximized">
 
   <Design.DataContext>
     <dvm:DesignMainViewModel/>
   </Design.DataContext>
 
-  <SplitView IsPaneOpen="True" DisplayMode="Inline">
-    <SplitView.Pane>
-      <ListBox x:Name="ListBoxPage" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}">
-        <ListBox.ItemTemplate>
-          <DataTemplate DataType="{x:Type models:ListItemTemplate}">
-            <StackPanel Orientation="Horizontal" Spacing="15">
-              <PathIcon Data="{Binding IconKey, Converter={x:Static converters:IconConverters.IconConverter}}" />
-              <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
-            </StackPanel>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-    </SplitView.Pane>
-    <SplitView.Content>
-      <ContentControl x:Name="Content" Content="{Binding Content}">
-        <ContentControl.Styles>
-          <Style Selector="ContentControl">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Background" Value="WhiteSmoke"/>
-            <Setter Property="CornerRadius" Value="20"/>
-            <Setter Property="Padding" Value="20"/>
-          </Style>
-        </ContentControl.Styles>
-      </ContentControl>
-    </SplitView.Content>
-  </SplitView>
+  <Window.Resources>
+    <converters:IconConverter x:Key="iconConverter"/>
+  </Window.Resources>
+
+  <Grid Margin="15">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="15*" MinWidth="70" />
+      <ColumnDefinition Width="85*" />
+    </Grid.ColumnDefinitions>
+    <ListBox x:Name="ListBoxPage" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}" Grid.Column="0" Theme="{StaticResource ListBoxCard}" Margin="0,0,5,0">
+      <ListBox.ItemTemplate>
+        <DataTemplate DataType="{x:Type models:ListItemTemplate}">
+          <StackPanel Orientation="Horizontal" Spacing="15">
+            <icons:MaterialIcon Width="28" Height="28" Kind="{Binding IconKey, Converter={StaticResource iconConverter}}" />
+            <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+    <controls:Card Grid.Column="1" Theme="{StaticResource CardOutset}" CornerRadius="8">
+      <ContentControl x:Name="Content" Content="{Binding Content}" />
+    </controls:Card>
+  </Grid>
 </Window>
