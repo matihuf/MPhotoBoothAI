@@ -178,6 +178,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zamknij.
+        /// </summary>
+        public static string close {
+            get {
+                return ResourceManager.GetString("close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Usuń.
         /// </summary>
         public static string delete {
@@ -286,6 +295,51 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aby przełączać się między layoutami wybierz przycisk z oznaczeniem layoutu który chcesz edytować..
+        /// </summary>
+        public static string layoutDescription_0 {
+            get {
+                return ResourceManager.GetString("layoutDescription_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Layouty wydruków pozwalają na personalizację wyglądu wydruków. Po dodaniu tła zostanie ono automatycznie załadowane do layoutu wydruku. Przycisk „Następne tło” służy do przełączania się między dodanymi tłami..
+        /// </summary>
+        public static string layoutDescription_1 {
+            get {
+                return ResourceManager.GetString("layoutDescription_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aby zmieniać ilość zdjęć w serii korzystaj z opcji „Dodaj zdjęcie” oraz „Usuń zdjęci”. Aby manipulować pozycją, rozmiarem oraz pochyleniem zdjęcia, przełącz się na warstwę zdjęć, aktywna warstwa jest oznaczona kolorowym kółkiem Pozycję zmienisz za pomocą ruchu myszy. Kąt pochylenia zdjęcia zmienisz kółkiem myszy, a jego rozmiar za pomocą klawisza CTRL oraz kółka myszy. Dodatkowo SHIFT zwiększa stopień powiększania i zmniejszania..
+        /// </summary>
+        public static string layoutDescription_2 {
+            get {
+                return ResourceManager.GetString("layoutDescription_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warstwa ramek służy do projektowania warstwy nakładanej na zdjęci. Do warstwy ramek można dodawać różnego rodzaju grafiki (np. serca, baloniki). Ta warstwa pozwala uzyskać efekt głębi wydruku. Aby dodać elementy do warstwy ramek, przełącz się na nią. Aktywna warstwa jest oznaczona kolorowym kółkiem. Użyj przycisku &quot;Dodaj ramkę&quot; i w nowym oknie wskaż plik lub przeciągnij myszką plik graficzny na pole podglądu layoutu. Aby usunąć element kliknij na nim prawym przyciskiem myszy i wybierz opcję Usuń.
+        /// </summary>
+        public static string layoutDescription_3 {
+            get {
+                return ResourceManager.GetString("layoutDescription_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Po zakończeniu edycji zapisz swoje ustawienia. Nie zapisanie ustawień spowoduję utratę wszelkim zmian. Wyczyszczenie warstw spowoduję usunięcie wszystkich zdjęć w serii, elementów grafiki z warstwy ramek oraz ich ustawień.
+        /// </summary>
+        public static string layoutDescription_4 {
+            get {
+                return ResourceManager.GetString("layoutDescription_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nazwa.
         /// </summary>
         public static string name {
@@ -318,6 +372,24 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string no {
             get {
                 return ResourceManager.GetString("no", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nie zapisanie zmian spowoduję ich utratę. Czy kontynuować?.
+        /// </summary>
+        public static string notSavedChangesMessage {
+            get {
+                return ResourceManager.GetString("notSavedChangesMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nie zapisane zmiany.
+        /// </summary>
+        public static string notSavedChangesTittle {
+            get {
+                return ResourceManager.GetString("notSavedChangesTittle", resourceCulture);
             }
         }
         
@@ -408,6 +480,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string save {
             get {
                 return ResourceManager.GetString("save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zapisano zmiany.
+        /// </summary>
+        public static string savedChanges {
+            get {
+                return ResourceManager.GetString("savedChanges", resourceCulture);
             }
         }
         

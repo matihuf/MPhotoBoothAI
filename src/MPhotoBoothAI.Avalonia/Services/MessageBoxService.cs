@@ -5,6 +5,7 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MPhotoBoothAI.Avalonia.Services;
@@ -40,8 +41,30 @@ public class MessageBoxService : IMessageBoxService
         return result == Application.Assets.UI.yes ? box.InputValue : string.Empty;
     }
 
-    private static IMsBox<string> BuildMessageBox(string title, string text, InputParams? inputParams)
+    public async Task<string> ShowInfo(string title, string text, IMainWindow? mainWindow = null)
     {
+        var box = BuildMessageBox(title, text, null, false);
+        string result;
+        if (mainWindow != null)
+        {
+            result = await box.ShowWindowDialogAsync((MainWindow)mainWindow);
+        }
+        else
+        {
+            result = await box.ShowAsync();
+        }
+        return result == Application.Assets.UI.close ? box.InputValue : string.Empty;
+    }
+
+    private static IMsBox<string> BuildMessageBox(string title, string text, InputParams? inputParams, bool showCancel = true)
+    {
+        List<ButtonDefinition> _buttonDefinition = new List<ButtonDefinition> {
+                new ButtonDefinition { Name = showCancel ? Application.Assets.UI.yes : Application.Assets.UI.close, IsCancel = false},
+        };
+        if (showCancel)
+        {
+            _buttonDefinition.Add(new ButtonDefinition { Name = Application.Assets.UI.cancel, IsCancel = true });
+        }
         return MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
         {
             ContentHeader = title,
@@ -52,11 +75,7 @@ public class MessageBoxService : IMessageBoxService
             ShowInCenter = true,
             Topmost = true,
             SystemDecorations = SystemDecorations.BorderOnly,
-            ButtonDefinitions =
-            [
-                new ButtonDefinition { Name = Application.Assets.UI.yes, IsCancel = false},
-                new ButtonDefinition { Name = Application.Assets.UI.cancel, IsCancel = true },
-            ],
+            ButtonDefinitions = _buttonDefinition,
             InputParams = inputParams
         });
     }

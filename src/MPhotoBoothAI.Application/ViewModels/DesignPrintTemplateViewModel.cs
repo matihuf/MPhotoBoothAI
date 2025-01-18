@@ -33,13 +33,13 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     private int _id = 0;
 
     [ObservableProperty]
-    private BackgroundInfo _backgroundInfo;
+    private BackgroundInfo _backgroundInfo = new();
 
     [ObservableProperty]
-    private LayoutFormatEntity _selectedLayoutFormat;
+    private LayoutFormatEntity _selectedLayoutFormat = new();
 
     [ObservableProperty]
-    private LayoutDataEntity _selectedLayoutData;
+    private LayoutDataEntity _selectedLayoutData = new();
 
     private Dictionary<FormatTypes, BackgroundInfo> _formats = [];
 
@@ -103,8 +103,11 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         var imageSize = _imageManager.GetImageSizeFromFile(pickFile);
         if (imageSize.HasValue)
         {
+            var formatRatio = _dbContext.LayoutFormat.First(x => x.Id == Id).FormatRatio;
             var ratio = (double)imageSize.Value.Width / imageSize.Value.Height;
-            if (ratio != _dbContext.LayoutFormat.First(x => x.Id == Id).FormatRatio && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
+            if (ratio < formatRatio * 1.01
+                && ratio > formatRatio * 0.99
+                && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
             {
                 return;
             }
@@ -120,9 +123,15 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     [RelayCommand]
     private async Task ChangeFormatIndex(int index)
     {
-        if (NotSavedChange && await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
+        if (!NotSavedChange)
         {
             Id = index;
+            return;
+        }
+        if (await _messageBoxService.ShowYesNo(Assets.UI.notSavedChangesTittle, Assets.UI.notSavedChangesMessage, null))
+        {
+            Id = index;
+            NotSavedChange = false;
         }
     }
 
@@ -152,8 +161,7 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         var count = BackgroundInfo.BackgroundPathsList.Count;
         if (count > 0 && !String.IsNullOrEmpty(BackgroundInfo.BackgroundPath))
         {
-            var index = BackgroundInfo.BackgroundPathsList.IndexOf(BackgroundInfo.BackgroundPath);
-            index++;
+            var index = BackgroundInfo.BackgroundPathsList.IndexOf(BackgroundInfo.BackgroundPath) + 1;
             if (index == count)
             {
                 index = 0;
@@ -163,8 +171,10 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void SaveLayout()
+    private async Task SaveLayout()
     {
         _dbContext.SaveChanges();
+        NotSavedChange = false;
+        await _messageBoxService.ShowInfo(Assets.UI.savedChanges, Assets.UI.savedChanges, null);
     }
 }

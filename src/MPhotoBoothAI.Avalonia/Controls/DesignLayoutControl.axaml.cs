@@ -213,8 +213,12 @@ public partial class DesignLayoutControl : UserControl
         }
         foreach (var overlayImage in LayoutData.OverlayImageData)
         {
-            var image = BuildImage(new Bitmap(overlayImage.Path));
-            AddImageOnCanvas(image, frameCanvas, new Point(overlayImage.Left * _mainScale, overlayImage.Top * _mainScale), overlayImage.Angle, overlayImage.Scale / _mainScale);
+            if (File.Exists(overlayImage.Path))
+            {
+                _overlayImagesPaths.Add(overlayImage.Path);
+                var image = BuildImage(new Bitmap(overlayImage.Path));
+                AddImageOnCanvas(image, frameCanvas, new Point(overlayImage.Left * _mainScale, overlayImage.Top * _mainScale), overlayImage.Angle, overlayImage.Scale / _mainScale);
+            }
         }
     }
 
@@ -290,7 +294,10 @@ public partial class DesignLayoutControl : UserControl
         {
             foreach (var file in files)
             {
-                LoadImageFromPath(e.GetPosition(this), file.Path.LocalPath, _mainScale);
+                if (File.Exists(file.Path.LocalPath))
+                {
+                    LoadImageFromPath(e.GetPosition(this), file.Path.LocalPath, _mainScale);
+                }
             }
         }
     }
@@ -303,6 +310,7 @@ public partial class DesignLayoutControl : UserControl
             var bitmap = new Bitmap(path);
             _overlayImagesPaths.Add(path);
             Image image = BuildImage(bitmap);
+            NotSavedChange = true;
             AddImageOnCanvas(image, frameCanvas, position, StartAngle, scale);
         }
     }
@@ -311,6 +319,7 @@ public partial class DesignLayoutControl : UserControl
     {
         var gridRect = BuildPhotoImageGrid();
         var position = new Point(gridRect.Width / 2 * _mainScale * StartScale, photoCanvas.Height / 2);
+        NotSavedChange = true;
         AddImageOnCanvas(gridRect, photoCanvas, position, 0, _mainScale * StartScale, true);
     }
 
@@ -331,7 +340,6 @@ public partial class DesignLayoutControl : UserControl
         }
         imageRoot.Children.Add(control);
         canvas.Children.Add(imageRoot);
-        NotSavedChange = true;
     }
 
     private ContextMenu BuildContextMenu()

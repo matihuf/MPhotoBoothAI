@@ -4,4 +4,5 @@ public interface IMessageBoxService
 {
     Task<bool> ShowYesNo(string title, string text, IMainWindow? mainWindow = null);
     Task<string> ShowInput(string title, string text, IMainWindow? mainWindow = null);
+    Task<string> ShowInfo(string title, string text, IMainWindow? mainWindow = null);
 }

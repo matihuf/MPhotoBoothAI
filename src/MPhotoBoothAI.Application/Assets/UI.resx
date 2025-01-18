@@ -264,4 +264,31 @@
   <data name="editFormat" xml:space="preserve">
     <value>Wybierz format do edycji</value>
   </data>
+  <data name="notSavedChangesMessage" xml:space="preserve">
+    <value>Nie zapisanie zmian spowoduję ich utratę. Czy kontynuować?</value>
+  </data>
+  <data name="notSavedChangesTittle" xml:space="preserve">
+    <value>Nie zapisane zmiany</value>
+  </data>
+  <data name="layoutDescription_1" xml:space="preserve">
+    <value>Layouty wydruków pozwalają na personalizację wyglądu wydruków. Po dodaniu tła zostanie ono automatycznie załadowane do layoutu wydruku. Przycisk „Następne tło” służy do przełączania się między dodanymi tłami.</value>
+  </data>
+  <data name="layoutDescription_0" xml:space="preserve">
+    <value>Aby przełączać się między layoutami wybierz przycisk z oznaczeniem layoutu który chcesz edytować.</value>
+  </data>
+  <data name="layoutDescription_2" xml:space="preserve">
+    <value>Aby zmieniać ilość zdjęć w serii korzystaj z opcji „Dodaj zdjęcie” oraz „Usuń zdjęci”. Aby manipulować pozycją, rozmiarem oraz pochyleniem zdjęcia, przełącz się na warstwę zdjęć, aktywna warstwa jest oznaczona kolorowym kółkiem Pozycję zmienisz za pomocą ruchu myszy. Kąt pochylenia zdjęcia zmienisz kółkiem myszy, a jego rozmiar za pomocą klawisza CTRL oraz kółka myszy. Dodatkowo SHIFT zwiększa stopień powiększania i zmniejszania.</value>
+  </data>
+  <data name="layoutDescription_3" xml:space="preserve">
+    <value>Warstwa ramek służy do projektowania warstwy nakładanej na zdjęci. Do warstwy ramek można dodawać różnego rodzaju grafiki (np. serca, baloniki). Ta warstwa pozwala uzyskać efekt głębi wydruku. Aby dodać elementy do warstwy ramek, przełącz się na nią. Aktywna warstwa jest oznaczona kolorowym kółkiem. Użyj przycisku "Dodaj ramkę" i w nowym oknie wskaż plik lub przeciągnij myszką plik graficzny na pole podglądu layoutu. Aby usunąć element kliknij na nim prawym przyciskiem myszy i wybierz opcję Usuń</value>
+  </data>
+  <data name="layoutDescription_4" xml:space="preserve">
+    <value>Po zakończeniu edycji zapisz swoje ustawienia. Nie zapisanie ustawień spowoduję utratę wszelkim zmian. Wyczyszczenie warstw spowoduję usunięcie wszystkich zdjęć w serii, elementów grafiki z warstwy ramek oraz ich ustawień</value>
+  </data>
+  <data name="savedChanges" xml:space="preserve">
+    <value>Zapisano zmiany</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Zamknij</value>
+  </data>
 </root>

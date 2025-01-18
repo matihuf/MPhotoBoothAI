@@ -153,14 +153,23 @@
                         Classes="Info"
                         CornerRadius="20"
                         Theme="{StaticResource BorderInset}">
-                        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                            <TextBlock Width="{Binding $parent.Bounds.Width}" TextWrapping="Wrap">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam nec pretium augue. Vivamus est risus, laoreet non ullamcorper congue, maximus id erat. Vivamus congue faucibus lorem eget feugiat. Phasellus sed ultrices sapien. Nam nibh justo, cursus eget suscipit ultrices, sollicitudin at erat. Pellentesque scelerisque nec urna eget auctor. Pellentesque eget sagittis nulla. Aliquam dictum mi eu sem pretium maximus. Praesent maximus lorem quis turpis mollis tincidunt.
-                            </TextBlock>
+                        <StackPanel
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Spacing="20">
+                            <StackPanel.Styles>
+                                <Style Selector="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap" />
+                                </Style>
+                            </StackPanel.Styles>
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_0}" />
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_1}" />
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_2}" />
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_3}" />
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_4}" />
                         </StackPanel>
                     </ui:Card>
                 </Grid>
-
                 <control:DesignLayoutControl
                     Margin="10,20,10,0"
                     FilePicker="{Binding FilePickerService}"
