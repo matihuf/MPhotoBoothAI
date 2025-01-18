@@ -10,9 +10,8 @@ public class FaceSwapTemplateFileManager(IApplicationInfoService applicationInfo
 
     private readonly string _baseFolder = "Templates";
     private readonly string _thumbnailSuffix = "_thumbnail";
-    private readonly string _imageExtension = ".jpg";
-    private readonly KeyValuePair<ImwriteFlags, int> _imageOptions = new(ImwriteFlags.JpegQuality, 100);
-    private readonly float _thumbnailSize = 0.5f;
+    private readonly string _imageExtension = ".png";
+    private readonly KeyValuePair<ImwriteFlags, int> _imageOptions = new(ImwriteFlags.PngCompression, 0);
 
     public void Save(int groupId, int templateId, string filePath)
     {
@@ -22,11 +21,13 @@ public class FaceSwapTemplateFileManager(IApplicationInfoService applicationInfo
             Directory.CreateDirectory(directoryPath);
         }
         string templatePath = Path.Combine(directoryPath, templateId.ToString());
-        using var image = CvInvoke.Imread(filePath);
+        using var image = CvInvoke.Imread(filePath, ImreadModes.Unchanged);
         CvInvoke.Imwrite($"{templatePath}{_imageExtension}", image, _imageOptions);
-
-        using var thumbnail = _resizeImageService.GetThumbnail(image, _thumbnailSize);
-        CvInvoke.Imwrite($"{templatePath}{_thumbnailSuffix}{_imageExtension}", thumbnail, _imageOptions);
+        bool keepRatio = image.Height > image.Width;
+        using var imageBgra = new Mat();
+        CvInvoke.CvtColor(image, imageBgra, ColorConversion.Bgr2Bgra);
+        using var thumbnail = _resizeImageService.Resize(imageBgra, 192, 340, keepRatio);
+        CvInvoke.Imwrite($"{templatePath}{_thumbnailSuffix}{_imageExtension}", thumbnail.Image);
     }
 
     public void DeleteGroup(int groupId)

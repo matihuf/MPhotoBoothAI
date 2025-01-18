@@ -9,7 +9,7 @@ namespace MPhotoBoothAI.Infrastructure.Services;
 
 public class ResizeImageService : IResizeImageService
 {
-    private readonly MCvScalar _border = new(0, 0, 0);
+    private readonly MCvScalar _border = new(0, 0, 0, 0);
 
     public ResizedImage Resize(Mat frame, int inputHeight = 640, int inputWidth = 640, bool keepRatio = true)
     {
