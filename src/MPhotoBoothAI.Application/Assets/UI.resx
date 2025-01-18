@@ -243,10 +243,10 @@
   <data name="designCanvasText" xml:space="preserve">
     <value>Projekt wydruku. Aby wyświetlić tło dodaj obraz do powyższej listy</value>
   </data>
-  <data name="stripeFormat" xml:space="preserve">
+  <data name="stripe" xml:space="preserve">
     <value>Listek</value>
   </data>
-  <data name="postcardFormat" xml:space="preserve">
+  <data name="postcard" xml:space="preserve">
     <value>Pocztówka</value>
   </data>
   <data name="clone" xml:space="preserve">
@@ -257,5 +257,11 @@
   </data>
   <data name="openFile" xml:space="preserve">
     <value>Otwórz plik</value>
+  </data>
+  <data name="chooseFormat" xml:space="preserve">
+    <value>Wybierz format</value>
+  </data>
+  <data name="editFormat" xml:space="preserve">
+    <value>Wybierz format do edycji</value>
   </data>
 </root>

@@ -15,12 +15,13 @@
 
     <UserControl.Styles>
         <Style Selector="Button">
-            <Setter Property="Width" Value="{Binding ButtonWidth}" />
-            <Setter Property="Height" Value="{Binding ButtonHeight}" />
+            <Setter Property="Width" Value="NaN" />
+            <Setter Property="Height" Value="{StaticResource TouchItemHeight}" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="Margin" Value="0 0 10 10" />
-            <Setter Property="CommandParameter" Value="{Binding CommandParameter, ElementName=root}" />
+            <Setter Property="CornerRadius" Value="5" />
         </Style>
         <Style Selector="Border.LayerButton">
             <Setter Property="Background" Value="{StaticResource ActiveColor}" />
@@ -66,7 +67,10 @@
         <x:Double x:Key="OpacityValue">0.8</x:Double>
     </UserControl.Resources>
     <StackPanel>
-        <Grid Name="canvasRoot" MinWidth="400">
+        <Grid
+            Name="canvasRoot"
+            MinWidth="400"
+            MaxWidth="1200">
             <Border
                 Margin="0"
                 Background="#20202020"
@@ -93,7 +97,8 @@
                 Opacity="{Binding ActiveLayerSwitch, ElementName=root, Converter={StaticResource boolToOpacity}, ConverterParameter={StaticResource OpacityValue}}" />
         </Grid>
         <WrapPanel
-            Margin="0,10,0,10"
+            Margin="10"
+            HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
             <Button Command="{Binding NextBackground, ElementName=root}" Content="{x:Static assets:UI.nextBackground}" />

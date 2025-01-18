@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
 using MPhotoBoothAI.Models.Entities;
@@ -7,8 +8,6 @@ using MPhotoBoothAI.Models.Entities;
 namespace MPhotoBoothAI.Application.ViewModels;
 public partial class DesignPrintTemplateViewModel : ViewModelBase
 {
-    private readonly IFilePickerService _filePickerService;
-
     private readonly IFilesManager _filesManager;
 
     private readonly IDatabaseContext _dbContext;
@@ -19,17 +18,29 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
 
     private readonly IMessageBoxService _messageBoxService;
 
-    private readonly Dictionary<FormatTypes, double> _ratios = [];
-
     private readonly Dictionary<FormatTypes, string> _backgroundDir = [];
 
     [ObservableProperty]
-    private Dictionary<FormatTypes, List<PhotoLayoutDataEntity>> _photoImages = [];
+    private bool _notSavedChange;
 
     [ObservableProperty]
-    private Dictionary<FormatTypes, List<OverlayImageDataEntity>> _overlayImages = [];
+    private IFilePickerService _filePickerService;
 
     [ObservableProperty]
+    private List<LayoutFormatEntity> _layoutFormat = [];
+
+    [ObservableProperty]
+    private int _id = 0;
+
+    [ObservableProperty]
+    private BackgroundInfo _backgroundInfo;
+
+    [ObservableProperty]
+    private LayoutFormatEntity _selectedLayoutFormat;
+
+    [ObservableProperty]
+    private LayoutDataEntity _selectedLayoutData;
+
     private Dictionary<FormatTypes, BackgroundInfo> _formats = [];
 
     public DesignPrintTemplateViewModel(IFilePickerService filePickerService,
@@ -39,7 +50,7 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         IImageManager imageManager,
         IMessageBoxService messageBoxService)
     {
-        _filePickerService = filePickerService;
+        FilePickerService = filePickerService;
         _filesManager = filesManager;
         _dbContext = dbContext;
         _applicationInfoService = applicationInfoService;
@@ -50,64 +61,50 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
 
     private void BuildProperties()
     {
+        LayoutFormat = _dbContext.LayoutFormat.ToList();
         foreach (FormatTypes format in Enum.GetValues(typeof(FormatTypes)))
         {
-            if (!_dbContext.LayoutDatas.Any(x => x.Id == (int)format))
-            {
-                _dbContext.LayoutDatas.Add(new LayoutDataEntity { Id = (int)format });
-                _dbContext.SaveChanges();
-            }
-            Formats.Add(format, new BackgroundInfo());
+            _formats.Add(format, new BackgroundInfo());
             _backgroundDir.Add(format, Path.Combine(_applicationInfoService.BackgroundDirectory, format.ToString()));
-            PhotoImages.Add(format, _dbContext.LayoutDatas.FirstOrDefault(x => x.Id == (int)format).PhotoLayoutData);
-            OverlayImages.Add(format, _dbContext.LayoutDatas.FirstOrDefault(x => x.Id == (int)format).OverlayImageData);
-            PopulateBackgroundList(_backgroundDir[format], Formats[format]);
         }
-        _ratios.Add(FormatTypes.Stripe, Consts.Background.StripeBackgroundRatio);
-        _ratios.Add(FormatTypes.PostCard, Consts.Background.PostcardBackgroundRatio);
+        Id = 1;
     }
 
-    private void DeleteItem(BackgroundInfo backgroundInfo)
+    partial void OnIdChanged(int value)
     {
-        if (backgroundInfo.SelectedItem != null)
-        {
-            var selectedValueCopy = backgroundInfo.SelectedItem;
-            _filesManager.DeleteFile(backgroundInfo.SelectedItem);
-            backgroundInfo.BackgroundPathsList.Remove(backgroundInfo.SelectedItem);
-            if (backgroundInfo.BackgroundPath == selectedValueCopy)
-            {
-                if (backgroundInfo.BackgroundPathsList.Count > 0)
-                {
-                    backgroundInfo.BackgroundPath = backgroundInfo.BackgroundPathsList[0];
-                    return;
-                }
-                backgroundInfo.BackgroundPath = null;
-            }
-        }
+        FormatTypes type = (FormatTypes)value;
+        BackgroundInfo = _formats[type];
+        SelectedLayoutFormat = LayoutFormat.First(x => x.Id == Id);
+        SelectedLayoutData = _dbContext.LayoutDatas
+            .Include(x => x.PhotoLayoutData)
+            .Include(x => x.OverlayImageData)
+            .First(x => x.Id == Id);
+        PopulateBackgroundList(_backgroundDir[type]);
     }
 
-    private void PopulateBackgroundList(string pathToCopy, BackgroundInfo backgroundInfo)
+    private void PopulateBackgroundList(string pathToCopy)
     {
-        backgroundInfo.BackgroundPathsList.Clear();
+        BackgroundInfo.BackgroundPathsList.Clear();
         foreach (var path in _filesManager.GetFiles(pathToCopy))
         {
-            backgroundInfo.BackgroundPathsList.Add(path);
+            BackgroundInfo.BackgroundPathsList.Add(path);
         }
-        if (String.IsNullOrEmpty(backgroundInfo.BackgroundPath) && backgroundInfo.BackgroundPathsList.Count > 0)
+        if (String.IsNullOrEmpty(BackgroundInfo.BackgroundPath) && BackgroundInfo.BackgroundPathsList.Count > 0)
         {
-            backgroundInfo.BackgroundPath = backgroundInfo.BackgroundPathsList[0];
+            BackgroundInfo.BackgroundPath = BackgroundInfo.BackgroundPathsList[0];
         }
     }
 
-    private async Task AddBackgroundToList(FormatTypes format, IMainWindow mainWindow)
+    [RelayCommand]
+    private async Task AddBackgroundToList()
     {
-        var pickFile = await _filePickerService.PickFilePath(Models.FileTypes.NonTransparentImages);
-        var pathToCopy = _backgroundDir[format];
+        var pickFile = await FilePickerService.PickFilePath(Models.FileTypes.NonTransparentImages);
+        var pathToCopy = _backgroundDir[(FormatTypes)Id];
         var imageSize = _imageManager.GetImageSizeFromFile(pickFile);
         if (imageSize.HasValue)
         {
             var ratio = (double)imageSize.Value.Width / imageSize.Value.Height;
-            if (ratio != _ratios[format] && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, mainWindow))
+            if (ratio != _dbContext.LayoutFormat.First(x => x.Id == Id).FormatRatio && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
             {
                 return;
             }
@@ -117,51 +114,57 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
             return;
         }
         _filesManager.CopyFile(pickFile, pathToCopy);
-        PopulateBackgroundList(pathToCopy, Formats[format]);
+        PopulateBackgroundList(pathToCopy);
     }
 
     [RelayCommand]
-    private Task AddPostcardBackgroundToList(IMainWindow mainWindow)
+    private async Task ChangeFormatIndex(int index)
     {
-        return AddBackgroundToList(FormatTypes.PostCard, mainWindow);
+        if (NotSavedChange && await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
+        {
+            Id = index;
+        }
     }
 
     [RelayCommand]
-    private Task AddStripeBackgroundToList(IMainWindow mainWindow)
+    private void RemoveBackgroundFromList()
     {
-        return AddBackgroundToList(FormatTypes.Stripe, mainWindow);
+        if (BackgroundInfo.SelectedItem != null)
+        {
+            var selectedValueCopy = BackgroundInfo.SelectedItem;
+            _filesManager.DeleteFile(BackgroundInfo.SelectedItem);
+            BackgroundInfo.BackgroundPathsList.Remove(BackgroundInfo.SelectedItem);
+            if (BackgroundInfo.BackgroundPath == selectedValueCopy)
+            {
+                if (BackgroundInfo.BackgroundPathsList.Count > 0)
+                {
+                    BackgroundInfo.BackgroundPath = BackgroundInfo.BackgroundPathsList[0];
+                    return;
+                }
+                BackgroundInfo.BackgroundPath = null;
+            }
+        }
     }
 
     [RelayCommand]
-    private void RemoveBackgroundFromList(FormatTypes format)
+    private void LoadNextBackground()
     {
-        DeleteItem(Formats[format]);
-    }
-
-    [RelayCommand]
-    private void LoadNextBackground(FormatTypes format)
-    {
-        LoadNextBackground(Formats[format]);
+        var count = BackgroundInfo.BackgroundPathsList.Count;
+        if (count > 0 && !String.IsNullOrEmpty(BackgroundInfo.BackgroundPath))
+        {
+            var index = BackgroundInfo.BackgroundPathsList.IndexOf(BackgroundInfo.BackgroundPath);
+            index++;
+            if (index == count)
+            {
+                index = 0;
+            }
+            BackgroundInfo.BackgroundPath = BackgroundInfo.BackgroundPathsList[index];
+        }
     }
 
     [RelayCommand]
     private void SaveLayout()
     {
         _dbContext.SaveChanges();
-    }
-
-    private void LoadNextBackground(BackgroundInfo backgroundInfo)
-    {
-        var count = backgroundInfo.BackgroundPathsList.Count;
-        if (count > 0 && !String.IsNullOrEmpty(backgroundInfo.BackgroundPath))
-        {
-            var index = backgroundInfo.BackgroundPathsList.IndexOf(backgroundInfo.BackgroundPath);
-            index++;
-            if (index == count)
-            {
-                index = 0;
-            }
-            backgroundInfo.BackgroundPath = backgroundInfo.BackgroundPathsList[index];
-        }
     }
 }

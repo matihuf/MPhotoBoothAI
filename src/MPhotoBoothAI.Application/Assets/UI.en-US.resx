@@ -243,10 +243,10 @@
   <data name="designCanvasText" xml:space="preserve">
     <value>Print design. To display the background add the image to the list above.</value>
   </data>
-  <data name="stripeFormat" xml:space="preserve">
+  <data name="stripe" xml:space="preserve">
     <value>Stripe</value>
   </data>
-  <data name="postcardFormat" xml:space="preserve">
+  <data name="postcard" xml:space="preserve">
     <value>Postcard</value>
   </data>
   <data name="clone" xml:space="preserve">
@@ -257,5 +257,11 @@
   </data>
   <data name="openFile" xml:space="preserve">
     <value>Open File</value>
+  </data>
+  <data name="chooseFormat" xml:space="preserve">
+    <value>Choose format</value>
+  </data>
+  <data name="editFormat" xml:space="preserve">
+    <value>Select a format to edit</value>
   </data>
 </root>

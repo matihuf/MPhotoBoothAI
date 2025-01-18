@@ -151,6 +151,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wybierz format.
+        /// </summary>
+        public static string chooseFormat {
+            get {
+                return ResourceManager.GetString("chooseFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wyczyść layout.
         /// </summary>
         public static string clearLayout {
@@ -210,6 +219,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string edit {
             get {
                 return ResourceManager.GetString("edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wybierz format do edycji.
+        /// </summary>
+        public static string editFormat {
+            get {
+                return ResourceManager.GetString("editFormat", resourceCulture);
             }
         }
         
@@ -333,9 +351,9 @@ namespace MPhotoBoothAI.Application.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Pocztówka.
         /// </summary>
-        public static string postcardFormat {
+        public static string postcard {
             get {
-                return ResourceManager.GetString("postcardFormat", resourceCulture);
+                return ResourceManager.GetString("postcard", resourceCulture);
             }
         }
         
@@ -423,9 +441,9 @@ namespace MPhotoBoothAI.Application.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Listek.
         /// </summary>
-        public static string stripeFormat {
+        public static string stripe {
             get {
-                return ResourceManager.GetString("stripeFormat", resourceCulture);
+                return ResourceManager.GetString("stripe", resourceCulture);
             }
         }
         

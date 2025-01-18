@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -9,7 +10,6 @@ using Avalonia.Media.Imaging;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
-using MPhotoBoothAI.Avalonia.Services;
 using MPhotoBoothAI.Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,11 @@ public partial class DesignLayoutControl : UserControl
 
     private const double StartAngle = 0;
 
-    private const double ConstImageRotation = 90;
+    private const double ResizeScaleDividor = 5000;
+
+    private bool _isFormatLayoutChanged;
+
+    private bool _isFormatDataChanged;
 
     private double _mainScale = 1;
 
@@ -42,35 +46,11 @@ public partial class DesignLayoutControl : UserControl
 
     private bool _resizeMultiplier;
 
-    private double _resizeScaleDividor = 5000;
-
     private readonly Point _startPivot = new Point(0, 0);
 
     private string[] _imageExtensions = [".tif", ".tiff", ".bmp", ".jpg", ".jpeg", ".png"];
 
-    private IFilePickerService _filesPicker;
-
-    private IList<PhotoLayoutDataEntity> _localPhotoImages;
-
-    private IList<OverlayImageDataEntity> _localOverlayImages;
-
-    public static readonly StyledProperty<double> CanvasWidthProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, double>(nameof(CanvasWidth));
-
-    public double CanvasWidth
-    {
-        get => this.GetValue(CanvasWidthProperty);
-        set => SetValue(CanvasWidthProperty, value);
-    }
-
-    public static readonly StyledProperty<double> CanvasHeightProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, double>(nameof(CanvasHeight));
-
-    public double CanvasHeight
-    {
-        get => this.GetValue(CanvasHeightProperty);
-        set => SetValue(CanvasHeightProperty, value);
-    }
+    private List<string> _overlayImagesPaths = [];
 
     public static readonly StyledProperty<string> LayoutBackgroundPathProperty =
         AvaloniaProperty.Register<DesignLayoutControl, string>(nameof(LayoutBackgroundPath));
@@ -79,24 +59,6 @@ public partial class DesignLayoutControl : UserControl
     {
         get => this.GetValue(LayoutBackgroundPathProperty);
         set => SetValue(LayoutBackgroundPathProperty, value);
-    }
-
-    public static readonly StyledProperty<double> ButtonWidthProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, double>(nameof(ButtonWidth));
-
-    public double ButtonWidth
-    {
-        get => this.GetValue(ButtonWidthProperty);
-        set => SetValue(ButtonWidthProperty, value);
-    }
-
-    public static readonly StyledProperty<double> ButtonHeightProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, double>(nameof(ButtonHeight));
-
-    public double ButtonHeight
-    {
-        get => this.GetValue(ButtonHeightProperty);
-        set => SetValue(ButtonHeightProperty, value);
     }
 
     public static readonly StyledProperty<bool> ActiveLayerSwitchProperty =
@@ -108,15 +70,6 @@ public partial class DesignLayoutControl : UserControl
         set => SetValue(ActiveLayerSwitchProperty, value);
     }
 
-    public static readonly StyledProperty<double> SizeRatioProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, double>(nameof(SizeRatio), 1);
-
-    public double SizeRatio
-    {
-        get => this.GetValue(SizeRatioProperty);
-        set => SetValue(SizeRatioProperty, value);
-    }
-
     public static readonly StyledProperty<ICommand> NextBackgroundProperty =
         AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(NextBackground));
 
@@ -124,24 +77,6 @@ public partial class DesignLayoutControl : UserControl
     {
         get => this.GetValue(NextBackgroundProperty);
         set => SetValue(NextBackgroundProperty, value);
-    }
-
-    public static readonly StyledProperty<object> CommandParameterProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, object>(nameof(CommandParameter));
-
-    public object CommandParameter
-    {
-        get => this.GetValue(CommandParameterProperty);
-        set => SetValue(CommandParameterProperty, value);
-    }
-
-    public static readonly StyledProperty<IList<PhotoLayoutDataEntity>> PhotoImagesProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, IList<PhotoLayoutDataEntity>>(nameof(PhotoImages));
-
-    public IList<PhotoLayoutDataEntity> PhotoImages
-    {
-        get => this.GetValue(PhotoImagesProperty);
-        set => SetValue(PhotoImagesProperty, value);
     }
 
     public static readonly StyledProperty<ICommand> SaveLayoutCommandProperty =
@@ -153,22 +88,40 @@ public partial class DesignLayoutControl : UserControl
         set => SetValue(SaveLayoutCommandProperty, value);
     }
 
-    public static readonly StyledProperty<ICommand> ResetLayoutCommandProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(ResetLayoutCommand), default);
+    public static readonly StyledProperty<IFilePickerService> FilePickerProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, IFilePickerService>(nameof(FilePicker));
 
-    public ICommand ResetLayoutCommand
+    public IFilePickerService FilePicker
     {
-        get => this.GetValue(ResetLayoutCommandProperty);
-        set => SetValue(ResetLayoutCommandProperty, value);
+        get => this.GetValue(FilePickerProperty);
+        set => SetValue(FilePickerProperty, value);
     }
 
-    public static readonly StyledProperty<IList<OverlayImageDataEntity>> OverlayImagesProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, IList<OverlayImageDataEntity>>(nameof(OverlayImages));
+    public static readonly StyledProperty<LayoutFormatEntity> LayoutFormatProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, LayoutFormatEntity>(nameof(LayoutFormat));
 
-    public IList<OverlayImageDataEntity> OverlayImages
+    public LayoutFormatEntity LayoutFormat
     {
-        get => this.GetValue(OverlayImagesProperty);
-        set => SetValue(OverlayImagesProperty, value);
+        get => this.GetValue(LayoutFormatProperty);
+        set => SetValue(LayoutFormatProperty, value);
+    }
+
+    public static readonly StyledProperty<LayoutDataEntity> LayoutDataProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, LayoutDataEntity>(nameof(LayoutData));
+
+    public LayoutDataEntity LayoutData
+    {
+        get => this.GetValue(LayoutDataProperty);
+        set => SetValue(LayoutDataProperty, value);
+    }
+
+    public static readonly StyledProperty<bool> NotSavedChangeProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, bool>(nameof(NotSavedChange), defaultBindingMode: BindingMode.TwoWay);
+
+    public bool NotSavedChange
+    {
+        get => this.GetValue(NotSavedChangeProperty);
+        set => SetValue(NotSavedChangeProperty, value);
     }
 
     public DesignLayoutControl()
@@ -179,7 +132,33 @@ public partial class DesignLayoutControl : UserControl
         {
             LoadBackgroundImage(path);
         });
-        _filesPicker = new FilePickerService();
+        this.GetObservable(LayoutDataProperty).Subscribe(path =>
+        {
+            if (path != null)
+            {
+                _isFormatDataChanged = true;
+                if (_isFormatLayoutChanged)
+                {
+                    ChangeLayout();
+                }
+            }
+        });
+        this.GetObservable(LayoutFormatProperty).Subscribe(path =>
+        {
+            if (path != null)
+            {
+                _isFormatLayoutChanged = true;
+                if (_isFormatDataChanged)
+                {
+                    ChangeLayout();
+                }
+            }
+        });
+    }
+
+    ~DesignLayoutControl()
+    {
+        canvasRoot.SizeChanged -= PhotoCanvas_SizeChanged;
     }
 
     private void ModifierPressed(object? sender, KeyEventArgs e)
@@ -206,22 +185,36 @@ public partial class DesignLayoutControl : UserControl
         }
     }
 
+    private void ChangeLayout()
+    {
+        _isFormatDataChanged = false;
+        _isFormatLayoutChanged = false;
+        var width = canvasRoot.Bounds.Width;
+        if (width > 0)
+        {
+            _mainScale = width / LayoutFormat.FormatWidth;
+            SetHeight(width);
+            Clear();
+            LoadLayerItems();
+        }
+    }
+
     private void LoadedControl(object? sender, RoutedEventArgs e)
     {
-        var width = canvasRoot.Bounds.Width;
-        _mainScale = width / Consts.Sizes.BasicPrintWidth;
-        SetHeight(width);
-        LoadLayerItems();
+        ChangeLayout();
     }
 
     private void LoadLayerItems()
     {
-        _localPhotoImages = PhotoImages;
-        _localOverlayImages = OverlayImages;
-        foreach (var photo in PhotoImages)
+        foreach (var photo in LayoutData.PhotoLayoutData)
         {
             var photoGrid = BuildPhotoImageGrid();
-            AddItemOnLayer(photoGrid, photoCanvas, new Point(photo.Left, photo.Top), photo.Angle, photo.Scale, true);
+            AddImageOnCanvas(photoGrid, photoCanvas, new Point(photo.Left * _mainScale, photo.Top * _mainScale), photo.Angle, photo.Scale / _mainScale, true);
+        }
+        foreach (var overlayImage in LayoutData.OverlayImageData)
+        {
+            var image = BuildImage(new Bitmap(overlayImage.Path));
+            AddImageOnCanvas(image, frameCanvas, new Point(overlayImage.Left * _mainScale, overlayImage.Top * _mainScale), overlayImage.Angle, overlayImage.Scale / _mainScale);
         }
     }
 
@@ -229,7 +222,7 @@ public partial class DesignLayoutControl : UserControl
     {
         var width = e.NewSize.Width;
         var ratio = width / e.PreviousSize.Width;
-        _mainScale = width / Consts.Sizes.BasicPrintWidth;
+        _mainScale = width / LayoutFormat.FormatWidth;
         SetHeight(width);
         ResizeReposiztionChildren(ratio, photoCanvas);
         ResizeReposiztionChildren(ratio, frameCanvas);
@@ -249,7 +242,7 @@ public partial class DesignLayoutControl : UserControl
 
     private void SetHeight(double width)
     {
-        var height = width / SizeRatio;
+        var height = width * LayoutFormat.FormatRatio;
         foreach (var child in canvasRoot.Children)
         {
             child.Width = width;
@@ -281,8 +274,8 @@ public partial class DesignLayoutControl : UserControl
     {
         try
         {
-            var file = await _filesPicker.PickFilePath(FileTypes.AllImages);
-            LoadImageFromPath(new Point(50, 50), file);
+            var file = await FilePicker.PickFilePath(FileTypes.AllImages);
+            LoadImageFromPath(new Point(50, 50), file, _mainScale);
         }
         catch (Exception ex)
         {
@@ -297,46 +290,39 @@ public partial class DesignLayoutControl : UserControl
         {
             foreach (var file in files)
             {
-                LoadImageFromPath(e.GetPosition(this), file.Path.LocalPath);
+                LoadImageFromPath(e.GetPosition(this), file.Path.LocalPath, _mainScale);
             }
         }
     }
 
-    private void LoadImageFromPath(Point position, string path)
+    private void LoadImageFromPath(Point position, string path, double scale)
     {
         var extension = Path.GetExtension(path).ToLower();
         if (_imageExtensions.Contains(extension))
         {
             var bitmap = new Bitmap(path);
+            _overlayImagesPaths.Add(path);
             Image image = BuildImage(bitmap);
-            AddItemOnLayer(image, frameCanvas, position, StartAngle, _mainScale);
+            AddImageOnCanvas(image, frameCanvas, position, StartAngle, scale);
         }
     }
 
     private void AddPhoto(object? sender, RoutedEventArgs e)
     {
         var gridRect = BuildPhotoImageGrid();
-        var position = new Point(gridRect.Width / 2, gridRect.Height / 2);
-        var photo = new PhotoLayoutDataEntity
-        {
-            Left = position.X / _mainScale,
-            Top = position.Y / _mainScale,
-            Angle = -ConstImageRotation,
-            Scale = gridRect.Height / Consts.Sizes.PhotoWidth / StartScale
-        };
-        PhotoImages.Add(photo);
-        AddItemOnLayer(gridRect, photoCanvas, position * _mainScale, 0, _mainScale, true);
+        var position = new Point(gridRect.Width / 2 * _mainScale * StartScale, photoCanvas.Height / 2);
+        AddImageOnCanvas(gridRect, photoCanvas, position, 0, _mainScale * StartScale, true);
     }
 
-    private void AddItemOnLayer(Control control, Canvas canvas, Point position, double angle, double scale, bool addIndex = false)
+    private void AddImageOnCanvas(Control control, Canvas canvas, Point position, double angle, double scale, bool addIndex = false)
     {
         var index = (canvas.Children.Count + 1).ToString();
         var imageRoot = new Grid() { Width = 0, Height = 0 };
         control.RenderTransform = new RotateTransform(angle, _startPivot.X, _startPivot.Y);
         control.Width *= scale;
         control.Height *= scale;
-        Canvas.SetTop(imageRoot, position.Y / _mainScale);
-        Canvas.SetLeft(imageRoot, position.X / _mainScale);
+        Canvas.SetTop(imageRoot, position.Y);
+        Canvas.SetLeft(imageRoot, position.X);
         RegisterEvents(control);
         if (control is Grid grid && addIndex)
         {
@@ -345,6 +331,7 @@ public partial class DesignLayoutControl : UserControl
         }
         imageRoot.Children.Add(control);
         canvas.Children.Add(imageRoot);
+        NotSavedChange = true;
     }
 
     private ContextMenu BuildContextMenu()
@@ -366,8 +353,8 @@ public partial class DesignLayoutControl : UserControl
     {
         return new Grid()
         {
-            Width = Consts.Sizes.PhotoHeight * StartScale,
-            Height = Consts.Sizes.PhotoWidth * StartScale,
+            Width = Consts.Sizes.PhotoHeight,
+            Height = Consts.Sizes.PhotoWidth,
             Background = RandomColor()
         };
     }
@@ -389,8 +376,8 @@ public partial class DesignLayoutControl : UserControl
         return new Image()
         {
             Source = bitmap,
-            Width = bitmap.Size.Width * StartScale,
-            Height = bitmap.Size.Height * StartScale,
+            Width = bitmap.Size.Width,
+            Height = bitmap.Size.Height,
             ClipToBounds = false,
             ContextMenu = BuildContextMenu()
         };
@@ -407,6 +394,8 @@ public partial class DesignLayoutControl : UserControl
                 clone.Click -= CloneItem;
                 if (contextMenu.Parent?.Parent?.Parent is Grid rootGrid)
                 {
+                    var index = frameCanvas.Children.IndexOf(rootGrid);
+                    _overlayImagesPaths.RemoveAt(index);
                     RemoveItemFromLayer(rootGrid, frameCanvas);
                 }
             }
@@ -424,7 +413,9 @@ public partial class DesignLayoutControl : UserControl
                 cloneImage.Width = image.Width;
                 cloneImage.Height = image.Height;
                 Point position = new(Canvas.GetLeft(rootGrid) + 50, Canvas.GetTop(rootGrid) + 50);
-                AddItemOnLayer(cloneImage, frameCanvas, position, StartAngle, 1);
+                var pathToCopy = frameCanvas.Children.IndexOf(rootGrid);
+                _overlayImagesPaths.Add(_overlayImagesPaths[pathToCopy]);
+                AddImageOnCanvas(cloneImage, frameCanvas, position, StartAngle, 1);
             }
         }
     }
@@ -434,6 +425,7 @@ public partial class DesignLayoutControl : UserControl
         if (photoCanvas.Children.Count > 0 && photoCanvas.Children[^1] is Grid item)
         {
             RemoveItemFromLayer(item, photoCanvas);
+            NotSavedChange = true;
         }
     }
 
@@ -443,6 +435,7 @@ public partial class DesignLayoutControl : UserControl
         {
             UnregisterEvents(item);
             layer.Children.Remove(item);
+            NotSavedChange = true;
         }
     }
 
@@ -482,6 +475,7 @@ public partial class DesignLayoutControl : UserControl
             var currentPosition = e.GetPosition(photoCanvas);
             Canvas.SetTop(parentControl, currentPosition.Y + _startDragOffset.Y);
             Canvas.SetLeft(parentControl, currentPosition.X + _startDragOffset.X);
+            NotSavedChange = true;
         }
     }
 
@@ -505,7 +499,7 @@ public partial class DesignLayoutControl : UserControl
                     height = image.Source.Size.Height;
                 }
                 var currentScale = control.Width / (width * _mainScale);
-                var newScale = (currentScale - (delta / _resizeScaleDividor * (_resizeMultiplier ? 5 : 1)));
+                var newScale = (currentScale - (delta / ResizeScaleDividor * (_resizeMultiplier ? 5 : 1)));
                 if (newScale > 0)
                 {
                     control.Width = width * _mainScale * newScale;
@@ -529,6 +523,7 @@ public partial class DesignLayoutControl : UserControl
                 }
             }
             e.Handled = true;
+            NotSavedChange = true;
         }
     }
 
@@ -539,13 +534,46 @@ public partial class DesignLayoutControl : UserControl
 
     private void SaveLayout(object? sender, RoutedEventArgs e)
     {
-        Console.Beep();
+        LayoutData.PhotoLayoutData.Clear();
+        LayoutData.OverlayImageData.Clear();
+        for (int i = 0; i < photoCanvas.Children.Count; i++)
+        {
+            Grid grid = (Grid)photoCanvas.Children[i];
+            var photo = new PhotoLayoutDataEntity
+            {
+                Top = Canvas.GetTop(grid) / _mainScale,
+                Left = Canvas.GetLeft(grid) / _mainScale,
+                Angle = (grid.Children[0].RenderTransform as RotateTransform).Angle,
+                Scale = grid.Children[0].Height / Consts.Sizes.PhotoWidth * _mainScale,
+            };
+            LayoutData.PhotoLayoutData.Add(photo);
+        }
+        for (int i = 0; i < frameCanvas.Children.Count; i++)
+        {
+            Grid grid = (Grid)frameCanvas.Children[i];
+            var image = grid.Children[0] as Image;
+            var bitmap = image.Source as Bitmap;
+            var overlayImage = new OverlayImageDataEntity
+            {
+                Top = Canvas.GetTop(grid) / _mainScale,
+                Left = Canvas.GetLeft(grid) / _mainScale,
+                Angle = (image.RenderTransform as RotateTransform).Angle,
+                Scale = image.Width / bitmap.Size.Width * _mainScale,
+                Path = _overlayImagesPaths[frameCanvas.Children.IndexOf(grid)]
+            };
+            LayoutData.OverlayImageData.Add(overlayImage);
+        }
+        SaveLayoutCommand?.Execute(null);
     }
 
     private void ClearLayout(object? sender, RoutedEventArgs e)
     {
-        _localOverlayImages.Clear();
-        _localPhotoImages.Clear();
+        Clear();
+        NotSavedChange = true;
+    }
+
+    private void Clear()
+    {
         photoCanvas.Children.Clear();
         frameCanvas.Children.Clear();
     }
