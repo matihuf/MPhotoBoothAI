@@ -98,7 +98,7 @@ public partial class DesignLayoutControl : UserControl
     }
 
     public static readonly StyledProperty<LayoutFormatEntity> LayoutFormatProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, LayoutFormatEntity>(nameof(LayoutFormat));
+        AvaloniaProperty.Register<DesignLayoutControl, LayoutFormatEntity>(nameof(LayoutFormat), default);
 
     public LayoutFormatEntity LayoutFormat
     {
@@ -107,7 +107,7 @@ public partial class DesignLayoutControl : UserControl
     }
 
     public static readonly StyledProperty<LayoutDataEntity> LayoutDataProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, LayoutDataEntity>(nameof(LayoutData));
+        AvaloniaProperty.Register<DesignLayoutControl, LayoutDataEntity>(nameof(LayoutData), default);
 
     public LayoutDataEntity LayoutData
     {
@@ -127,8 +127,6 @@ public partial class DesignLayoutControl : UserControl
     public DesignLayoutControl()
     {
         InitializeComponent();
-        DataContext = this;
-        canvasRoot.SizeChanged += PhotoCanvas_SizeChanged;
         this.GetObservable(LayoutBackgroundPathProperty).Subscribe(path =>
         {
             LoadBackgroundImage(path);
@@ -155,6 +153,7 @@ public partial class DesignLayoutControl : UserControl
                 }
             }
         });
+        canvasRoot.SizeChanged += PhotoCanvas_SizeChanged;
     }
 
     ~DesignLayoutControl()
@@ -186,25 +185,25 @@ public partial class DesignLayoutControl : UserControl
         }
     }
 
-    private void ChangeLayout()
-    {
-        _isFormatDataChanged = false;
-        _isFormatLayoutChanged = false;
-        var width = canvasRoot.Bounds.Width;
-        if (width > 0 && LayoutData != null && LayoutFormat != null)
-        {
-            _mainScale = width / LayoutFormat.FormatWidth;
-            SetHeight(width);
-            Clear();
-            LoadLayerItems();
-        }
-    }
-
     private void LoadedControl(object? sender, RoutedEventArgs e)
     {
         if (LayoutFormat is not null && LayoutData is not null)
         {
             ChangeLayout();
+        }
+    }
+
+    private void ChangeLayout()
+    {
+        var width = canvasRoot.Bounds.Width;
+        if (width > 0)
+        {
+            _isFormatDataChanged = false;
+            _isFormatLayoutChanged = false;
+            _mainScale = width / LayoutFormat.FormatWidth;
+            SetHeight(width);
+            Clear();
+            LoadLayerItems();
         }
     }
 
@@ -228,7 +227,7 @@ public partial class DesignLayoutControl : UserControl
 
     private void PhotoCanvas_SizeChanged(object? sender, SizeChangedEventArgs e)
     {
-        if (LayoutFormat != null)
+        if (LayoutFormat is not null)
         {
             var width = e.NewSize.Width;
             var ratio = width / e.PreviousSize.Width;

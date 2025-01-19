@@ -3,6 +3,6 @@
 namespace MPhotoBoothAI.Models.Entities;
 public class LayoutDataEntity : Entity
 {
-    public ICollection<PhotoLayoutDataEntity> PhotoLayoutData { get; set; } = [];
-    public ICollection<OverlayImageDataEntity> OverlayImageData { get; set; } = [];
+    public List<PhotoLayoutDataEntity> PhotoLayoutData { get; set; } = [];
+    public List<OverlayImageDataEntity> OverlayImageData { get; set; } = [];
 }

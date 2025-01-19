@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Name="root"
     x:DataType="controls:DesignLayoutControl"
+    Design.DataContext="controls:DesignLayoutControl"
     KeyDown="ModifierPressed"
     KeyUp="ModifierReleased"
     Loaded="LoadedControl">
@@ -60,6 +61,7 @@
     <StackPanel>
         <Grid
             Name="canvasRoot"
+            Height=""
             MinWidth="400"
             MaxWidth="1200">
             <Border
