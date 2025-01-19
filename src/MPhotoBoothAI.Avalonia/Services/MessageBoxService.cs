@@ -41,7 +41,7 @@ public class MessageBoxService : IMessageBoxService
         return result == Application.Assets.UI.yes ? box.InputValue : string.Empty;
     }
 
-    public async Task<string> ShowInfo(string title, string text, IMainWindow? mainWindow = null)
+    public async Task<bool> ShowInfo(string title, string text, IMainWindow? mainWindow = null)
     {
         var box = BuildMessageBox(title, text, null, false);
         string result;
@@ -53,7 +53,7 @@ public class MessageBoxService : IMessageBoxService
         {
             result = await box.ShowAsync();
         }
-        return result == Application.Assets.UI.close ? box.InputValue : string.Empty;
+        return result == Application.Assets.UI.close;
     }
 
     private static IMsBox<string> BuildMessageBox(string title, string text, InputParams? inputParams, bool showCancel = true)

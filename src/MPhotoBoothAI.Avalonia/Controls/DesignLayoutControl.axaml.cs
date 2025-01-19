@@ -80,7 +80,7 @@ public partial class DesignLayoutControl : UserControl
     }
 
     public static readonly StyledProperty<ICommand> SaveLayoutCommandProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(SaveLayoutCommand), default);
+        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(SaveLayoutCommand));
 
     public ICommand SaveLayoutCommand
     {
@@ -127,6 +127,7 @@ public partial class DesignLayoutControl : UserControl
     public DesignLayoutControl()
     {
         InitializeComponent();
+        DataContext = this;
         canvasRoot.SizeChanged += PhotoCanvas_SizeChanged;
         this.GetObservable(LayoutBackgroundPathProperty).Subscribe(path =>
         {
@@ -190,7 +191,7 @@ public partial class DesignLayoutControl : UserControl
         _isFormatDataChanged = false;
         _isFormatLayoutChanged = false;
         var width = canvasRoot.Bounds.Width;
-        if (width > 0)
+        if (width > 0 && LayoutData != null && LayoutFormat != null)
         {
             _mainScale = width / LayoutFormat.FormatWidth;
             SetHeight(width);
@@ -201,7 +202,10 @@ public partial class DesignLayoutControl : UserControl
 
     private void LoadedControl(object? sender, RoutedEventArgs e)
     {
-        ChangeLayout();
+        if (LayoutFormat is not null && LayoutData is not null)
+        {
+            ChangeLayout();
+        }
     }
 
     private void LoadLayerItems()
@@ -224,12 +228,15 @@ public partial class DesignLayoutControl : UserControl
 
     private void PhotoCanvas_SizeChanged(object? sender, SizeChangedEventArgs e)
     {
-        var width = e.NewSize.Width;
-        var ratio = width / e.PreviousSize.Width;
-        _mainScale = width / LayoutFormat.FormatWidth;
-        SetHeight(width);
-        ResizeReposiztionChildren(ratio, photoCanvas);
-        ResizeReposiztionChildren(ratio, frameCanvas);
+        if (LayoutFormat != null)
+        {
+            var width = e.NewSize.Width;
+            var ratio = width / e.PreviousSize.Width;
+            _mainScale = width / LayoutFormat.FormatWidth;
+            SetHeight(width);
+            ResizeReposiztionChildren(ratio, photoCanvas);
+            ResizeReposiztionChildren(ratio, frameCanvas);
+        }
     }
 
     private void ResizeReposiztionChildren(double ratio, Canvas canvas)

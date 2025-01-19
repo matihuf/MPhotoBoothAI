@@ -15,17 +15,11 @@
     d:DesignHeight="1080"
     d:DesignWidth="1920"
     x:DataType="vm:DesignPrintTemplateViewModel"
-    DataContext="vm:DesignPrintTemplateViewModel"
-    Design.DataContext="vm:DesignPrintTemplateViewModel"
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <x:Double x:Key="stripeRatio">3</x:Double>
-        <x:Double x:Key="postcardRatio">2</x:Double>
         <converter:FullPathToFileNameConverter x:Key="fullPathToName" />
         <converter:FormatTypeToTranslatedNameConverter x:Key="formatToName" />
-        <format:FormatTypes x:Key="stripe">Stripe</format:FormatTypes>
-        <format:FormatTypes x:Key="postcard">PostCard</format:FormatTypes>
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="Button">

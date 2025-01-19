@@ -104,12 +104,13 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         if (imageSize.HasValue)
         {
             var formatRatio = _dbContext.LayoutFormat.First(x => x.Id == Id).FormatRatio;
-            var ratio = (double)imageSize.Value.Width / imageSize.Value.Height;
-            if (ratio < formatRatio * 1.01
-                && ratio > formatRatio * 0.99
-                && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
+            var ratio = imageSize.Value.Height / (double)imageSize.Value.Width;
+            if (ratio > formatRatio * 1.01 || ratio < formatRatio * 0.99)
             {
-                return;
+                if (!await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
+                {
+                    return;
+                }
             }
         }
         else
