@@ -8,6 +8,7 @@
         x:Class="MPhotoBoothAI.Avalonia.Windows.FaceSwapTemplates.PreviewFaceSwapTemplateWindow"
         xmlns:vm="using:MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates"
         xmlns:assets="using:MPhotoBoothAI.Application.Assets"
+        xmlns:neumorphism="clr-namespace:Avalonia.Themes.Neumorphism.Controls;assembly=Avalonia.Themes.Neumorphism"
         x:DataType="vm:PreviewFaceSwapTemplateViewModel"
         xmlns:fa="using:FluentAvalonia.UI.Controls"
         Title="PreviewFaceSwapTemplateWindow"
@@ -23,17 +24,10 @@
   <Window.Styles>
     <Style Selector="Window">
       <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="Padding" Value="20"/>
     </Style>
   </Window.Styles>
 
-  <Border>
-    <Border.Styles>
-      <Style Selector="Border">
-        <Setter Property="Background" Value="WhiteSmoke"/>
-        <Setter Property="CornerRadius" Value="20"/>
-      </Style>
-    </Border.Styles>
+  <neumorphism:Card CornerRadius="8" Margin="5">
     <Grid>
       <Grid.RowDefinitions>
         <RowDefinition Height="*"/>
@@ -79,11 +73,19 @@
             <TextBlock Text="{x:Static assets:UI.cameraPreview}" IsVisible="{Binding CameraFrame, Converter={x:Static ObjectConverters.IsNull}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Panel>
         </Border>
-        <Button Grid.Column="1" Grid.Row="1" Command="{Binding SwapCommand}" IsEnabled="{Binding CameraFrame, Converter={x:Static ObjectConverters.IsNotNull}}" Content="{x:Static assets:UI.swap}" HorizontalAlignment="Center"/>
+        <neumorphism:FloatingButton Grid.Column="1" Grid.Row="1" IsExtended="True" IsEnabled="{Binding CameraFrame, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource MaterialDesignForeground}" Command="{Binding SwapCommand}" HorizontalAlignment="Center">
+          <neumorphism:FloatingButton.Content>
+            <TextBlock Text="{x:Static assets:UI.swap}" VerticalAlignment="Center" Margin="5,0,0,0" />
+          </neumorphism:FloatingButton.Content>
+        </neumorphism:FloatingButton>
       </Grid>
       <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Spacing="10" Margin="10">
-        <Button x:Name="btnClose" Content="{x:Static assets:UI.close}" Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <neumorphism:FloatingButton x:Name="btnClose" IsExtended="True" Foreground="{DynamicResource MaterialDesignForeground}" Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+          <neumorphism:FloatingButton.Content>
+            <TextBlock Text="{x:Static assets:UI.close}" VerticalAlignment="Center" Margin="5,0,0,0" />
+          </neumorphism:FloatingButton.Content>
+        </neumorphism:FloatingButton>
       </StackPanel>
     </Grid>
-  </Border>
+  </neumorphism:Card>
 </Window>
