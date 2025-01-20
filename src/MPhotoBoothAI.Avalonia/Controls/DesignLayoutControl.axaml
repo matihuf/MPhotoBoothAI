@@ -96,8 +96,8 @@
             Orientation="Horizontal">
             <Button
                 x:Name="NextBackgroundButton"
-                Command="{Binding NextBackground, ElementName=root}"
-                Content="{x:Static assets:UI.nextBackground}" />
+                Command="{Binding SetBackground, ElementName=root}"
+                Content="{x:Static assets:UI.setBackground}" />
             <Button x:Name="PhotoLayerButton" Click="SwitchToPhotoLayer">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
@@ -128,11 +128,6 @@
                 x:Name="AddPhotoButton"
                 Click="AddPhoto"
                 Content="{x:Static assets:UI.addPhoto}"
-                IsEnabled="{Binding ActiveLayerSwitch, ElementName=root}" />
-            <Button
-                x:Name="RemovePhotoButton"
-                Click="RemovePhoto"
-                Content="{x:Static assets:UI.removePhoto}"
                 IsEnabled="{Binding ActiveLayerSwitch, ElementName=root}" />
             <Button
                 x:Name="AddFrameButton"

@@ -8,6 +8,8 @@ using MPhotoBoothAI.Models.Entities;
 namespace MPhotoBoothAI.Application.ViewModels;
 public partial class DesignPrintTemplateViewModel : ViewModelBase
 {
+    private const string BackgroundFileName = "background.jpg";
+
     private readonly IFilesManager _filesManager;
 
     private readonly IDatabaseContext _dbContext;
@@ -33,15 +35,13 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     private int _id = 0;
 
     [ObservableProperty]
-    private BackgroundInfo _backgroundInfo = new();
+    private string? _backgroundPath = null;
 
     [ObservableProperty]
     private LayoutFormatEntity _selectedLayoutFormat = new();
 
     [ObservableProperty]
     private LayoutDataEntity _selectedLayoutData = new();
-
-    private Dictionary<FormatTypes, BackgroundInfo> _formats = [];
 
     public DesignPrintTemplateViewModel(IFilePickerService filePickerService,
         IFilesManager filesManager,
@@ -64,7 +64,6 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         LayoutFormat = _dbContext.LayoutFormat.ToList();
         foreach (FormatTypes format in Enum.GetValues(typeof(FormatTypes)))
         {
-            _formats.Add(format, new BackgroundInfo());
             _backgroundDir.Add(format, Path.Combine(_applicationInfoService.BackgroundDirectory, format.ToString()));
         }
         Id = 1;
@@ -73,30 +72,16 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     partial void OnIdChanged(int value)
     {
         FormatTypes type = (FormatTypes)value;
-        BackgroundInfo = _formats[type];
         SelectedLayoutFormat = LayoutFormat.First(x => x.Id == Id);
         SelectedLayoutData = _dbContext.LayoutDatas
             .Include(x => x.PhotoLayoutData)
             .Include(x => x.OverlayImageData)
             .First(x => x.Id == Id);
-        PopulateBackgroundList(_backgroundDir[type]);
-    }
-
-    private void PopulateBackgroundList(string pathToCopy)
-    {
-        BackgroundInfo.BackgroundPathsList.Clear();
-        foreach (var path in _filesManager.GetFiles(pathToCopy))
-        {
-            BackgroundInfo.BackgroundPathsList.Add(path);
-        }
-        if (String.IsNullOrEmpty(BackgroundInfo.BackgroundPath) && BackgroundInfo.BackgroundPathsList.Count > 0)
-        {
-            BackgroundInfo.BackgroundPath = BackgroundInfo.BackgroundPathsList[0];
-        }
+        BackgroundPath = Path.Combine(_backgroundDir[type], BackgroundFileName);
     }
 
     [RelayCommand]
-    private async Task AddBackgroundToList()
+    private async Task SetBackground()
     {
         var pickFile = await FilePickerService.PickFilePath(Models.FileTypes.NonTransparentImages);
         var pathToCopy = _backgroundDir[(FormatTypes)Id];
@@ -117,8 +102,9 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         {
             return;
         }
-        _filesManager.CopyFile(pickFile, pathToCopy);
-        PopulateBackgroundList(pathToCopy);
+        _filesManager.CopyFile(pickFile, pathToCopy, BackgroundFileName);
+        BackgroundPath = null;
+        BackgroundPath = Path.Combine(pathToCopy, BackgroundFileName);
     }
 
     [RelayCommand]
@@ -133,41 +119,6 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         {
             Id = index;
             NotSavedChange = false;
-        }
-    }
-
-    [RelayCommand]
-    private void RemoveBackgroundFromList()
-    {
-        if (BackgroundInfo.SelectedItem != null)
-        {
-            var selectedValueCopy = BackgroundInfo.SelectedItem;
-            _filesManager.DeleteFile(BackgroundInfo.SelectedItem);
-            BackgroundInfo.BackgroundPathsList.Remove(BackgroundInfo.SelectedItem);
-            if (BackgroundInfo.BackgroundPath == selectedValueCopy)
-            {
-                if (BackgroundInfo.BackgroundPathsList.Count > 0)
-                {
-                    BackgroundInfo.BackgroundPath = BackgroundInfo.BackgroundPathsList[0];
-                    return;
-                }
-                BackgroundInfo.BackgroundPath = null;
-            }
-        }
-    }
-
-    [RelayCommand]
-    private void LoadNextBackground()
-    {
-        var count = BackgroundInfo.BackgroundPathsList.Count;
-        if (count > 0 && !String.IsNullOrEmpty(BackgroundInfo.BackgroundPath))
-        {
-            var index = BackgroundInfo.BackgroundPathsList.IndexOf(BackgroundInfo.BackgroundPath) + 1;
-            if (index == count)
-            {
-                index = 0;
-            }
-            BackgroundInfo.BackgroundPath = BackgroundInfo.BackgroundPathsList[index];
         }
     }
 

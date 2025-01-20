@@ -70,13 +70,13 @@ public partial class DesignLayoutControl : UserControl
         set => SetValue(ActiveLayerSwitchProperty, value);
     }
 
-    public static readonly StyledProperty<ICommand> NextBackgroundProperty =
-        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(NextBackground));
+    public static readonly StyledProperty<ICommand> SetBackgroundProperty =
+        AvaloniaProperty.Register<DesignLayoutControl, ICommand>(nameof(SetBackground));
 
-    public ICommand NextBackground
+    public ICommand SetBackground
     {
-        get => this.GetValue(NextBackgroundProperty);
-        set => SetValue(NextBackgroundProperty, value);
+        get => this.GetValue(SetBackgroundProperty);
+        set => SetValue(SetBackgroundProperty, value);
     }
 
     public static readonly StyledProperty<ICommand> SaveLayoutCommandProperty =
@@ -369,7 +369,8 @@ public partial class DesignLayoutControl : UserControl
         {
             Width = Consts.Sizes.PhotoHeight,
             Height = Consts.Sizes.PhotoWidth,
-            Background = RandomColor()
+            Background = RandomColor(),
+            ContextMenu = BuildContextMenu()
         };
     }
 
@@ -408,9 +409,18 @@ public partial class DesignLayoutControl : UserControl
                 clone.Click -= CloneItem;
                 if (contextMenu.Parent?.Parent?.Parent is Grid rootGrid)
                 {
-                    var index = frameCanvas.Children.IndexOf(rootGrid);
-                    _overlayImagesPaths.RemoveAt(index);
-                    RemoveItemFromLayer(rootGrid, frameCanvas);
+                    Canvas canvas;
+                    if (contextMenu.Parent?.Parent is Grid photoGrid)
+                    {
+                        canvas = photoCanvas;
+                    }
+                    else
+                    {
+                        canvas = frameCanvas;
+                        var index = canvas.Children.IndexOf(rootGrid);
+                        _overlayImagesPaths.RemoveAt(index);
+                    }
+                    RemoveItemFromLayer(rootGrid, canvas);
                 }
             }
         }
@@ -421,15 +431,26 @@ public partial class DesignLayoutControl : UserControl
         if (sender is MenuItem menuItem)
         {
             var contextMenu = menuItem.GetLogicalParent<ContextMenu>();
-            if (contextMenu != null && contextMenu.Parent?.Parent is Image image && image.Parent is Grid rootGrid && image.Source is Bitmap bitmap)
+            if (contextMenu != null && contextMenu.Parent?.Parent?.Parent is Grid rootGrid)
             {
-                var cloneImage = BuildImage(bitmap);
-                cloneImage.Width = image.Width;
-                cloneImage.Height = image.Height;
+                Control clone;
+                bool isPhoto;
+                if (rootGrid.Children[0] is Image image && image.Source is Bitmap bitmap)
+                {
+                    clone = BuildImage(bitmap);
+                    var pathToCopy = frameCanvas.Children.IndexOf(rootGrid);
+                    _overlayImagesPaths.Add(_overlayImagesPaths[pathToCopy]);
+                    isPhoto = false;
+                }
+                else
+                {
+                    clone = BuildPhotoImageGrid();
+                    isPhoto = true;
+                }
+                clone.Width = rootGrid.Children[0].Width;
+                clone.Height = rootGrid.Children[0].Height;
                 Point position = new(Canvas.GetLeft(rootGrid) + 50, Canvas.GetTop(rootGrid) + 50);
-                var pathToCopy = frameCanvas.Children.IndexOf(rootGrid);
-                _overlayImagesPaths.Add(_overlayImagesPaths[pathToCopy]);
-                AddImageOnCanvas(cloneImage, frameCanvas, position, StartAngle, 1);
+                AddImageOnCanvas(clone, isPhoto ? photoCanvas : frameCanvas, position, StartAngle, 1, isPhoto);
             }
         }
     }
@@ -449,7 +470,22 @@ public partial class DesignLayoutControl : UserControl
         {
             UnregisterEvents(item);
             layer.Children.Remove(item);
+            if (layer == photoCanvas)
+            {
+                UpdatePhotoIndex();
+            }
             NotSavedChange = true;
+        }
+    }
+
+    private void UpdatePhotoIndex()
+    {
+        for (int i = 0; i < photoCanvas.Children.Count; i++)
+        {
+            var grid = photoCanvas.Children[i] as Grid;
+            grid = grid.Children[0] as Grid;
+            var text = grid.Children[0] as TextBlock;
+            text.Text = (i + 1).ToString();
         }
     }
 

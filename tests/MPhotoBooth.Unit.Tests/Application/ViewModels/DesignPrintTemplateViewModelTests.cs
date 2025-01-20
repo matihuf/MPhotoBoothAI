@@ -1,7 +1,5 @@
-﻿using DynamicData;
-using Moq;
+﻿using Moq;
 using MPhotoBooth.Unit.Tests.Application.ViewModels.Builders;
-using System.Drawing;
 
 namespace MPhotoBooth.Unit.Tests.Application.ViewModels;
 public class DesignPrintTemplateViewModelTests
@@ -13,23 +11,6 @@ public class DesignPrintTemplateViewModelTests
 
         Assert.Equal(1, viewModel.Id);
         Assert.NotNull(viewModel.LayoutFormat);
-        Assert.NotNull(viewModel.BackgroundInfo);
-    }
-
-    [Fact]
-    public async Task AddBackgroundToList_WithValidImage_CopiesFileAndUpdatesBackgroundList()
-    {
-        var builder = new DesignPrintTemplateViewModelBuilder()
-            .WithFilePicker("testFile.jpg")
-            .WithImageSize("testFile.jpg", new Size(100, 150))
-            .WithBackgroundFiles("TestBackgroundDir\\1", new List<string> { "existing.jpg" });
-
-        var viewModel = builder.Build();
-
-        await viewModel.AddBackgroundToListCommand.ExecuteAsync(null);
-
-        builder.FilesManager.Verify(x => x.CopyFile("testFile.jpg", It.IsAny<string>()), Times.Once);
-        builder.FilesManager.Verify(x => x.GetFiles(It.IsAny<string>()), Times.AtLeast(2));
     }
 
     [Fact]
@@ -47,54 +28,6 @@ public class DesignPrintTemplateViewModelTests
             x => x.ShowYesNo(It.IsAny<string>(), It.IsAny<string>(), null),
             Times.Once);
         Assert.Equal(2, viewModel.Id);
-    }
-
-    [Fact]
-    public void RemoveBackgroundFromList_RemovesSelectedBackground()
-    {
-        var backgroundFiles = new List<string> { "bg1.jpg", "bg2.jpg" };
-        var formatDir = Path.Combine("TestBackgroundDir", "1");
-
-        var builder = new DesignPrintTemplateViewModelBuilder()
-            .WithBackgroundFiles(formatDir, backgroundFiles);
-
-        var viewModel = builder.Build();
-
-        viewModel.Id = 1;
-
-        viewModel.BackgroundInfo.BackgroundPathsList.AddRange(backgroundFiles);
-        viewModel.BackgroundInfo.SelectedItem = "bg1.jpg";
-        viewModel.BackgroundInfo.BackgroundPath = "bg1.jpg";
-
-        viewModel.RemoveBackgroundFromListCommand.Execute(null);
-
-        builder.FilesManager.Verify(x => x.DeleteFile("bg1.jpg"), Times.Once);
-        Assert.DoesNotContain("bg1.jpg", viewModel.BackgroundInfo.BackgroundPathsList);
-        Assert.Equal("bg2.jpg", viewModel.BackgroundInfo.BackgroundPath);
-    }
-
-    [Fact]
-    public void RemoveBackgroundFromList_WhenLastBackground_ClearsBackgroundPath()
-    {
-        var backgroundFiles = new List<string> { "bg1.jpg" };
-        var formatDir = Path.Combine("TestBackgroundDir", "1");
-
-        var builder = new DesignPrintTemplateViewModelBuilder()
-            .WithBackgroundFiles(formatDir, backgroundFiles);
-
-        var viewModel = builder.Build();
-
-        viewModel.Id = 1;
-
-        viewModel.BackgroundInfo.BackgroundPathsList.AddRange(backgroundFiles);
-        viewModel.BackgroundInfo.SelectedItem = "bg1.jpg";
-        viewModel.BackgroundInfo.BackgroundPath = "bg1.jpg";
-
-        viewModel.RemoveBackgroundFromListCommand.Execute(null);
-
-        builder.FilesManager.Verify(x => x.DeleteFile("bg1.jpg"), Times.Once);
-        Assert.Empty(viewModel.BackgroundInfo.BackgroundPathsList);
-        Assert.Null(viewModel.BackgroundInfo.BackgroundPath);
     }
 
     [Fact]

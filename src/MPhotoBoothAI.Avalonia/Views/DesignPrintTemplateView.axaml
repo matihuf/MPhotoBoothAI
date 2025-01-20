@@ -20,6 +20,7 @@
     <UserControl.Resources>
         <converter:FullPathToFileNameConverter x:Key="fullPathToName" />
         <converter:FormatTypeToTranslatedNameConverter x:Key="formatToName" />
+        <converter:IntCompareToBoolConverter x:Key="intToBool" />
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="Button">
@@ -78,6 +79,14 @@
                                         FontSize="15"
                                         Text="{Binding SizeName}"
                                         TextAlignment="Center" />
+                                    <Border Margin="0" Classes="LayerButton">
+                                        <Border.IsVisible>
+                                            <MultiBinding Converter="{StaticResource intToBool}">
+                                                <Binding Path="Id" />
+                                                <Binding ElementName="root" Path="((vm:DesignPrintTemplateViewModel)DataContext).Id" />
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                    </Border>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
@@ -95,57 +104,15 @@
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition MinWidth="800" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <StackPanel
-                            Margin="20"
-                            Orientation="Horizontal"
-                            Spacing="20">
-                            <StackPanel.Styles>
-                                <Style Selector="Button">
-                                    <Setter Property="Height" Value="{StaticResource TouchItemHeight}" />
-                                </Style>
-                            </StackPanel.Styles>
-                            <Button
-                                Command="{Binding AddBackgroundToListCommand}"
-                                CommandParameter="{Binding $parent[Window]}"
-                                Content="{x:Static assets:UI.add}" />
-                            <Button Command="{Binding RemoveBackgroundFromListCommand}" Content="{x:Static assets:UI.remove}" />
-                        </StackPanel>
 
-                        <ListBox
-                            Height="300"
-                            Margin="5,0"
-                            Padding="0"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Top"
-                            ItemContainerTheme="{StaticResource ListBoxItemInset}"
-                            ItemsSource="{Binding BackgroundInfo.BackgroundPathsList}"
-                            SelectedItem="{Binding BackgroundInfo.SelectedItem}"
-                            Theme="{StaticResource ListBoxCard}">
-                            <ListBox.Styles>
-                                <Style Selector="ListBoxItem">
-                                    <Setter Property="Margin" Value="0" />
-                                    <Setter Property="Theme" Value="{StaticResource ListBoxItemBorder}" />
-                                </Style>
-                            </ListBox.Styles>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Border
-                                        Margin="0"
-                                        Padding="10"
-                                        HorizontalAlignment="Stretch">
-                                        <TextBlock Text="{Binding ., Converter={StaticResource fullPathToName}}" TextAlignment="Left" />
-                                    </Border>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </StackPanel>
-                    <ui:Card
+                    <Expander
                         Grid.Column="1"
-                        Margin="10,10,10,0"
+                        Margin="10,10,10,10"
                         Padding="20"
+                        HorizontalAlignment="Stretch"
                         Classes="Info"
                         CornerRadius="20"
+                        Header="{x:Static assets:UI.helpInfo}"
                         Theme="{StaticResource BorderInset}">
                         <StackPanel
                             HorizontalAlignment="Stretch"
@@ -161,18 +128,19 @@
                             <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_2}" />
                             <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_3}" />
                             <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_4}" />
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_5}" />
                         </StackPanel>
-                    </ui:Card>
+                    </Expander>
                 </Grid>
                 <control:DesignLayoutControl
                     Margin="10,20,10,0"
                     FilePicker="{Binding FilePickerService}"
-                    LayoutBackgroundPath="{Binding BackgroundInfo.BackgroundPath}"
+                    LayoutBackgroundPath="{Binding BackgroundPath}"
                     LayoutData="{Binding SelectedLayoutData}"
                     LayoutFormat="{Binding SelectedLayoutFormat}"
-                    NextBackground="{Binding LoadNextBackgroundCommand}"
                     NotSavedChange="{Binding NotSavedChange}"
-                    SaveLayoutCommand="{Binding SaveLayoutCommand}" />
+                    SaveLayoutCommand="{Binding SaveLayoutCommand}"
+                    SetBackground="{Binding SetBackgroundCommand}" />
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

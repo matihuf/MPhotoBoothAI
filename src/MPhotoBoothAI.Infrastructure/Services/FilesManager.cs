@@ -3,8 +3,7 @@
 namespace MPhotoBoothAI.Infrastructure.Services;
 public class FilesManager : IFilesManager
 {
-    public void CopyFile(string filePath, string dirPath
-        )
+    public void CopyFile(string filePath, string dirPath, string? fileName = null)
     {
         if (!File.Exists(filePath))
         {
@@ -14,8 +13,7 @@ public class FilesManager : IFilesManager
         {
             Directory.CreateDirectory(dirPath);
         }
-        var fileName = Path.GetFileName(filePath);
-        File.Copy(filePath, Path.Combine(dirPath, fileName), true);
+        File.Copy(filePath, Path.Combine(dirPath, String.IsNullOrEmpty(fileName) ? Path.GetFileName(filePath) : fileName), true);
     }
 
 

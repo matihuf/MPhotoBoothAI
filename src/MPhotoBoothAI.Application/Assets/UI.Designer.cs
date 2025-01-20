@@ -277,6 +277,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pomoc.
+        /// </summary>
+        public static string helpInfo {
+            get {
+                return ResourceManager.GetString("helpInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Iso.
         /// </summary>
         public static string iso {
@@ -304,7 +313,7 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Layouty wydruków pozwalają na personalizację wyglądu wydruków. Po dodaniu tła zostanie ono automatycznie załadowane do layoutu wydruku. Przycisk „Następne tło” służy do przełączania się między dodanymi tłami..
+        ///   Looks up a localized string similar to Aby ustawić tło wybierz opcję „Ustaw tło”, następnie wskaż plik na komputerze..
         /// </summary>
         public static string layoutDescription_1 {
             get {
@@ -313,7 +322,7 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aby zmieniać ilość zdjęć w serii korzystaj z opcji „Dodaj zdjęcie” oraz „Usuń zdjęci”. Aby manipulować pozycją, rozmiarem oraz pochyleniem zdjęcia, przełącz się na warstwę zdjęć, aktywna warstwa jest oznaczona kolorowym kółkiem Pozycję zmienisz za pomocą ruchu myszy. Kąt pochylenia zdjęcia zmienisz kółkiem myszy, a jego rozmiar za pomocą klawisza CTRL oraz kółka myszy. Dodatkowo SHIFT zwiększa stopień powiększania i zmniejszania..
+        ///   Looks up a localized string similar to Aby zmieniać ilość zdjęć w serii korzystaj z opcji „Dodaj zdjęcie”. Aby manipulować pozycją, rozmiarem oraz pochyleniem zdjęcia, przełącz się na warstwę zdjęć, aktywna warstwa jest oznaczona kolorowym kółkiem. .
         /// </summary>
         public static string layoutDescription_2 {
             get {
@@ -322,7 +331,7 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warstwa ramek służy do projektowania warstwy nakładanej na zdjęci. Do warstwy ramek można dodawać różnego rodzaju grafiki (np. serca, baloniki). Ta warstwa pozwala uzyskać efekt głębi wydruku. Aby dodać elementy do warstwy ramek, przełącz się na nią. Aktywna warstwa jest oznaczona kolorowym kółkiem. Użyj przycisku &quot;Dodaj ramkę&quot; i w nowym oknie wskaż plik lub przeciągnij myszką plik graficzny na pole podglądu layoutu. Aby usunąć element kliknij na nim prawym przyciskiem myszy i wybierz opcję Usuń.
+        ///   Looks up a localized string similar to Warstwa ramek służy do projektowania warstwy nakładanej na zdjęci. Aby dodać elementy do warstwy ramek, przełącz się na nią. Aktywna warstwa jest oznaczona kolorowym kółkiem. Użyj przycisku dodaj ramkę i w nowym oknie wskaż plik lub przeciągnij myszką plik graficzny na pole podglądu..
         /// </summary>
         public static string layoutDescription_3 {
             get {
@@ -331,11 +340,20 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Po zakończeniu edycji zapisz swoje ustawienia. Nie zapisanie ustawień spowoduję utratę wszelkim zmian. Wyczyszczenie warstw spowoduję usunięcie wszystkich zdjęć w serii, elementów grafiki z warstwy ramek oraz ich ustawień.
+        ///   Looks up a localized string similar to Pozycję elementów zmienisz za pomocą ruchu myszy. Kąt obrotu elementu zmienisz kółkiem myszy, a jego rozmiar za pomocą klawisza CTRL oraz kółka myszy. Dodatkowo SHIFT zwiększa stopień powiększania i zmniejszania. Pod prawym przyciskiem myszy dostępne jest menu umożliwiające usunięcie lub skopiowanie elementu..
         /// </summary>
         public static string layoutDescription_4 {
             get {
                 return ResourceManager.GetString("layoutDescription_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Po zakończeniu edycji zapisz swoje ustawienia. Nie zapisanie ustawień spowoduję utratę wszelkim zmian. Wyczyszczenie warstw spowoduję usunięcie wszystkich zdjęć w serii, elementów grafiki z warstwy ramek oraz ich ustawień.
+        /// </summary>
+        public static string layoutDescription_5 {
+            get {
+                return ResourceManager.GetString("layoutDescription_5", resourceCulture);
             }
         }
         
@@ -354,15 +372,6 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string newGroup {
             get {
                 return ResourceManager.GetString("newGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Następne tło.
-        /// </summary>
-        public static string nextBackground {
-            get {
-                return ResourceManager.GetString("nextBackground", resourceCulture);
             }
         }
         
@@ -498,6 +507,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string saveLayout {
             get {
                 return ResourceManager.GetString("saveLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ustaw tło.
+        /// </summary>
+        public static string setBackground {
+            get {
+                return ResourceManager.GetString("setBackground", resourceCulture);
             }
         }
         

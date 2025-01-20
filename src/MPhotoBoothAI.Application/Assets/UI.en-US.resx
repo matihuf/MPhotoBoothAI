@@ -204,8 +204,8 @@
   <data name="printLayout" xml:space="preserve">
     <value>Print layout</value>
   </data>
-  <data name="nextBackground" xml:space="preserve">
-    <value>Next background</value>
+  <data name="setBackground" xml:space="preserve">
+    <value>Set background</value>
   </data>
   <data name="addPhoto" xml:space="preserve">
     <value>Add photo</value>
@@ -271,24 +271,30 @@
     <value>Unsaved changes</value>
   </data>
   <data name="layoutDescription_1" xml:space="preserve">
-    <value>Print layouts allow you to personalize the appearance of your printouts. When you add a background, it will be automatically loaded into the print layout. The “Next background” button is used to switch between added backgrounds.</value>
+    <value>To set the background, select “Set background”, then point to the file on your computer.</value>
   </data>
   <data name="layoutDescription_0" xml:space="preserve">
     <value>To switch between layouts, select the button with the designation of the layout you want to edit.</value>
   </data>
   <data name="layoutDescription_2" xml:space="preserve">
-    <value>To change the number of photos in a series use the “Add photo” and “Delete photo” options. To manipulate the position, size and tilt of a photo, switch to the photo layer, the active layer is marked with a colored circle. You will change the position by moving the mouse. You will change the photo's tilt angle with the mouse wheel, and its size with the CTRL key and the mouse wheel. In addition, SHIFT increases zoom in and out.</value>
+    <value>To change the number of photos in a series use the “Add photo” option. To manipulate the position, size and tilt of the photo, switch to the photo layer, the active layer is marked with a colored circle. </value>
   </data>
   <data name="layoutDescription_3" xml:space="preserve">
-    <value>The frames layer is used to design a layer to be applied to a photo. Various kinds of graphics (e.g. hearts, balloons) can be added to the frames layer. This layer allows you to create a depth effect for your print. To add elements to the frames layer, switch to it. The active layer is marked with a colored circle. Use the “Add Frame” button and in the new window, point to the file or drag the image file to the layout preview box with the mouse. To delete an item, right-click on it and select Delete</value>
+    <value>The frames layer is used to design a layer to be applied to a photo. To add elements to the frame layer, switch to it. The active layer is marked with a colored circle. Use the add frame button and in the new window point to the file or drag the image file to the preview box with the mouse.</value>
   </data>
   <data name="layoutDescription_4" xml:space="preserve">
-    <value>When you have finished editing, save your settings. Failure to save your settings will result in the loss of any changes. Clearing the layers will remove all photos in the series, the graphic elements from the frames layer and their settings</value>
+    <value>You will change the position of the elements with mouse movement. You will change the rotation angle of an element with the mouse wheel, and its size with the CTRL key and the mouse wheel. In addition, SHIFT increases zoom in and out. A menu is available under the right mouse button to delete or copy an element.</value>
   </data>
   <data name="savedChanges" xml:space="preserve">
     <value>Saved changes</value>
   </data>
   <data name="close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="helpInfo" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="layoutDescription_5" xml:space="preserve">
+    <value>When you have finished editing, save your settings. Failure to save your settings will result in the loss of any changes. Clearing the layers will remove all photos in the series, the graphic elements from the frames layer and their settings</value>
   </data>
 </root>
