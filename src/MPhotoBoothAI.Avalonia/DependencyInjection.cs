@@ -1,12 +1,15 @@
 ﻿using EDSDK.NET;
 using Emgu.CV.Dnn;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML.OnnxRuntime;
 using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Managers;
+using MPhotoBoothAI.Application.Managers.FaceSwapTemplates;
 using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
 using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
 using MPhotoBoothAI.Infrastructure.CameraDevices;
@@ -21,12 +24,15 @@ namespace MPhotoBoothAI.Avalonia;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection Configure(this IServiceCollection services)
+    public static IServiceCollection Configure(this IServiceCollection services, IConfiguration configuration, bool addAiModels = true)
     {
         AddViewModels(services);
         AddServices(services);
         AddCamera(services);
-        AddAiModels(services);
+        if (addAiModels)
+        {
+            AddAiModels(services);
+        }
         AddManagers(services);
         AddNavigation(services);
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
@@ -52,6 +58,9 @@ public static class DependencyInjection
         services.AddTransient<IFaceSwapManager, FaceSwapManager>();
         services.AddTransient<IFaceMultiSwapManager, FaceMultiSwapManager>();
         services.AddSingleton<ICameraManager, CameraManager>();
+        services.AddTransient<IAddFaceSwapTemplateManager, AddFaceSwapTemplateManager>();
+        services.AddTransient<IFaceSwapTemplateFileManager, FaceSwapTemplateFileManager>();
+        services.AddTransient<IFaceDetectionManager, FaceDetectionManager>();
     }
 
     private static void AddAiModels(IServiceCollection services)
@@ -75,12 +84,14 @@ public static class DependencyInjection
         services.AddTransient<FaceDetectionViewModel>();
         services.AddTransient<LanguageViewModel>();
         services.AddTransient<CameraSettingsViewModel>();
-        services.AddTransient<FaceSwapTemplatesViewModel>();
+        services.AddTransient<FaceSwapGroupTemplatesViewModel>();
+        services.AddTransient<AddFaceSwapTemplateViewModel>();
+        services.AddTransient<PreviewFaceSwapTemplateViewModel>();
     }
 
     private static void AddServices(IServiceCollection services)
     {
-        services.AddTransient<ResizeImageService>();
+        services.AddTransient<IResizeImageService, ResizeImageService>();
         services.AddTransient<IFaceDetectionService, FaceDetectionService>();
         services.AddTransient<IFaceSwapPredictService, FaceSwapPredictService>();
         services.AddTransient<IFaceSwapService, FaceSwapService>();
@@ -95,6 +106,7 @@ public static class DependencyInjection
         services.AddTransient<IDiskInfoService, DiskInfoService>();
         services.AddTransient<SDKHandler>();
         services.AddTransient<IMessageBoxService, MessageBoxService>();
+        services.AddTransient<IWindowService, WindowService>();
     }
 
     private static void AddCamera(IServiceCollection services)

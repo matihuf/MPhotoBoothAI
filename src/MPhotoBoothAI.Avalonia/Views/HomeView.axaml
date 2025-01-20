@@ -12,6 +12,6 @@
   <Design.DataContext>
     <dvm:DesignHomeViewModel/>
   </Design.DataContext>
-
+    
   <c:LanguageControl DataContext="{Binding Language}"/>
 </UserControl>

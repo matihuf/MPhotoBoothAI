@@ -8,10 +8,6 @@ public class FaceSwapTemplateConfiguration : IEntityTypeConfiguration<FaceSwapTe
     public void Configure(EntityTypeBuilder<FaceSwapTemplateEntity> builder)
     {
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.FileName)
-            .HasMaxLength(50)
-            .HasColumnType("NVARCHAR")
-            .IsRequired();
         builder.Property(x => x.CreatedAt)
             .HasColumnType("DATETIME")
             .HasDefaultValueSql("CURRENT_TIMESTAMP")

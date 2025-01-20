@@ -1,16 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Common.Tests;
 using MPhotoBoothAI.Infrastructure.Services;
+using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Integration.Tests.Infrastructure.Services;
 
 public class ResizeImageServiceTests : IClassFixture<DependencyInjectionFixture>
 {
-    private readonly ResizeImageService _resizeImageService;
+    private readonly IResizeImageService _resizeImageService;
 
     public ResizeImageServiceTests(DependencyInjectionFixture dependencyInjectionFixture)
     {
-        _resizeImageService = dependencyInjectionFixture.ServiceProvider.GetService<ResizeImageService>();
+        _resizeImageService = dependencyInjectionFixture.ServiceProvider.GetService<IResizeImageService>();
     }
 
     [Fact]

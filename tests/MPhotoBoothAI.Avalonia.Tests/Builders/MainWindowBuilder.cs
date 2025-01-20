@@ -2,13 +2,12 @@
 using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Views;
-using MPhotoBoothAI.Common.Tests;
 
 namespace MPhotoBoothAI.Avalonia.Tests.Builders;
-public class MainWindowBuilder(DependencyInjectionFixture dependencyInjectionFixture) : IDisposable
+public class MainWindowBuilder(DependencyInjectionAvaloniaFixture dependencyInjectionFixture) : IDisposable
 {
     private MainWindow _mainWindow;
-    private readonly DependencyInjectionFixture _dependencyInjectionFixture = dependencyInjectionFixture;
+    private readonly DependencyInjectionAvaloniaFixture _dependencyInjectionFixture = dependencyInjectionFixture;
 
     public MainWindow Build()
     {

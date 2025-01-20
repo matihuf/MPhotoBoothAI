@@ -1,0 +1,190 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
+             xmlns:vm="using:MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates"
+             xmlns:con="using:MPhotoBoothAI.Avalonia.Converters"
+             xmlns:neumorphism="clr-namespace:Avalonia.Themes.Neumorphism.Controls;assembly=Avalonia.Themes.Neumorphism"
+             x:DataType="vm:FaceSwapGroupTemplatesViewModel"
+             xmlns:entities="using:MPhotoBoothAI.Models.Entities"
+             xmlns:models="using:MPhotoBoothAI.Models.FaceSwaps"
+             xmlns:interfaces="using:MPhotoBoothAI.Application.Interfaces"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assets="using:MPhotoBoothAI.Application.Assets"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			       xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="MPhotoBoothAI.Avalonia.Views.FaceSwapTemplates.FaceSwapGroupTemplatesView">
+  <Design.DataContext>
+    <dvm:DesignFaceSwapTemplatesViewModel/>
+  </Design.DataContext>
+
+  <UserControl.Resources>
+    <con:PathBitmapConverter x:Key="pathBitmapConverter"/>
+    <con:TupleConverter x:Key="tupleConverter"/>
+    <con:CursorConverter x:Key="cursorConverter"/>
+    <sys:Boolean x:Key="True">True</sys:Boolean>
+    <sys:Boolean x:Key="False">False</sys:Boolean>
+  </UserControl.Resources>
+
+  <Grid Margin="15">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="20*" MinWidth="300" />
+      <ColumnDefinition Width="80*" />
+    </Grid.ColumnDefinitions>
+    <Grid Grid.Column="0" IsEnabled="{Binding !IsGroupInEdit}" Margin="0,0,15,0">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Panel Grid.Row="0">
+        <TextBlock Text="{x:Static assets:UI.groups}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <neumorphism:FloatingButton x:Name="addGroupBtn" IsExtended="True" Foreground="{DynamicResource MaterialDesignForeground}" Command="{Binding AddGroupCommand}" CommandParameter="{Binding $parent[Window]}" HorizontalAlignment="Right">
+          <neumorphism:FloatingButton.Content>
+            <StackPanel Orientation="Horizontal">
+              <icons:MaterialIcon Kind="Plus" Width="24" Height="24" Foreground="{DynamicResource MaterialDesignForeground}" />
+              <TextBlock Text="{x:Static assets:UI.addGroup}" VerticalAlignment="Center" Margin="5,0,0,0" />
+            </StackPanel>
+          </neumorphism:FloatingButton.Content>
+        </neumorphism:FloatingButton>
+      </Panel>
+      <Grid Grid.Row="1" Margin="0,30,0,10">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Text="{x:Static assets:UI.name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="3" Text="{x:Static assets:UI.active}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+      </Grid>
+      <ListBox x:Name="ListBoxGroups" Grid.Row="2" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}" Theme="{StaticResource ListBoxCard}">
+        <ListBox.ItemTemplate>
+          <DataTemplate DataType="{x:Type entities:FaceSwapTemplateGroupEntity}">
+            <Panel>
+              <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Left" />
+              <CheckBox Grid.Row="1" IsChecked="{Binding IsEnabled, Mode=TwoWay}" HorizontalAlignment="Right">
+                <i:Interaction.Behaviors>
+                  <ia:EventTriggerBehavior EventName="Click">
+                    <ia:InvokeCommandAction Command="{Binding $parent[ListBox].((vm:FaceSwapGroupTemplatesViewModel)DataContext).SaveChangesCommand}" />
+                  </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+              </CheckBox>
+            </Panel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Grid>
+    <neumorphism:Card Grid.Column="1" IsVisible="{Binding Groups.Count}" CornerRadius="8">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="30"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <Panel Grid.Column="0">
+            <TextBlock x:Name="groupNameTextBlock" Text="{Binding SelectedGroup.Name}" IsVisible="{Binding !IsGroupInEdit}" VerticalAlignment="Center"/>
+            <TextBox x:Name="groupNameTextBox" Text="{Binding SelectedGroup.Name, Mode=TwoWay}" MaxLength="50" IsVisible="{Binding IsGroupInEdit}" VerticalAlignment="Center"/>
+          </Panel>
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="5">
+            <neumorphism:FloatingButton IsExtended="True" Foreground="{DynamicResource MaterialDesignForeground}" x:Name="editGroupBtn" Command="{Binding EditGroupCommand}" IsVisible="{Binding !IsGroupInEdit}">
+              <StackPanel Orientation="Horizontal">
+                <icons:MaterialIcon Kind="Edit" Width="24" Height="24" Foreground="{DynamicResource MaterialDesignForeground}" />
+                <TextBlock Text="{x:Static assets:UI.edit}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+              </StackPanel>
+            </neumorphism:FloatingButton>
+            <neumorphism:FloatingButton IsExtended="True" Foreground="{DynamicResource MaterialDesignForeground}" x:Name="deleteGroupBtn" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding $parent[Window]}" IsVisible="{Binding !IsGroupInEdit}">
+              <StackPanel Orientation="Horizontal">
+                <icons:MaterialIcon Kind="Delete" Width="24" Height="24" Foreground="{DynamicResource MaterialDesignForeground}" />
+                <TextBlock Text="{x:Static assets:UI.delete}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+              </StackPanel>
+            </neumorphism:FloatingButton>
+            <neumorphism:FloatingButton IsExtended="True" Foreground="{DynamicResource MaterialDesignForeground}" x:Name="saveEditGroupBtn" Command="{Binding SaveEditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
+              <StackPanel Orientation="Horizontal">
+                <icons:MaterialIcon Kind="Check" Width="24" Height="24" Foreground="{DynamicResource MaterialDesignForeground}" />
+                <TextBlock Text="{x:Static assets:UI.save}" VerticalAlignment="Center" Margin="5,0,0,0" />
+              </StackPanel>
+            </neumorphism:FloatingButton>
+            <neumorphism:FloatingButton IsExtended="True" Foreground="{DynamicResource MaterialDesignForeground}" x:Name="cancelEditGroupBtn" Command="{Binding CancelEditGroupCommand}" IsVisible="{Binding IsGroupInEdit}">
+              <StackPanel Orientation="Horizontal">
+                <icons:MaterialIcon Kind="Close" Width="24" Height="24" Foreground="{DynamicResource MaterialDesignForeground}" />
+                <TextBlock Text="{x:Static assets:UI.cancel}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+              </StackPanel>
+            </neumorphism:FloatingButton>
+          </StackPanel>
+        </Grid>
+        <Panel Grid.Row="2" IsEnabled="{Binding !IsGroupInEdit}" Margin="0,30,0,0">
+          <TextBlock Text="{x:Static assets:UI.templates}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+          <neumorphism:FloatingButton IsExtended="True" Foreground="{DynamicResource MaterialDesignForeground}" x:Name="addTemplateBtn" Command="{Binding AddTemplateCommand}" CommandParameter="{Binding $parent[Window]}" HorizontalAlignment="Right">
+            <neumorphism:FloatingButton.Content>
+              <StackPanel Orientation="Horizontal">
+                <icons:MaterialIcon Kind="Plus" Width="24" Height="24" Foreground="{DynamicResource MaterialDesignForeground}" />
+                <TextBlock Text="{x:Static assets:UI.addTemplate}" VerticalAlignment="Center" Margin="5,0,0,0" />
+              </StackPanel>
+            </neumorphism:FloatingButton.Content>
+          </neumorphism:FloatingButton>
+        </Panel>
+        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" Margin="0 20 0 0">
+          <ItemsControl ItemsSource="{Binding Templates}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate DataType="{x:Type models:FaceSwapTemplateId}">
+                <neumorphism:Card CornerRadius="20" Padding="0" Margin="10" Cursor="{Binding $parent[ItemsControl].((vm:FaceSwapGroupTemplatesViewModel)DataContext).TemplateImageCursor, Converter={StaticResource cursorConverter}}">
+                  <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="PointerPressed">
+                      <ia:InvokeCommandAction Command="{Binding $parent[ItemsControl].((vm:FaceSwapGroupTemplatesViewModel)DataContext).OpenTemplateCommand}">
+                        <ia:InvokeCommandAction.CommandParameter>
+                          <MultiBinding Converter="{StaticResource tupleConverter}">
+                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                            <Binding />
+                          </MultiBinding>
+                        </ia:InvokeCommandAction.CommandParameter>
+                      </ia:InvokeCommandAction>                      
+                    </ia:EventTriggerBehavior>
+                    <ia:EventTriggerBehavior EventName="PointerEntered">
+                      <ia:InvokeCommandAction Command="{Binding $parent[ItemsControl].((vm:FaceSwapGroupTemplatesViewModel)DataContext).OpenTemplatePointerCommand}" CommandParameter="{StaticResource True}" />
+                    </ia:EventTriggerBehavior>
+                    <ia:EventTriggerBehavior EventName="PointerExited">
+                      <ia:InvokeCommandAction Command="{Binding $parent[ItemsControl].((vm:FaceSwapGroupTemplatesViewModel)DataContext).OpenTemplatePointerCommand}" CommandParameter="{StaticResource False}" />
+                    </ia:EventTriggerBehavior>
+                  </i:Interaction.Behaviors>
+                  <StackPanel>
+                    <Image Width="340" Height="192" Stretch="Uniform" Source="{Binding FilePath, Converter={StaticResource pathBitmapConverter}}" />
+                    <DockPanel>
+                      <icons:MaterialIcon Kind="Person" Width="24" Height="24" Foreground="{DynamicResource MaterialDesignForeground}" Margin="10,0,0,0"/>
+                      <TextBlock Margin="5 0 0 0" Text="{Binding Faces}" VerticalAlignment="Center" />
+                      <neumorphism:FloatingButton HorizontalAlignment="Right" Margin="10" Command="{Binding $parent[ItemsControl].((vm:FaceSwapGroupTemplatesViewModel)DataContext).DeleteTemplateCommand}">
+                        <neumorphism:FloatingButton.Content>
+                          <icons:MaterialIcon Kind="Delete" Width="24" Height="24" Foreground="{DynamicResource MaterialDesignForeground}" />
+                        </neumorphism:FloatingButton.Content>
+                        <neumorphism:FloatingButton.CommandParameter>
+                          <MultiBinding Converter="{StaticResource tupleConverter}">
+                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                            <Binding />
+                          </MultiBinding>
+                        </neumorphism:FloatingButton.CommandParameter>
+                      </neumorphism:FloatingButton>
+                    </DockPanel>
+                  </StackPanel>
+                </neumorphism:Card>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>       
+      </Grid>
+    </neumorphism:Card>
+  </Grid>
+</UserControl>

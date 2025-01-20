@@ -141,8 +141,8 @@
   <data name="delete" xml:space="preserve">
     <value>Usuń</value>
   </data>
-  <data name="deleteGroup" xml:space="preserve">
-    <value>Usunąć grupę?</value>
+  <data name="deleteQuestion" xml:space="preserve">
+    <value>Usunąć?</value>
   </data>
   <data name="deleteGroupDesc" xml:space="preserve">
     <value>Usunąć grupę i wszystkie szablony?</value>
@@ -200,5 +200,26 @@
   </data>
   <data name="yes" xml:space="preserve">
     <value>Tak</value>
+  </data>
+  <data name="en-EN" xml:space="preserve">
+    <value>Angielski</value>
+  </data>
+  <data name="template" xml:space="preserve">
+    <value>Szablon</value>
+  </data>
+  <data name="pick" xml:space="preserve">
+    <value>Wybierz</value>
+  </data>
+  <data name="cameraPreview" xml:space="preserve">
+    <value>Podgląd z kamery</value>
+  </data>
+  <data name="swap" xml:space="preserve">
+    <value>Zamiana</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Zamknij</value>
+  </data>
+  <data name="deleteTemplate" xml:space="preserve">
+    <value>Usunąć szablon?</value>
   </data>
 </root>

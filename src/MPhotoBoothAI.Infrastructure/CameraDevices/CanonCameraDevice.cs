@@ -117,7 +117,7 @@ public class CanonCameraDevice : BaseCameraDevice, ICameraDevice, ICameraDeviceS
 
     public string CameraName { get; private set; } = "Canon EOS";
 
-    public CanonCameraDevice(ILogger<CanonCameraDevice> logger, IDiskInfoService diskInfoService, SDKHandler sdkHandler)
+    public CanonCameraDevice(ILogger<CanonCameraDevice> logger, IDiskInfoService diskInfoService, SDKHandler sdkHandler) : base(logger)
     {
         _diskInfoService = diskInfoService;
         _sdkHandler = sdkHandler;

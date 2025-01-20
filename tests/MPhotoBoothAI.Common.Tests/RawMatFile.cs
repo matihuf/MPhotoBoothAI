@@ -2,7 +2,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using System.Runtime.InteropServices;
 
-namespace MPhotoBoothAI.Integration.Tests;
+namespace MPhotoBoothAI.Common.Tests;
 
 public static class RawMatFile
 {
@@ -52,7 +52,7 @@ public static class RawMatFile
         {
             return true;
         }
-        var failedPercentage = (failed / (float)sourceRaw.Length) * 100f;
+        var failedPercentage = failed / (float)sourceRaw.Length * 100f;
         return failedPercentage <= maxFailedPercentage;
     }
 }

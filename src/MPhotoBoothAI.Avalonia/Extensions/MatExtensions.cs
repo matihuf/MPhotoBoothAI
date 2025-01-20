@@ -16,7 +16,7 @@ public static class MatExtensions
 
         if (mat.Width != dst.PixelSize.Width || mat.Height != dst.PixelSize.Height)
             throw new ArgumentException("size of src must be equal to size of dst");
-        if (dst.Format != PixelFormat.Bgra8888 || !dst.Dpi.Equals(new Vector(96, 96)))
+        if ((dst.Format != null && dst.Format != PixelFormat.Bgra8888) || !dst.Dpi.Equals(new Vector(96, 96)))
             throw new ArgumentException("Currently only Bgra8888 + 96 DPI WriteableBitmaps can be reused ");
 
 

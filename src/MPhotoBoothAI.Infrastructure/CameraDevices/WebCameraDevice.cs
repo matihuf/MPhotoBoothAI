@@ -1,4 +1,5 @@
 using Emgu.CV;
+using Microsoft.Extensions.Logging;
 using MPhotoBoothAI.Application.Interfaces;
 
 namespace MPhotoBoothAI.Infrastructure.CameraDevices;
@@ -17,7 +18,7 @@ public class WebCameraDevice : BaseCameraDevice, ICameraDevice
 
     public string CameraName => _videoCapture.BackendName;
 
-    public WebCameraDevice()
+    public WebCameraDevice(ILogger<WebCameraDevice> logger) : base(logger)
     {
         _videoCapture = new VideoCapture(0, VideoCapture.API.DShow);
         _videoCapture.ImageGrabbed += CaptureDevice_ImageGrabbed;

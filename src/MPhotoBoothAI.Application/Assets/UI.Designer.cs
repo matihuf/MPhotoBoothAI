@@ -106,6 +106,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Podgląd z kamery.
+        /// </summary>
+        public static string cameraPreview {
+            get {
+                return ResourceManager.GetString("cameraPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aparat.
         /// </summary>
         public static string cameraSettings {
@@ -124,20 +133,20 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zamknij.
+        /// </summary>
+        public static string close {
+            get {
+                return ResourceManager.GetString("close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Usuń.
         /// </summary>
         public static string delete {
             get {
                 return ResourceManager.GetString("delete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Usunąć grupę?.
-        /// </summary>
-        public static string deleteGroup {
-            get {
-                return ResourceManager.GetString("deleteGroup", resourceCulture);
             }
         }
         
@@ -151,11 +160,38 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Usunąć?.
+        /// </summary>
+        public static string deleteQuestion {
+            get {
+                return ResourceManager.GetString("deleteQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usunąć szablon?.
+        /// </summary>
+        public static string deleteTemplate {
+            get {
+                return ResourceManager.GetString("deleteTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edytuj.
         /// </summary>
         public static string edit {
             get {
                 return ResourceManager.GetString("edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angielski.
+        /// </summary>
+        public static string en_EN {
+            get {
+                return ResourceManager.GetString("en-EN", resourceCulture);
             }
         }
         
@@ -223,6 +259,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wybierz.
+        /// </summary>
+        public static string pick {
+            get {
+                return ResourceManager.GetString("pick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Polski.
         /// </summary>
         public static string pl_PL {
@@ -277,11 +322,29 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zamiana.
+        /// </summary>
+        public static string swap {
+            get {
+                return ResourceManager.GetString("swap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zrób zdjęcie.
         /// </summary>
         public static string takePhoto {
             get {
                 return ResourceManager.GetString("takePhoto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Szablon.
+        /// </summary>
+        public static string template {
+            get {
+                return ResourceManager.GetString("template", resourceCulture);
             }
         }
         
