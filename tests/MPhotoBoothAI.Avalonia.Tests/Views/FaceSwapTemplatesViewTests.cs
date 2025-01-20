@@ -28,10 +28,10 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionAvaloniaFixture depen
         var addGroupButton = GetAddGroupButton(window);
         addGroupButton.Command.Execute(window);
         var messageBoxWindow = window.OwnedWindows[0];
-        var messageBoxInput = messageBoxWindow.FindControls<TextBox>().ElementAt(2);
+        var messageBoxInput = messageBoxWindow.FindControls<TextBox>().First();
         var messageBoxButtonYes = GetMessageBoxButtonYes(messageBoxWindow);
         messageBoxInput.Text = groupName;
-        messageBoxButtonYes.Command.Execute(messageBoxButtonYes.Content);
+        messageBoxButtonYes.Press(window);
     }
 
     [AvaloniaFact]
@@ -45,7 +45,7 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionAvaloniaFixture depen
         addGroupButton.Command.Execute(window);
         var messageBoxWindow = window.OwnedWindows[0];
         var messageBoxButtonNo = GetMessageBoxButtonNo(messageBoxWindow);
-        messageBoxButtonNo.Command.Execute(messageBoxButtonNo.Content);
+        messageBoxButtonNo.Press(window);
         //assert
         Assert.Empty(GetListBoxGroups(window).Items);
     }
@@ -63,11 +63,10 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionAvaloniaFixture depen
         GetDeleteGroupButton(window).Command.Execute(window);
         var messageBoxWindow = window.OwnedWindows[0];
         var messageBoxButtonYes = GetMessageBoxButtonYes(messageBoxWindow);
-        messageBoxButtonYes.Command.Execute(messageBoxButtonYes.Content);
+        messageBoxButtonYes.Press(window);
         //assert
         Assert.Empty(listBoxGroups.Items);
     }
-
 
     [AvaloniaFact]
     public void DeleteGroup_MessageBoxNotConfirmed_DoNotDelete()

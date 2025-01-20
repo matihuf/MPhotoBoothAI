@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Avalonia.Headless;
+using Avalonia.Input;
 using Avalonia.VisualTree;
 
 namespace MPhotoBoothAI.Avalonia.Tests.Extensions;
@@ -20,5 +22,11 @@ public static class ControlExtensions
             }
         }
         return controls;
+    }
+
+    public static void Press(this Control control, Window window)
+    {
+        control.Focus();
+        window.KeyReleaseQwerty(PhysicalKey.Space, RawInputModifiers.None);
     }
 }

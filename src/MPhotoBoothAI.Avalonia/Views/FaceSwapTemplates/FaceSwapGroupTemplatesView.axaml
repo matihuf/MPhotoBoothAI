@@ -42,7 +42,7 @@
       </Grid.RowDefinitions>
       <Panel Grid.Row="0">
         <TextBlock Text="{x:Static assets:UI.groups}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-        <neumorphism:FloatingButton IsExtended="True" Foreground="{DynamicResource MaterialDesignForeground}" Command="{Binding AddGroupCommand}" CommandParameter="{Binding $parent[Window]}" HorizontalAlignment="Right">
+        <neumorphism:FloatingButton x:Name="addGroupBtn" IsExtended="True" Foreground="{DynamicResource MaterialDesignForeground}" Command="{Binding AddGroupCommand}" CommandParameter="{Binding $parent[Window]}" HorizontalAlignment="Right">
           <neumorphism:FloatingButton.Content>
             <StackPanel Orientation="Horizontal">
               <icons:MaterialIcon Kind="Plus" Width="24" Height="24" Foreground="{DynamicResource MaterialDesignForeground}" />

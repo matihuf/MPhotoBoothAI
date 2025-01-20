@@ -21,7 +21,7 @@ public class FaceSwapGroupTemplatesViewModelBuilder
 
     internal FaceSwapGroupTemplatesViewModelBuilder WithGroupName(string groupName)
     {
-        MessageBoxService.Setup(x => x.ShowInput(UI.addGroup, UI.name, It.IsAny<IWindow>())).ReturnsAsync(groupName);
+        MessageBoxService.Setup(x => x.ShowInput(UI.addGroup, UI.name, It.IsAny<int>(), It.IsAny<IWindow>())).ReturnsAsync(groupName);
         return this;
     }
 
