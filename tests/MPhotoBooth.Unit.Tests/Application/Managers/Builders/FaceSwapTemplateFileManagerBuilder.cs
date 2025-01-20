@@ -13,7 +13,7 @@ internal class FaceSwapTemplateFileManagerBuilder
 
     internal FaceSwapTemplateFileManagerBuilder WithThumbnail(Mat thumbnail)
     {
-        _resizeImageService.Setup(x => x.GetThumbnail(It.IsAny<Mat>(), It.IsAny<float>())).Returns(thumbnail);
+        _resizeImageService.Setup(x => x.Resize(It.IsAny<Mat>(), 192, 340, It.IsAny<bool>())).Returns(new MPhotoBoothAI.Models.ResizedImage(thumbnail, 0, 0, 0, 0));
         return this;
     }
 

@@ -81,7 +81,7 @@ public class FaceSwapTemplateFileManagerTests
         //act
         string templatePath = manager.GetFullTemplatePath(groupId, templateId);
         //assert
-        Assert.Equal(Path.Combine(userProfilePath, "Templates", groupId.ToString(), templateId.ToString(), $"{templateId}.jpg"), templatePath);
+        Assert.Equal(Path.Combine(userProfilePath, "Templates", groupId.ToString(), templateId.ToString(), $"{templateId}.png"), templatePath);
     }
 
     [Fact]
@@ -95,6 +95,6 @@ public class FaceSwapTemplateFileManagerTests
         //act
         string templatePath = manager.GetFullTemplateThumbnailPath(groupId, templateId);
         //assert
-        Assert.Equal(Path.Combine(userProfilePath, "Templates", groupId.ToString(), templateId.ToString(), $"{templateId}_thumbnail.jpg"), templatePath);
+        Assert.Equal(Path.Combine(userProfilePath, "Templates", groupId.ToString(), templateId.ToString(), $"{templateId}_thumbnail.png"), templatePath);
     }
 }
