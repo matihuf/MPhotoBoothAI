@@ -23,7 +23,7 @@ public partial class MainViewModel : ViewModelBase, IDisposable
         new ListItemTemplate(typeof(CameraSettingsViewModel), "Camera", "cameraSettings"),
         new ListItemTemplate(typeof(FaceSwapTemplatesViewModel), "ImageEditOutline", Assets.UI.templates),
         new ListItemTemplate(typeof(FaceDetectionViewModel), "FaceRecognition", "FaceDetection"),
-        new ListItemTemplate(typeof(DesignPrintTemplateViewModel), "image_copy_regular", Assets.UI.printLayout),
+        new ListItemTemplate(typeof(DesignPrintTemplateViewModel), "BorderOutside", Assets.UI.printLayout),
     ];
 
     public MainViewModel(INavigationService<ViewModelBase> navigationService)
