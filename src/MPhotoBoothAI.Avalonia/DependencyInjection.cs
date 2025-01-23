@@ -76,6 +76,7 @@ public static class DependencyInjection
         services.AddTransient<LanguageViewModel>();
         services.AddTransient<CameraSettingsViewModel>();
         services.AddTransient<FaceSwapTemplatesViewModel>();
+        services.AddTransient<DesignPrintTemplateViewModel>();
     }
 
     private static void AddServices(IServiceCollection services)
@@ -95,6 +96,8 @@ public static class DependencyInjection
         services.AddTransient<IDiskInfoService, DiskInfoService>();
         services.AddTransient<SDKHandler>();
         services.AddTransient<IMessageBoxService, MessageBoxService>();
+        services.AddTransient<IFilesManager, FilesManager>();
+        services.AddTransient<IImageManager, ImagesManager>();
     }
 
     private static void AddCamera(IServiceCollection services)

@@ -11,6 +11,7 @@ public class ApplicationInfoService : IApplicationInfoService
     public string Product => _fvi?.ProductName ?? string.Empty;
     public string UserProfilePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Company, Product);
     public string Version => _fvi?.FileVersion ?? string.Empty;
+    public string BackgroundDirectory => Path.Combine(UserProfilePath, "Background");
 
     public ApplicationInfoService()
     {

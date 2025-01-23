@@ -406,3 +406,5 @@ models/
 #Avalonia
 src/MPhotoBoothAI.Avalonia/.avalonia-build-tasks/
 tests/MPhotoBoothAI.Avalonia.Tests/.avalonia-build-tasks/
+
+src/MPhotoBoothAI.Infrastructure/src/

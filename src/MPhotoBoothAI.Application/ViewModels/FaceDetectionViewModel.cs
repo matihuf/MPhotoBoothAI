@@ -31,7 +31,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     [RelayCommand]
     private async Task SetTarget()
     {
-        byte[] target = await _filePickerService.PickFile();
+        byte[] target = await _filePickerService.PickFile(Models.FileTypes.All);
         CvInvoke.Imdecode(target, ImreadModes.Color, _target);
     }
 

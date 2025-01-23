@@ -1,45 +1,63 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
-        xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:models="using:MPhotoBoothAI.Models.UI"
-        xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
-        xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        xmlns:controls="clr-namespace:Avalonia.Themes.Neumorphism.Controls;assembly=Avalonia.Themes.Neumorphism"
-        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-        x:Class="MPhotoBoothAI.Avalonia.Views.MainWindow"
-        x:DataType="vm:MainViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="MPhotoBoothAI"
-		    WindowState="Maximized">
+<Window
+    x:Class="MPhotoBoothAI.Avalonia.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.Themes.Neumorphism.Controls;assembly=Avalonia.Themes.Neumorphism"
+    xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:MPhotoBoothAI.Models.UI"
+    xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+    Title="MPhotoBoothAI"
+    d:DesignHeight="1080"
+    d:DesignWidth="1920"
+    x:DataType="vm:MainViewModel"
+    Icon="/Assets/avalonia-logo.ico"
+    WindowState="Maximized"
+    mc:Ignorable="d">
 
-  <Design.DataContext>
-    <dvm:DesignMainViewModel/>
-  </Design.DataContext>
+    <Design.DataContext>
+        <dvm:DesignMainViewModel />
+    </Design.DataContext>
 
-  <Window.Resources>
-    <converters:IconConverter x:Key="iconConverter"/>
-  </Window.Resources>
+    <Window.Resources>
+        <converters:IconConverter x:Key="iconConverter" />
+    </Window.Resources>
 
-  <Grid Margin="15">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="15*" MinWidth="70" />
-      <ColumnDefinition Width="85*" />
-    </Grid.ColumnDefinitions>
-    <ListBox x:Name="ListBoxPage" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}" Grid.Column="0" Theme="{StaticResource ListBoxCard}" Margin="0,0,5,0">
-      <ListBox.ItemTemplate>
-        <DataTemplate DataType="{x:Type models:ListItemTemplate}">
-          <StackPanel Orientation="Horizontal" Spacing="15">
-            <icons:MaterialIcon Width="28" Height="28" Kind="{Binding IconKey, Converter={StaticResource iconConverter}}" />
-            <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
-          </StackPanel>
-        </DataTemplate>
-      </ListBox.ItemTemplate>
-    </ListBox>
-    <controls:Card Grid.Column="1" Theme="{StaticResource CardOutset}" CornerRadius="8">
-      <ContentControl x:Name="Content" Content="{Binding Content}" />
-    </controls:Card>
-  </Grid>
+    <Grid Margin="15">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15*" MinWidth="70" />
+            <ColumnDefinition Width="85*" />
+        </Grid.ColumnDefinitions>
+        <ListBox
+            x:Name="ListBoxPage"
+            Grid.Column="0"
+            Margin="0,0,5,0"
+            ItemsSource="{Binding Pages}"
+            SelectedItem="{Binding SelectedPage}"
+            Theme="{StaticResource ListBoxCard}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:ListItemTemplate}">
+                    <StackPanel Orientation="Horizontal" Spacing="15">
+                        <icons:MaterialIcon
+                            Width="28"
+                            Height="28"
+                            Kind="{Binding IconKey, Converter={StaticResource iconConverter}}" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Label}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <controls:Card
+            Grid.Column="1"
+            CornerRadius="8"
+            Theme="{StaticResource CardOutset}">
+            <ContentControl
+                x:Name="Content"
+                ClipToBounds="False"
+                Content="{Binding Content}" />
+        </controls:Card>
+    </Grid>
 </Window>

@@ -5,4 +5,5 @@ public interface IApplicationInfoService
     string Product { get; }
     string UserProfilePath { get; }
     string Version { get; }
+    string BackgroundDirectory { get; }
 }
