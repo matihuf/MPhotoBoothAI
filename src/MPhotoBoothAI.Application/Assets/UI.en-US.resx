@@ -241,7 +241,7 @@
     <value>Wrong aspect ratio, the image will be stretched to fit the print area. Do you still want to add the image to the background list?</value>
   </data>
   <data name="designCanvasText" xml:space="preserve">
-    <value>Print design. To display the background add the image to the list above.</value>
+    <value>Print design. Add a background using the “Set background” option.</value>
   </data>
   <data name="stripe" xml:space="preserve">
     <value>Stripe</value>

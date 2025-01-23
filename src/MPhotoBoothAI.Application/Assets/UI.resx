@@ -241,7 +241,7 @@
     <value>Niewłaściwe proporcje obrazu, obraz zostanie rozciągnięty, aby dopasować się do obszaru wydruku. Czy mimo to chcesz dodać obraz do listy teł?</value>
   </data>
   <data name="designCanvasText" xml:space="preserve">
-    <value>Projekt wydruku. Aby wyświetlić tło dodaj obraz do powyższej listy</value>
+    <value>Projekt wydruku. Dodaj tło za pomocą opcji "Ustaw tło"</value>
   </data>
   <data name="stripe" xml:space="preserve">
     <value>Listek</value>

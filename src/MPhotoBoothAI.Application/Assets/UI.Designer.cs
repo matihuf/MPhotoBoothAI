@@ -214,7 +214,7 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Projekt wydruku. Aby wyświetlić tło dodaj obraz do powyższej listy.
+        ///   Looks up a localized string similar to Projekt wydruku. Dodaj tło za pomocą opcji &quot;Ustaw tło&quot;.
         /// </summary>
         public static string designCanvasText {
             get {

@@ -388,14 +388,17 @@ public partial class DesignLayoutControl : UserControl
 
     private Image BuildImage(Bitmap bitmap)
     {
-        return new Image()
+        var image = new Image()
         {
             Source = bitmap,
             Width = bitmap.Size.Width,
             Height = bitmap.Size.Height,
             ClipToBounds = false,
-            ContextMenu = BuildContextMenu()
+            ContextMenu = BuildContextMenu(),
         };
+        RenderOptions.SetBitmapInterpolationMode(image, BitmapInterpolationMode.HighQuality);
+        RenderOptions.SetEdgeMode(image, EdgeMode.Antialias);
+        return image;
     }
 
     private void RemoveItem(object? sender, RoutedEventArgs e)
