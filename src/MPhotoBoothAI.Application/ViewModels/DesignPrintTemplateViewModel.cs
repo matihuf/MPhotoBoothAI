@@ -61,7 +61,7 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
 
     private void BuildProperties()
     {
-        LayoutFormat = _dbContext.LayoutFormat.ToList();
+        LayoutFormat = _dbContext.LayoutFormat.AsNoTracking().ToList();
         foreach (FormatTypes format in Enum.GetValues(typeof(FormatTypes)))
         {
             _backgroundDir.Add(format, Path.Combine(_applicationInfoService.BackgroundDirectory, format.ToString()));
@@ -86,22 +86,17 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         var pickFile = await FilePickerService.PickFilePath(Models.FileTypes.NonTransparentImages);
         var pathToCopy = _backgroundDir[(FormatTypes)Id];
         var imageSize = _imageManager.GetImageSizeFromFile(pickFile);
-        if (imageSize.HasValue)
-        {
-            var formatRatio = _dbContext.LayoutFormat.First(x => x.Id == Id).FormatRatio;
-            var ratio = imageSize.Value.Height / (double)imageSize.Value.Width;
-            if (ratio > formatRatio * 1.01 || ratio < formatRatio * 0.99)
-            {
-                if (!await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
-                {
-                    return;
-                }
-            }
-        }
-        else
+        if (!imageSize.HasValue)
         {
             return;
         }
+        var formatRatio = _dbContext.LayoutFormat.AsNoTracking().First(x => x.Id == Id).FormatRatio;
+        var ratio = imageSize.Value.Height / (double)imageSize.Value.Width;
+        if ((ratio > formatRatio * 1.01 || ratio < formatRatio * 0.99) && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
+        {
+            return;
+        }
+
         _filesManager.CopyFile(pickFile, pathToCopy, BackgroundFileName);
         BackgroundPath = null;
         BackgroundPath = Path.Combine(pathToCopy, BackgroundFileName);

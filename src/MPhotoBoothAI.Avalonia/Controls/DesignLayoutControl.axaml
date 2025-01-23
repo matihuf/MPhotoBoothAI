@@ -61,7 +61,6 @@
     <StackPanel>
         <Grid
             Name="canvasRoot"
-            Height=""
             MinWidth="400"
             MaxWidth="1200">
             <Border

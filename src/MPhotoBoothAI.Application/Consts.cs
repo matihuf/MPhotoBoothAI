@@ -16,7 +16,6 @@ public static class Consts
     {
         public const int PhotoWidth = 3000;
         public const int PhotoHeight = 2000;
-        public const int BasicPrintWidth = 3000;
     }
 
     public static class Background
