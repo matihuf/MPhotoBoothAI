@@ -34,7 +34,7 @@ public class DesignPrintTemplateViewModelTests
 
         //assert
         builder.MessageBoxService.Verify(
-            x => x.ShowYesNo(It.IsAny<string>(), It.IsAny<string>(), null),
+            x => x.ShowYesNo(MPhotoBoothAI.Application.Assets.UI.notSavedChangesTittle, MPhotoBoothAI.Application.Assets.UI.notSavedChangesMessage, null),
             Times.Once);
         Assert.Equal(2, viewModel.Id);
     }
@@ -47,19 +47,15 @@ public class DesignPrintTemplateViewModelTests
         var builder = new DesignPrintTemplateViewModelBuilder();
         var viewModel = builder.Build(databaseContext);
         viewModel.NotSavedChange = true;
-
-        var layoutFormat = new LayoutFormatEntity { Id = 1, FormatRatio = 1.5 };
-
-        var layoutData = new LayoutDataEntity { Id = 1, PhotoLayoutData = new(), OverlayImageData = new() };
+        viewModel.SelectedLayoutFormat = new LayoutFormatEntity { Id = 1, FormatRatio = 1.5 }; ;
+        viewModel.SelectedLayoutData = new LayoutDataEntity { Id = 1, PhotoLayoutData = new(), OverlayImageData = new() }; ;
 
         //act
-        viewModel.SelectedLayoutFormat = layoutFormat;
-        viewModel.SelectedLayoutData = layoutData;
         await viewModel.SaveLayoutCommand.ExecuteAsync(null);
 
         //assert
         builder.MessageBoxService.Verify(
-            x => x.ShowInfo(It.IsAny<string>(), It.IsAny<string>(), null),
+            x => x.ShowInfo(MPhotoBoothAI.Application.Assets.UI.savedChanges, MPhotoBoothAI.Application.Assets.UI.savedChanges, null),
             Times.Once);
         Assert.False(viewModel.NotSavedChange);
     }

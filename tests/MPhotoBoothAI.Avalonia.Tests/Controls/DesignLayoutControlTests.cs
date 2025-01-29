@@ -12,6 +12,7 @@ public class DesignLayoutControlTests
     [AvaloniaFact]
     public void SwitchToPhotoLayer_ShouldSetActiveLayerSwitchToTrue()
     {
+        //arrange
         var control = new DesignLayoutControlBuilder()
             .WithActiveLayerSwitch(false)
             .Build();
@@ -25,6 +26,7 @@ public class DesignLayoutControlTests
     [AvaloniaFact]
     public void SwitchToFrameLayer_ShouldSetActiveLayerSwitchToFalse()
     {
+        //arrange
         var control = new DesignLayoutControlBuilder()
             .WithActiveLayerSwitch(true)
             .Build();
@@ -38,41 +40,47 @@ public class DesignLayoutControlTests
     [AvaloniaFact]
     public void AddPhoto_ShouldAddPhotoToCanvas()
     {
+        //arrange
         var control = new DesignLayoutControlBuilder()
             .WithActiveLayerSwitch(true)
             .Build();
 
         var photoCanvas = control.FindControl<Canvas>("photoCanvas");
-        var initialCount = photoCanvas.Children.Count;
-
         var addPhotoButton = control.FindControl<Button>("AddPhotoButton");
+
+        //act
+        var initialCount = photoCanvas.Children.Count;
         addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, addPhotoButton));
 
+        //assert
         Assert.Equal(initialCount + 1, photoCanvas.Children.Count);
     }
 
     [AvaloniaFact]
     public void RemovePhoto_ShouldRemoveLastPhotoFromCanvas()
     {
+        //arrange
         var control = new DesignLayoutControlBuilder()
             .WithActiveLayerSwitch(true)
             .Build();
 
         var photoCanvas = control.FindControl<Canvas>("photoCanvas");
-
         var addPhotoButton = control.FindControl<Button>("AddPhotoButton");
-        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, addPhotoButton));
+        var removePhotoButton = control.FindControl<Button>("RemovePhotoButton");
         var initialCount = photoCanvas.Children.Count;
 
-        var removePhotoButton = control.FindControl<Button>("RemovePhotoButton");
+        //act
+        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, addPhotoButton));
         removePhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, removePhotoButton));
 
+        //assert
         Assert.Equal(initialCount - 1, photoCanvas.Children.Count);
     }
 
     [AvaloniaFact]
     public void SaveLayout_ShouldUpdateLayoutData()
     {
+        //arrange
         var control = new DesignLayoutControlBuilder().Build();
         control.LayoutData = new LayoutDataEntity();
         control.LayoutFormat = new LayoutFormatEntity
@@ -82,28 +90,31 @@ public class DesignLayoutControlTests
         };
 
         var addPhotoButton = control.FindControl<Button>("AddPhotoButton");
-        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-
         var saveButton = control.FindControl<Button>("SaveLayoutButton");
+
+        //act
+        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         saveButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
+        //assert
         Assert.NotEmpty(control.LayoutData.PhotoLayoutData);
     }
 
     [AvaloniaFact]
     public void ClearLayout_ShouldRemoveAllItems()
     {
+        //arrange
         var control = new DesignLayoutControlBuilder().Build();
-
         var photoCanvas = control.FindControl<Canvas>("photoCanvas");
         var frameCanvas = control.FindControl<Canvas>("frameCanvas");
-
         var addPhotoButton = control.FindControl<Button>("AddPhotoButton");
-        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, addPhotoButton));
-
         var clearButton = control.FindControl<Button>("ClearLayoutButton");
+
+        //act
+        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, addPhotoButton));
         clearButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, clearButton));
 
+        //assert
         Assert.Empty(photoCanvas.Children);
         Assert.Empty(frameCanvas.Children);
     }
@@ -111,6 +122,7 @@ public class DesignLayoutControlTests
     [AvaloniaFact]
     public void AddPhoto_SetCanvasPosition_PhotoShouldMoved()
     {
+        //arrange
         var builder = new DesignLayoutControlBuilder();
         var control = builder.Build();
         var layoutFormat = new LayoutFormatEntity
@@ -121,21 +133,21 @@ public class DesignLayoutControlTests
         };
 
         var layoutData = new LayoutDataEntity { Id = 1 };
-
         control.LayoutData = layoutData;
         control.LayoutFormat = layoutFormat;
 
         var addPhotoButton = control.FindControl<Button>("AddPhotoButton");
-        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, addPhotoButton));
-
         var photoCanvas = control.FindControl<Canvas>("photoCanvas");
 
+        //acr
+        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, addPhotoButton));
         var photoGrid = photoCanvas.Children[0] as Grid;
         Canvas.SetTop(photoGrid, 200);
         Canvas.SetLeft(photoGrid, 200);
         var saveButton = control.FindControl<Button>("SaveLayoutButton");
         saveButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
+        //assert
         Assert.NotEqual(layoutData.PhotoLayoutData.First().Left, 0);
         Assert.NotEqual(layoutData.PhotoLayoutData.First().Top, 0);
     }
@@ -143,6 +155,7 @@ public class DesignLayoutControlTests
     [AvaloniaFact]
     public void AddPhoto_SetRotateTransformAngle_PhotoShouldRotate()
     {
+        //arrange
         var builder = new DesignLayoutControlBuilder();
         var control = builder.Build();
         var layoutFormat = new LayoutFormatEntity
@@ -159,9 +172,10 @@ public class DesignLayoutControlTests
         control.LayoutFormat = layoutFormat;
 
         var addPhotoButton = control.FindControl<Button>("AddPhotoButton");
-        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, addPhotoButton));
-
         var photoCanvas = control.FindControl<Canvas>("photoCanvas");
+
+        //act
+        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, addPhotoButton));
 
         var photoGrid = photoCanvas.Children[0] as Grid;
         var photoImage = photoGrid.Children[0] as Grid;
@@ -169,6 +183,7 @@ public class DesignLayoutControlTests
         var saveButton = control.FindControl<Button>("SaveLayoutButton");
         saveButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
+        //assert
         Assert.Equal(layoutData.PhotoLayoutData.First().Angle, angle);
     }
 

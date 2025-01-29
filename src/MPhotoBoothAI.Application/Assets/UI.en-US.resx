@@ -238,7 +238,7 @@
     <value>Wrong image ratio</value>
   </data>
   <data name="wrongImageRatioMessage" xml:space="preserve">
-    <value>Wrong aspect ratio, the image will be stretched to fit the print area. Do you still want to add the image to the background list?</value>
+    <value>Wrong aspect ratio, the image will be stretched to fit the print area. Do you still want to add?</value>
   </data>
   <data name="designCanvasText" xml:space="preserve">
     <value>Print design. Add a background using the “Set background” option.</value>
