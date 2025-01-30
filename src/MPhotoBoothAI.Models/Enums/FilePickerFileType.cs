@@ -6,5 +6,6 @@ public enum FilePickerFileType
     /// <summary>
     /// Jpeg and Png
     /// </summary>
-    Image
+    AllImage,
+    NonTransparentImage
 }

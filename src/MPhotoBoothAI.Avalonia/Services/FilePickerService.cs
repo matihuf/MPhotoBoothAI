@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using MPhotoBoothAI.Application.Interfaces;
-using MPhotoBoothAI.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +15,8 @@ public class FilePickerService : IFilePickerService
     {
         { MPhotoBoothAI.Models.Enums.FilePickerFileType.Pdf, FilePickerFileTypes.Pdf  },
         { MPhotoBoothAI.Models.Enums.FilePickerFileType.Text, FilePickerFileTypes.TextPlain  },
-        { MPhotoBoothAI.Models.Enums.FilePickerFileType.Image, ImageAll  }
+        { MPhotoBoothAI.Models.Enums.FilePickerFileType.AllImage, ImageAll  },
+        { MPhotoBoothAI.Models.Enums.FilePickerFileType.NonTransparentImage, FilePickerFileTypes.ImageJpg},
     };
 
     public async Task<byte[]> PickFile(MPhotoBoothAI.Models.Enums.FilePickerFileType[]? filePickerFileTypes = null)

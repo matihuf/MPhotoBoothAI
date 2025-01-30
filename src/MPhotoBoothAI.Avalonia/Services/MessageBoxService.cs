@@ -2,87 +2,46 @@
 using Avalonia.Themes.Neumorphism.Dialogs;
 using Avalonia.Themes.Neumorphism.Dialogs.Enums;
 using MPhotoBoothAI.Application.Interfaces;
-using MPhotoBoothAI.Avalonia.Views;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Base;
-using MsBox.Avalonia.Dto;
-using MsBox.Avalonia.Models;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MPhotoBoothAI.Avalonia.Services;
 public class MessageBoxService : IMessageBoxService
 {
-    public async Task<bool> ShowYesNo(string title, string text, IMainWindow? mainWindow = null)
+    public async Task<bool> ShowInfo(string title, string text, IWindow? mainWindow = null)
     {
-        var box = BuildMessageBox(title, text, null);
-        string result;
-        if (mainWindow != null)
-        {
-            result = await box.ShowWindowDialogAsync((MainWindow)mainWindow);
-        }
-        else
-        {
-            result = await box.ShowAsync();
-        }
-        return result == Application.Assets.UI.yes;
-    }
-
-    public async Task<string> ShowInput(string title, string text, IMainWindow? mainWindow = null)
-    {
-        var box = BuildMessageBox(title, text, new InputParams { Label = string.Empty });
-        string result;
-        if (mainWindow != null)
-        {
-            result = await box.ShowWindowDialogAsync((MainWindow)mainWindow);
-        }
-        else
-        {
-            result = await box.ShowAsync();
-        }
-        return result == Application.Assets.UI.yes ? box.InputValue : string.Empty;
-    }
-
-    public async Task<bool> ShowInfo(string title, string text, IMainWindow? mainWindow = null)
-    {
-        var box = BuildMessageBox(title, text, null, false);
-        string result;
-        if (mainWindow != null)
-        {
-            result = await box.ShowWindowDialogAsync((MainWindow)mainWindow);
-        }
-        else
-        {
-            result = await box.ShowAsync();
-        }
-        return result == Application.Assets.UI.close;
-    }
-
-    private static IMsBox<string> BuildMessageBox(string title, string text, InputParams? inputParams, bool showCancel = true)
-    {
-        List<ButtonDefinition> _buttonDefinition = new List<ButtonDefinition> {
-                new ButtonDefinition { Name = showCancel ? Application.Assets.UI.yes : Application.Assets.UI.close, IsCancel = false},
-        };
-        if (showCancel)
-        {
-            _buttonDefinition.Add(new ButtonDefinition { Name = Application.Assets.UI.cancel, IsCancel = true });
-        }
-        return MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
+        var dialog = DialogHelper.CreateCommonDialog(new CommonDialogBuilderParams()
         {
             ContentHeader = title,
-            ContentMessage = text,
-            WindowStartupLocation = WindowStartupLocation.CenterScreen,
-            CanResize = false,
-            Width = 500,
-            ShowInCenter = true,
-            Topmost = true,
-            SystemDecorations = SystemDecorations.BorderOnly,
-            ButtonDefinitions = _buttonDefinition,
-            InputParams = inputParams
+            SupportingText = text,
+            StartupLocation = WindowStartupLocation.CenterOwner,
+            NegativeResult = new DialogResult(Application.Assets.UI.cancel),
+            Borderless = true,
+            Width = 480,
+            RightDialogButtons =
+            [
+                new DialogButton
+                {
+                    Content = Application.Assets.UI.ok,
+                    Result = Application.Assets.UI.ok,
+                    DialogButtonStyle = new DialogButtonStyle(DialogButtonBackgroundColor.PrimaryColor, DialogButtonForegroundColor.White)
+                }
+            ]
         });
-    public async Task<bool> ShowYesNo(string title, string text, IWindow mainWindow)
+        DialogResult result;
+        if (mainWindow != null)
+        {
+            result = await dialog.ShowDialog((Window)mainWindow);
+        }
+        else
+        {
+            result = await dialog.Show();
+        }
+        return result.GetResult == Application.Assets.UI.ok;
+    }
+
+    public async Task<bool> ShowYesNo(string title, string text, IWindow? mainWindow = null)
     {
-        var result = await DialogHelper.CreateCommonDialog(new CommonDialogBuilderParams()
+        var dialog = DialogHelper.CreateCommonDialog(new CommonDialogBuilderParams()
         {
             ContentHeader = title,
             SupportingText = text,
@@ -100,13 +59,23 @@ public class MessageBoxService : IMessageBoxService
                     DialogButtonStyle = new DialogButtonStyle(DialogButtonBackgroundColor.PrimaryColor, DialogButtonForegroundColor.White)
                 }
             ]
-        }).ShowDialog((Window)mainWindow);
+        });
+
+        DialogResult result;
+        if (mainWindow != null)
+        {
+            result = await dialog.ShowDialog((Window)mainWindow);
+        }
+        else
+        {
+            result = await dialog.Show();
+        }
         return result.GetResult == Application.Assets.UI.yes;
     }
 
-    public async Task<string> ShowInput(string title, string text, int maxLength, IWindow mainWindow)
+    public async Task<string> ShowInput(string title, string text, int maxLength, IWindow? mainWindow = null)
     {
-        var result = await DialogHelper.CreateTextFieldDialog(new TextFieldDialogBuilderParams()
+        var dialog = DialogHelper.CreateTextFieldDialog(new TextFieldDialogBuilderParams()
         {
             ContentHeader = title,
             StartupLocation = WindowStartupLocation.CenterOwner,
@@ -129,7 +98,17 @@ public class MessageBoxService : IMessageBoxService
                     DialogButtonStyle = new DialogButtonStyle(DialogButtonBackgroundColor.PrimaryColor, DialogButtonForegroundColor.White)
                 }
             ],
-        }).ShowDialog((Window)mainWindow);
+        });
+
+        TextFieldDialogResult result;
+        if (mainWindow != null)
+        {
+            result = await dialog.ShowDialog((Window)mainWindow);
+        }
+        else
+        {
+            result = await dialog.Show();
+        }
         return result.GetResult == Application.Assets.UI.yes ? result.GetFieldsResult()[0].Text : string.Empty;
     }
 }

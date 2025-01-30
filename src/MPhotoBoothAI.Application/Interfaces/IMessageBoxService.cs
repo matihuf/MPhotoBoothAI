@@ -2,7 +2,7 @@
 namespace MPhotoBoothAI.Application.Interfaces;
 public interface IMessageBoxService
 {
-    Task<bool> ShowYesNo(string title, string text, IMainWindow? mainWindow = null);
-    Task<string> ShowInput(string title, string text, IMainWindow? mainWindow = null);
-    Task<bool> ShowInfo(string title, string text, IMainWindow? mainWindow = null);
+    Task<bool> ShowYesNo(string title, string text, IWindow? mainWindow = null);
+    Task<string> ShowInput(string title, string text, int maxLength, IWindow? mainWindow = null);
+    Task<bool> ShowInfo(string title, string text, IWindow? mainWindow = null);
 }

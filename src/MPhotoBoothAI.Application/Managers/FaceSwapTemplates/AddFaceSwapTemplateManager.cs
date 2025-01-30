@@ -15,7 +15,7 @@ public class AddFaceSwapTemplateManager(IFilePickerService filePickerService, IF
 
     public async Task<FaceSwapTemplate?> PickTemplate()
     {
-        var filePath = await _filePickerService.PickFilePath([FilePickerFileType.Image]);
+        var filePath = await _filePickerService.PickFilePath([FilePickerFileType.AllImage]);
         if (string.IsNullOrEmpty(filePath))
         {
             return null;

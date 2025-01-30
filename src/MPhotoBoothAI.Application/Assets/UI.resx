@@ -297,9 +297,6 @@
   <data name="layoutDescription_5" xml:space="preserve">
     <value>Po zakończeniu edycji zapisz swoje ustawienia. Nie zapisanie ustawień spowoduję utratę wszelkim zmian. Wyczyszczenie warstw spowoduję usunięcie wszystkich zdjęć w serii, elementów grafiki z warstwy ramek oraz ich ustawień</value>
   </data>
-  <data name="en-EN" xml:space="preserve">
-    <value>Angielski</value>
-  </data>
   <data name="template" xml:space="preserve">
     <value>Szablon</value>
   </data>
@@ -312,10 +309,10 @@
   <data name="swap" xml:space="preserve">
     <value>Zamiana</value>
   </data>
-  <data name="close" xml:space="preserve">
-    <value>Zamknij</value>
-  </data>
   <data name="deleteTemplate" xml:space="preserve">
     <value>Usunąć szablon?</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>Ok</value>
   </data>
 </root>
