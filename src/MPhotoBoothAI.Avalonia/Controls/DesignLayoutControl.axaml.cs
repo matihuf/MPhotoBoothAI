@@ -11,6 +11,7 @@ using MPhotoBoothAI.Application;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
 using MPhotoBoothAI.Models.Entities;
+using MPhotoBoothAI.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -284,7 +285,7 @@ public partial class DesignLayoutControl : UserControl
     {
         try
         {
-            var file = await FilePicker.PickFilePath(FileTypes.AllImages);
+            var file = await FilePicker.PickFilePath([FilePickerFileType.AllImage]);
             LoadImageFromPath(new Point(50, 50), file, _mainScale);
         }
         catch (Exception ex)

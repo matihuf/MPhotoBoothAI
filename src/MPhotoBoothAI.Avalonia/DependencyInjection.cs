@@ -84,7 +84,6 @@ public static class DependencyInjection
         services.AddTransient<FaceDetectionViewModel>();
         services.AddTransient<LanguageViewModel>();
         services.AddTransient<CameraSettingsViewModel>();
-        services.AddTransient<FaceSwapTemplatesViewModel>();
         services.AddTransient<DesignPrintTemplateViewModel>();
         services.AddTransient<FaceSwapGroupTemplatesViewModel>();
         services.AddTransient<AddFaceSwapTemplateViewModel>();

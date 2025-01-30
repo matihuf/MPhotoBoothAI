@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Models;
 using MPhotoBoothAI.Models.Entities;
+using MPhotoBoothAI.Models.Enums;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 public partial class DesignPrintTemplateViewModel : ViewModelBase
@@ -83,7 +84,7 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     [RelayCommand]
     private async Task SetBackground()
     {
-        var pickFile = await FilePickerService.PickFilePath(Models.FileTypes.NonTransparentImages);
+        var pickFile = await FilePickerService.PickFilePath([FilePickerFileType.NonTransparentImage]);
         var pathToCopy = _backgroundDir[(FormatTypes)Id];
         var imageSize = _imageManager.GetImageSizeFromFile(pickFile);
         if (!imageSize.HasValue)

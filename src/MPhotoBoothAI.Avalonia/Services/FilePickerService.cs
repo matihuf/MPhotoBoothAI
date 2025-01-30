@@ -48,11 +48,6 @@ public class FilePickerService : IFilePickerService
         {
             throw new NullReferenceException("Missing StorageProvider instance.");
         }
-        List<FilePickerFileType> filters = [];
-        if (_pickerFileTypes.TryGetValue(fileTypes, out FilePickerFileType? filter) && filter != null)
-        {
-            filters.Add(filter);
-        }
         var files = await provider.OpenFilePickerAsync(new FilePickerOpenOptions()
         {
             Title = Application.Assets.UI.openFile,
