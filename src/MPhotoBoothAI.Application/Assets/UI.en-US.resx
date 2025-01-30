@@ -141,8 +141,8 @@
   <data name="delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="deleteGroup" xml:space="preserve">
-    <value>Delete Group?</value>
+  <data name="deleteQuestion" xml:space="preserve">
+    <value>Delete?</value>
   </data>
   <data name="deleteGroupDesc" xml:space="preserve">
     <value>Delete group and all templates?</value>
@@ -150,7 +150,7 @@
   <data name="edit" xml:space="preserve">
     <value>Edit</value>
   </data>
-  <data name="en-EN" xml:space="preserve">
+  <data name="en-US" xml:space="preserve">
     <value>English</value>
   </data>
   <data name="iso" xml:space="preserve">
@@ -200,5 +200,26 @@
   </data>
   <data name="yes" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="en-EN" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="template" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="pick" xml:space="preserve">
+    <value>Pick</value>
+  </data>
+  <data name="cameraPreview" xml:space="preserve">
+    <value>Camera preview</value>
+  </data>
+  <data name="swap" xml:space="preserve">
+    <value>Swap</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="deleteTemplate" xml:space="preserve">
+    <value>Delete template?</value>
   </data>
 </root>

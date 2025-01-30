@@ -1,10 +1,12 @@
 ﻿using Emgu.CV;
+using Microsoft.Extensions.Logging;
 using MPhotoBoothAI.Application.Interfaces.Observers;
 
 namespace MPhotoBoothAI.Infrastructure.CameraDevices;
 
-public abstract class BaseCameraDevice()
+public abstract class BaseCameraDevice(ILogger<BaseCameraDevice> logger)
 {
+    private readonly ILogger<BaseCameraDevice> _logger = logger;
     private readonly List<IObserver> _observers = [];
 
     public void Attach(IObserver observer) => _observers.Add(observer);
@@ -13,19 +15,30 @@ public abstract class BaseCameraDevice()
 
     public void Notify(Mat mat)
     {
-        foreach (var observer in _observers.ToList())
+        try
         {
-            try
+            foreach (var observer in _observers.ToList())
             {
-                if (mat != null && !mat.IsEmpty)
+                try
                 {
-                    observer.Notify(mat.Clone());
+                    if (mat != null && !mat.IsEmpty)
+                    {
+                        observer.Notify(mat.Clone());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Notify failed for {Observer}", observer.GetType().Name);
                 }
             }
-            finally
-            {
-                mat?.Dispose();
-            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Notify failed");
+        }
+        finally
+        {
+            mat?.Dispose();
         }
     }
 }

@@ -1,58 +1,62 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Themes.Neumorphism.Dialogs;
+using Avalonia.Themes.Neumorphism.Dialogs.Enums;
 using MPhotoBoothAI.Application.Interfaces;
-using MPhotoBoothAI.Avalonia.Views;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Dto;
-using MsBox.Avalonia.Models;
 using System.Threading.Tasks;
 
 namespace MPhotoBoothAI.Avalonia.Services;
 public class MessageBoxService : IMessageBoxService
 {
-    public async Task<bool> ShowYesNo(string title, string text, IMainWindow mainWindow)
+    public async Task<bool> ShowYesNo(string title, string text, IWindow mainWindow)
     {
-        var box = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
+        var result = await DialogHelper.CreateCommonDialog(new CommonDialogBuilderParams()
         {
             ContentHeader = title,
-            ContentMessage = text,
-            WindowStartupLocation = WindowStartupLocation.CenterScreen,
-            CanResize = false,
-            Width = 500,
-            Height = 150,
-            ShowInCenter = true,
-            Topmost = true,
-            SystemDecorations = SystemDecorations.None,
-            ButtonDefinitions =
+            SupportingText = text,
+            StartupLocation = WindowStartupLocation.CenterOwner,
+            NegativeResult = new DialogResult(Application.Assets.UI.cancel),
+            Borderless = true,
+            Width = 480,
+            LeftDialogButtons = [new DialogButton { Content = Application.Assets.UI.cancel, Result = Application.Assets.UI.cancel }],
+            RightDialogButtons =
             [
-                new ButtonDefinition { Name = Application.Assets.UI.yes, IsCancel = false},
-                new ButtonDefinition { Name = Application.Assets.UI.cancel, IsCancel = true },
-            ],
-        });
-        var result = await box.ShowWindowDialogAsync((MainWindow)mainWindow);
-        return result == Application.Assets.UI.yes;
+                new DialogButton
+                {
+                    Content = Application.Assets.UI.yes,
+                    Result = Application.Assets.UI.yes,
+                    DialogButtonStyle = new DialogButtonStyle(DialogButtonBackgroundColor.PrimaryColor, DialogButtonForegroundColor.White)
+                }
+            ]
+        }).ShowDialog((Window)mainWindow);
+        return result.GetResult == Application.Assets.UI.yes;
     }
 
-    public async Task<string> ShowInput(string title, string text, IMainWindow mainWindow)
+    public async Task<string> ShowInput(string title, string text, int maxLength, IWindow mainWindow)
     {
-        var box = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
+        var result = await DialogHelper.CreateTextFieldDialog(new TextFieldDialogBuilderParams()
         {
             ContentHeader = title,
-            ContentMessage = text,
-            WindowStartupLocation = WindowStartupLocation.CenterScreen,
-            CanResize = false,
-            Width = 500,
-            Height = 180,
-            ShowInCenter = true,
-            Topmost = true,
-            SystemDecorations = SystemDecorations.None,
-            ButtonDefinitions =
+            StartupLocation = WindowStartupLocation.CenterOwner,
+            Borderless = true,
+            Width = 400,
+            TextFields = [new() { Label = text, MaxCountChars = maxLength }],
+            RightDialogButtons =
             [
-                new ButtonDefinition { Name = Application.Assets.UI.yes, IsCancel = false},
-                new ButtonDefinition { Name = Application.Assets.UI.cancel, IsCancel = true },
+                new DialogButton
+                {
+                    Content = Application.Assets.UI.cancel,
+                    Result = Application.Assets.UI.cancel,
+                    IsNegative = true
+                },
+                new DialogButton
+                {
+                    Content = Application.Assets.UI.yes,
+                    Result = Application.Assets.UI.yes,
+                    IsPositive = true,
+                    DialogButtonStyle = new DialogButtonStyle(DialogButtonBackgroundColor.PrimaryColor, DialogButtonForegroundColor.White)
+                }
             ],
-            InputParams = new InputParams { Label = string.Empty }
-        });
-        var result = await box.ShowWindowDialogAsync((MainWindow)mainWindow);
-        return result == Application.Assets.UI.yes ? box.InputValue : string.Empty;
+        }).ShowDialog((Window)mainWindow);
+        return result.GetResult == Application.Assets.UI.yes ? result.GetFieldsResult()[0].Text : string.Empty;
     }
 }

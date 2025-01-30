@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
 using MPhotoBoothAI.Models.UI;
 using System.Collections.ObjectModel;
 
@@ -21,7 +22,7 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     [
         new ListItemTemplate(typeof(HomeViewModel), "Home", "Home"),
         new ListItemTemplate(typeof(CameraSettingsViewModel), "Camera", "cameraSettings"),
-        new ListItemTemplate(typeof(FaceSwapTemplatesViewModel), "ImageEditOutline", Assets.UI.templates),
+        new ListItemTemplate(typeof(FaceSwapGroupTemplatesViewModel), "ImageEditOutline", Assets.UI.templates),
         new ListItemTemplate(typeof(FaceDetectionViewModel), "FaceRecognition", "FaceDetection")
     ];
 
