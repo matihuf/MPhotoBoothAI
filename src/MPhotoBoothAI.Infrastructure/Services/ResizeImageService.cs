@@ -1,14 +1,15 @@
-﻿using System.Drawing;
-using Emgu.CV;
+﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-using MPhotoBoothAI.Infrastructure.Models;
+using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Models;
+using System.Drawing;
 
 namespace MPhotoBoothAI.Infrastructure.Services;
 
-public class ResizeImageService
+public class ResizeImageService : IResizeImageService
 {
-    private readonly MCvScalar _border = new(0, 0, 0);
+    private readonly MCvScalar _border = new(0, 0, 0, 0);
 
     public ResizedImage Resize(Mat frame, int inputHeight = 640, int inputWidth = 640, bool keepRatio = true)
     {
@@ -41,5 +42,14 @@ public class ResizeImageService
             CvInvoke.Resize(frame, result, new Size(inputWidth, inputHeight), interpolation: Inter.Area);
         }
         return new ResizedImage(result, newh, neww, top, left);
+    }
+
+    public Mat GetThumbnail(Mat frame, float percentage)
+    {
+        int inputHeight = frame.Height - (int)Math.Round(frame.Height * percentage);
+        int inputWidth = frame.Width - (int)Math.Round(frame.Width * percentage);
+        var resized = new Mat();
+        CvInvoke.Resize(frame, resized, new Size(inputWidth, inputHeight), interpolation: Inter.Area);
+        return resized;
     }
 }

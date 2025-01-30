@@ -1,14 +1,13 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
-using MPhotoBoothAI.Application.ViewModels;
+using MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
 using MPhotoBoothAI.Avalonia.Tests.Extensions;
 using MPhotoBoothAI.Avalonia.Views;
-using MPhotoBoothAI.Common.Tests;
 using MPhotoBoothAI.Models.Entities;
 
 namespace MPhotoBoothAI.Avalonia.Tests.Views;
 
-public class FaceSwapTemplatesViewTests(DependencyInjectionFixture dependencyInjectionFixture) : BaseMainWindowTests(dependencyInjectionFixture)
+public class FaceSwapTemplatesViewTests(DependencyInjectionAvaloniaFixture dependencyInjectionFixture) : BaseMainWindowTests(dependencyInjectionFixture)
 {
     private static readonly string _groupName = "groupName";
 
@@ -17,7 +16,7 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionFixture dependencyInj
     {
         //arrange
         var window = _builder.Build();
-        window.OpenView(typeof(FaceSwapTemplatesViewModel));
+        window.OpenView(typeof(FaceSwapGroupTemplatesViewModel));
         AddNewGroup(window, _groupName);
         //assert
         var faceSwapTemplateGroup = (FaceSwapTemplateGroupEntity)GetListBoxGroups(window).Items[0];
@@ -29,10 +28,10 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionFixture dependencyInj
         var addGroupButton = GetAddGroupButton(window);
         addGroupButton.Command.Execute(window);
         var messageBoxWindow = window.OwnedWindows[0];
-        var messageBoxInput = messageBoxWindow.FindControls<TextBox>().ElementAt(2);
+        var messageBoxInput = messageBoxWindow.FindControls<TextBox>().First();
         var messageBoxButtonYes = GetMessageBoxButtonYes(messageBoxWindow);
         messageBoxInput.Text = groupName;
-        messageBoxButtonYes.Command.Execute(messageBoxButtonYes.Content);
+        messageBoxButtonYes.Press(window);
     }
 
     [AvaloniaFact]
@@ -40,13 +39,13 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionFixture dependencyInj
     {
         //arrange
         var window = _builder.Build();
-        window.OpenView(typeof(FaceSwapTemplatesViewModel));
+        window.OpenView(typeof(FaceSwapGroupTemplatesViewModel));
         var addGroupButton = GetAddGroupButton(window);
         //act
         addGroupButton.Command.Execute(window);
         var messageBoxWindow = window.OwnedWindows[0];
         var messageBoxButtonNo = GetMessageBoxButtonNo(messageBoxWindow);
-        messageBoxButtonNo.Command.Execute(messageBoxButtonNo.Content);
+        messageBoxButtonNo.Press(window);
         //assert
         Assert.Empty(GetListBoxGroups(window).Items);
     }
@@ -56,7 +55,7 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionFixture dependencyInj
     {
         //arrange
         var window = _builder.Build();
-        window.OpenView(typeof(FaceSwapTemplatesViewModel));
+        window.OpenView(typeof(FaceSwapGroupTemplatesViewModel));
         var listBoxGroups = GetListBoxGroups(window);
         AddNewGroup(window, _groupName);
         Assert.NotEmpty(listBoxGroups.Items);
@@ -64,18 +63,17 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionFixture dependencyInj
         GetDeleteGroupButton(window).Command.Execute(window);
         var messageBoxWindow = window.OwnedWindows[0];
         var messageBoxButtonYes = GetMessageBoxButtonYes(messageBoxWindow);
-        messageBoxButtonYes.Command.Execute(messageBoxButtonYes.Content);
+        messageBoxButtonYes.Press(window);
         //assert
         Assert.Empty(listBoxGroups.Items);
     }
-
 
     [AvaloniaFact]
     public void DeleteGroup_MessageBoxNotConfirmed_DoNotDelete()
     {
         //arrange
         var window = _builder.Build();
-        window.OpenView(typeof(FaceSwapTemplatesViewModel));
+        window.OpenView(typeof(FaceSwapGroupTemplatesViewModel));
         var listBoxGroups = GetListBoxGroups(window);
         AddNewGroup(window, _groupName);
         Assert.NotEmpty(listBoxGroups.Items);
@@ -93,7 +91,7 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionFixture dependencyInj
     {
         //arrange
         var window = _builder.Build();
-        window.OpenView(typeof(FaceSwapTemplatesViewModel));
+        window.OpenView(typeof(FaceSwapGroupTemplatesViewModel));
         AddNewGroup(window, _groupName);
         var editGroupButton = GetEditGroupButton(window);
         //act
@@ -111,7 +109,7 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionFixture dependencyInj
     {
         //arrange
         var window = _builder.Build();
-        window.OpenView(typeof(FaceSwapTemplatesViewModel));
+        window.OpenView(typeof(FaceSwapGroupTemplatesViewModel));
         AddNewGroup(window, _groupName);
         var editGroupButton = GetEditGroupButton(window);
         var cancelEditGroupButton = GetCancelEditGroupButton(window);
@@ -131,7 +129,7 @@ public class FaceSwapTemplatesViewTests(DependencyInjectionFixture dependencyInj
     {
         //arrange
         var window = _builder.Build();
-        window.OpenView(typeof(FaceSwapTemplatesViewModel));
+        window.OpenView(typeof(FaceSwapGroupTemplatesViewModel));
         AddNewGroup(window, _groupName);
         var editGroupButton = GetEditGroupButton(window);
         var saveEditGroupButton = GetSaveEditGroupButton(window);

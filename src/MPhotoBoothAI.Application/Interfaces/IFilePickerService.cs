@@ -1,9 +1,9 @@
-﻿using MPhotoBoothAI.Application.Models;
+﻿using MPhotoBoothAI.Models.Enums;
 
 namespace MPhotoBoothAI.Application.Interfaces;
 
 public interface IFilePickerService
 {
-    Task<byte[]> PickFile(FileTypes fileTypes);
-    Task<string> PickFilePath(FileTypes fileTypes);
+    Task<byte[]> PickFile(FilePickerFileType[]? filePickerFileTypes = null);
+    Task<string> PickFilePath(FilePickerFileType[]? filePickerFileTypes = null);
 }

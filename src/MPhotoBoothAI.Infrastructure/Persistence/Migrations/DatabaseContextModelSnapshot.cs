@@ -113,11 +113,6 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.Property<int>("Faces")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FaceSwapTemplateGroupId");

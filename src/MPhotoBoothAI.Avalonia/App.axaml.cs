@@ -1,6 +1,7 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.ViewModels;
@@ -26,7 +27,8 @@ public partial class App : AvaloniaApplication
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            _serviceProvider = ConfigureServiceProvider();
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            _serviceProvider = ConfigureServiceProvider(configuration);
             _serviceProvider.GetRequiredService<IDatabaseContext>().Database.Migrate();
             SetApplicationLanguage(_serviceProvider.GetRequiredService<IDatabaseContext>());
             desktop.MainWindow = new MainWindow
@@ -39,10 +41,10 @@ public partial class App : AvaloniaApplication
         base.OnFrameworkInitializationCompleted();
     }
 
-    private static ServiceProvider ConfigureServiceProvider()
+    private static ServiceProvider ConfigureServiceProvider(IConfiguration configuration)
     {
         var serviceCollection = new ServiceCollection();
-        serviceCollection.Configure();
+        serviceCollection.Configure(configuration);
         return serviceCollection.BuildServiceProvider();
     }
 

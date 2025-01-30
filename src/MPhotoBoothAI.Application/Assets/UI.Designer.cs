@@ -133,6 +133,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Podgląd z kamery.
+        /// </summary>
+        public static string cameraPreview {
+            get {
+                return ResourceManager.GetString("cameraPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aparat.
         /// </summary>
         public static string cameraSettings {
@@ -196,20 +205,29 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Usunąć grupę?.
-        /// </summary>
-        public static string deleteGroup {
-            get {
-                return ResourceManager.GetString("deleteGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Usunąć grupę i wszystkie szablony?.
         /// </summary>
         public static string deleteGroupDesc {
             get {
                 return ResourceManager.GetString("deleteGroupDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usunąć?.
+        /// </summary>
+        public static string deleteQuestion {
+            get {
+                return ResourceManager.GetString("deleteQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usunąć szablon?.
+        /// </summary>
+        public static string deleteTemplate {
+            get {
+                return ResourceManager.GetString("deleteTemplate", resourceCulture);
             }
         }
         
@@ -538,6 +556,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zamiana.
+        /// </summary>
+        public static string swap {
+            get {
+                return ResourceManager.GetString("swap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Listek.
         /// </summary>
         public static string stripe {
@@ -552,6 +579,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string takePhoto {
             get {
                 return ResourceManager.GetString("takePhoto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Szablon.
+        /// </summary>
+        public static string template {
+            get {
+                return ResourceManager.GetString("template", resourceCulture);
             }
         }
         

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using MPhotoBoothAI.Application.Interfaces;
+using MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
 using MPhotoBoothAI.Models.UI;
 using System.Collections.ObjectModel;
 
