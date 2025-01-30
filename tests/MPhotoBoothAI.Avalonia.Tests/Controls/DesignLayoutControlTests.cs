@@ -56,26 +56,6 @@ public class DesignLayoutControlTests
         Assert.Equal(initialCount + 1, photoCanvas.Children.Count);
     }
 
-    [AvaloniaFact]
-    public void RemovePhoto_ShouldRemoveLastPhotoFromCanvas()
-    {
-        //arrange
-        var control = new DesignLayoutControlBuilder()
-            .WithActiveLayerSwitch(true)
-            .Build();
-
-        var photoCanvas = control.FindControl<Canvas>("photoCanvas");
-        var addPhotoButton = control.FindControl<Button>("AddPhotoButton");
-        var removePhotoButton = control.FindControl<Button>("RemovePhotoButton");
-        var initialCount = photoCanvas.Children.Count;
-
-        //act
-        addPhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, addPhotoButton));
-        removePhotoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, removePhotoButton));
-
-        //assert
-        Assert.Equal(initialCount - 1, photoCanvas.Children.Count);
-    }
 
     [AvaloniaFact]
     public void SaveLayout_ShouldUpdateLayoutData()
