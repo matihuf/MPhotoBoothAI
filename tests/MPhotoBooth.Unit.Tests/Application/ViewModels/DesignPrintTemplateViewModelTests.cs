@@ -40,7 +40,7 @@ public class DesignPrintTemplateViewModelTests
     }
 
     [Fact]
-    public async Task SaveLayout_SavesChangesAndShowsConfirmation()
+    public async Task SaveLayout_ShowsConfirmation()
     {
         //arrange
         using var databaseContext = new DatabaseContextBuilder().Build();
@@ -58,5 +58,24 @@ public class DesignPrintTemplateViewModelTests
             x => x.ShowInfo(MPhotoBoothAI.Application.Assets.UI.savedChanges, MPhotoBoothAI.Application.Assets.UI.savedChanges, null),
             Times.Once);
         Assert.False(viewModel.NotSavedChange);
+    }
+
+    [Fact]
+    public async Task SaveLayout_DatabaseShouldChange()
+    {
+        //arrange
+        using var databaseContext = new DatabaseContextBuilder().Build();
+        var builder = new DesignPrintTemplateViewModelBuilder();
+        var viewModel = builder.Build(databaseContext);
+        viewModel.NotSavedChange = true;
+        viewModel.SelectedLayoutFormat = new LayoutFormatEntity { Id = 1, FormatRatio = 1.5 }; ;
+        viewModel.SelectedLayoutData = new LayoutDataEntity { Id = 1, PhotoLayoutData = new(), OverlayImageData = new() };
+
+        //act
+        await viewModel.SaveLayoutCommand.ExecuteAsync(null);
+        var layoutData = databaseContext.LayoutDatas.FirstOrDefault();
+
+        //assert
+        Assert.NotNull(layoutData);
     }
 }
