@@ -439,6 +439,15 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wybierz.
+        /// </summary>
+        public static string pick {
+            get {
+                return ResourceManager.GetString("pick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Polski.
         /// </summary>
         public static string pl_PL {
@@ -556,20 +565,20 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Zamiana.
-        /// </summary>
-        public static string swap {
-            get {
-                return ResourceManager.GetString("swap", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Listek.
         /// </summary>
         public static string stripe {
             get {
                 return ResourceManager.GetString("stripe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zamiana.
+        /// </summary>
+        public static string swap {
+            get {
+                return ResourceManager.GetString("swap", resourceCulture);
             }
         }
         
