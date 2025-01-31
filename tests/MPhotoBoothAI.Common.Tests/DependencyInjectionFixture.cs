@@ -19,13 +19,13 @@ public class DependencyInjectionFixture : IDisposable
         var serviceCollection = new ServiceCollection();
         serviceCollection.Configure(configuration);
         ReplaceService(serviceCollection);
+        serviceCollection.AddSingleton(s => new Mock<ICameraDevice>());
         ServiceProvider = serviceCollection.BuildServiceProvider();
     }
 
 
     public virtual void ReplaceService(IServiceCollection services)
     {
-        services.Replace(ServiceDescriptor.Singleton(s => new Mock<ICameraDevice>().Object));
         services.Replace(ServiceDescriptor.Transient(s => new DatabaseContextBuilder().Build()));
     }
 

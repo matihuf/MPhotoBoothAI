@@ -111,10 +111,11 @@ public static class DependencyInjection
 
     private static void AddCamera(IServiceCollection services, IConfiguration configuration)
     {
-        if (ShouldAddService(configuration, "AddEDSKHandler"))
+        if (!ShouldAddService(configuration, "AddCamera"))
         {
-            services.AddTransient<SDKHandler>();
+            return;
         }
+        services.AddTransient<SDKHandler>();
         services.AddSingleton<ICameraDevice, WebCameraDevice>();
         services.AddSingleton<ICameraDevice, CanonCameraDevice>();
     }
