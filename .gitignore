@@ -396,6 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.idea/*
 
 # Emgu
 libcvextern.so
@@ -404,5 +405,4 @@ libcvextern.so
 models/
 
 #Avalonia
-src/MPhotoBoothAI.Avalonia/.avalonia-build-tasks/
-tests/MPhotoBoothAI.Avalonia.Tests/.avalonia-build-tasks/
+**/*.avalonia-build-tasks/*

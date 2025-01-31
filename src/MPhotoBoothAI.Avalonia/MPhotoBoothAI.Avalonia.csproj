@@ -10,6 +10,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Company>Motiony</Company>
     <Product>MPhotoBooth</Product>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +20,12 @@
 
   <ItemGroup>
     <Content Include="../../models/**" CopyToOutputDirectory="PreserveNewest" LinkBase="models\" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-x64' ">
+    <Content Include="bin\x64\Debug\net8.0\linux-x64\runtimes\ubuntu-x64\native\libcvextern.so" Link="libcvextern.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
