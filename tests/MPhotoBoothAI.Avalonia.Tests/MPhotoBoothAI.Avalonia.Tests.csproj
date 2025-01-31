@@ -33,4 +33,11 @@
     <Content Include="$(SolutionDir)models\**" CopyToOutputDirectory="PreserveNewest" LinkBase="models\" />        
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Update="appsettings.avalonia.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

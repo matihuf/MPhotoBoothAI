@@ -21,6 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.integration.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\MPhotoBoothAI.Infrastructure\MPhotoBoothAI.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\MPhotoBoothAI.Avalonia\MPhotoBoothAI.Avalonia.csproj" />
     <ProjectReference Include="..\MPhotoBoothAI.Common.Tests\MPhotoBoothAI.Common.Tests.csproj" />

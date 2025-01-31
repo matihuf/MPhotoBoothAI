@@ -7,7 +7,7 @@ using MPhotoBoothAI.Common.Tests;
 namespace MPhotoBoothAI.Avalonia.Tests;
 public class DependencyInjectionAvaloniaFixture : DependencyInjectionFixture
 {
-    public override bool AddAiModels { get; set; } = false;
+    public override string Configuration { get; set; } = "avalonia";
 
     public override void ReplaceService(IServiceCollection services)
     {

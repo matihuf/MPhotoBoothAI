@@ -16,12 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\src\MPhotoBoothAI.Avalonia\appsettings.json" Link="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="TestData\roundedRectangle.dat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

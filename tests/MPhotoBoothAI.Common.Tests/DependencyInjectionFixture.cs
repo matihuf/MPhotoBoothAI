@@ -11,13 +11,13 @@ public class DependencyInjectionFixture : IDisposable
 {
     public ServiceProvider ServiceProvider { get; private set; }
 
-    public virtual bool AddAiModels { get; set; } = true;
+    public virtual string Configuration { get; set; } = "integration";
 
     public DependencyInjectionFixture()
     {
-        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        var configuration = new ConfigurationBuilder().AddJsonFile($"appsettings.{Configuration}.json").Build();
         var serviceCollection = new ServiceCollection();
-        serviceCollection.Configure(configuration, AddAiModels);
+        serviceCollection.Configure(configuration);
         ReplaceService(serviceCollection);
         ServiceProvider = serviceCollection.BuildServiceProvider();
     }

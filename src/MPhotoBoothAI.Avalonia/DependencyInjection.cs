@@ -24,15 +24,12 @@ namespace MPhotoBoothAI.Avalonia;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection Configure(this IServiceCollection services, IConfiguration configuration, bool addAiModels = true)
+    public static IServiceCollection Configure(this IServiceCollection services, IConfiguration configuration)
     {
         AddViewModels(services);
         AddServices(services);
-        AddCamera(services);
-        if (addAiModels)
-        {
-            AddAiModels(services);
-        }
+        AddCamera(services, configuration);
+        AddAiModels(services, configuration);
         AddManagers(services);
         AddNavigation(services);
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
@@ -63,8 +60,12 @@ public static class DependencyInjection
         services.AddTransient<IFaceDetectionManager, FaceDetectionManager>();
     }
 
-    private static void AddAiModels(IServiceCollection services)
+    private static void AddAiModels(IServiceCollection services, IConfiguration configuration)
     {
+        if (!ShouldAddService(configuration, "AddAIModels"))
+        {
+            return;
+        }
         services.AddKeyedSingleton(Consts.AiModels.Yolov8nFace, delegate { return new LazyDisposal<Net>(() => GetDnnModel(Consts.AiModels.Yolov8nFace)); });
         services.AddKeyedSingleton(Consts.AiModels.ArcfaceBackbone, delegate { return new LazyDisposal<Net>(() => GetDnnModel(Consts.AiModels.ArcfaceBackbone)); });
         services.AddKeyedSingleton(Consts.AiModels.Gunet2blocks, delegate { return new LazyDisposal<Net>(() => GetDnnModel(Consts.AiModels.Gunet2blocks)); });
@@ -104,14 +105,23 @@ public static class DependencyInjection
         services.AddTransient<IAppRestarterService, AppRestarterService>();
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
         services.AddTransient<IDiskInfoService, DiskInfoService>();
-        services.AddTransient<SDKHandler>();
         services.AddTransient<IMessageBoxService, MessageBoxService>();
         services.AddTransient<IWindowService, WindowService>();
     }
 
-    private static void AddCamera(IServiceCollection services)
+    private static void AddCamera(IServiceCollection services, IConfiguration configuration)
     {
+        if (ShouldAddService(configuration, "AddEDSKHandler"))
+        {
+            services.AddTransient<SDKHandler>();
+        }
         services.AddSingleton<ICameraDevice, WebCameraDevice>();
         services.AddSingleton<ICameraDevice, CanonCameraDevice>();
+    }
+
+    private static bool ShouldAddService(IConfiguration configuration, string configurationKey)
+    {
+        bool parsed = bool.TryParse(configuration[$"DependencyInjectionConfiguration:{configurationKey}"], out bool shouldAddService);
+        return parsed ? shouldAddService : true;
     }
 }
