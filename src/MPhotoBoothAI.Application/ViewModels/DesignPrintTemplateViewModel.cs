@@ -85,13 +85,17 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     private async Task SetBackground()
     {
         var pickFile = await FilePickerService.PickFilePath([FilePickerFileType.NonTransparentImage]);
+        if (String.IsNullOrEmpty(pickFile))
+        {
+            return;
+        }
         var pathToCopy = _backgroundDir[(FormatTypes)Id];
         var imageSize = _imageManager.GetImageSizeFromFile(pickFile);
         if (!imageSize.HasValue)
         {
             return;
         }
-        var formatRatio = _dbContext.LayoutFormat.AsNoTracking().First(x => x.Id == Id).FormatRatio;
+        var formatRatio = SelectedLayoutFormat.FormatRatio;
         var ratio = imageSize.Value.Height / (double)imageSize.Value.Width;
         if ((ratio > formatRatio * 1.01 || ratio < formatRatio * 0.99) && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
         {

@@ -27,19 +27,11 @@
     <Application.Styles>
         <materialIcons:MaterialIconStyles />
         <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Icons.axaml" />
-        <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/MessageBox.axaml" />
         <themes:NeumorphismTheme
             BaseTheme="Light"
             PrimaryColor="Purple"
             SecondaryColor="Lime" />
         <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Styles.axaml" />
+        <StyleInclude Source="avares://FluentAvalonia.ProgressRing/Styling/Controls/ProgressRing.axaml" />
     </Application.Styles>
-
-  <Application.Styles>
-    <materialIcons:MaterialIconStyles />
-    <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Icons.axaml" />
-    <themes:NeumorphismTheme BaseTheme="Light" PrimaryColor="Purple" SecondaryColor="Lime" />
-    <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Styles.axaml" />
-    <StyleInclude Source="avares://FluentAvalonia.ProgressRing/Styling/Controls/ProgressRing.axaml" />
-  </Application.Styles>
 </Application>
