@@ -11,7 +11,14 @@ public class ImagesManager : IImageManager
         {
             return null;
         }
-        using var image = CvInvoke.Imread(path);
-        return image.Size;
+        try
+        {
+            using var image = CvInvoke.Imread(path);
+            return image.Size;
+        }
+        catch
+        {
+            return null;
+        }
     }
 }
