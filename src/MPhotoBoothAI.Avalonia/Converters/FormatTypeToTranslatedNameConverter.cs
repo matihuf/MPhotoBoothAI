@@ -8,7 +8,7 @@ public class FormatTypeToTranslatedNameConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is int formatIndex)
+        if (value is int formatIndex && Enum.IsDefined(typeof(FormatTypes), formatIndex))
         {
             var lowerCaseName = ((FormatTypes)formatIndex).ToString().ToLowerInvariant();
             var translatedName = Application.Assets.UI.ResourceManager.GetString(lowerCaseName);
