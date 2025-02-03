@@ -7,6 +7,7 @@
     xmlns:converters="using:MPhotoBoothAI.Avalonia.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:Avalonia.Themes.Neumorphism.Controls;assembly=Avalonia.Themes.Neumorphism"
     Name="root"
     x:DataType="controls:DesignLayoutControl"
     Design.DataContext="controls:DesignLayoutControl"
@@ -15,7 +16,7 @@
     Loaded="LoadedControl">
 
     <UserControl.Styles>
-        <Style Selector="Button">
+        <Style Selector="ui|FloatingButton">
             <Setter Property="Width" Value="150" />
             <Setter Property="Height" Value="{StaticResource TouchItemHeight}" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -23,6 +24,7 @@
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="Margin" Value="0 0 10 10" />
             <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="IsExtended" Value="True" />
         </Style>
         <Style Selector="Canvas">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -93,11 +95,11 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
-            <Button
+            <ui:FloatingButton
                 x:Name="NextBackgroundButton"
                 Command="{Binding SetBackground, ElementName=root}"
                 Content="{x:Static assets:UI.setBackground}" />
-            <Button x:Name="PhotoLayerButton" Click="SwitchToPhotoLayer">
+            <ui:FloatingButton x:Name="PhotoLayerButton" Click="SwitchToPhotoLayer">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Bottom" Text="{x:Static assets:UI.photoLayer}" />
@@ -109,9 +111,9 @@
                         </Border>
                     </StackPanel>
                 </Button.Content>
-            </Button>
-            <Button x:Name="FrameLayerButton" Click="SwitchToFrameLayer">
-                <Button.Content>
+            </ui:FloatingButton>
+            <ui:FloatingButton x:Name="FrameLayerButton" Click="SwitchToFrameLayer">
+                <ui:FloatingButton.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Text="{x:Static assets:UI.frameLayer}" />
                         <Border Background="Transparent" Classes="LayerButton">
@@ -121,23 +123,23 @@
                                 IsVisible="{Binding !ActiveLayerSwitch, ElementName=root}" />
                         </Border>
                     </StackPanel>
-                </Button.Content>
-            </Button>
-            <Button
+                </ui:FloatingButton.Content>
+            </ui:FloatingButton>
+            <ui:FloatingButton
                 x:Name="AddPhotoButton"
                 Click="AddPhoto"
                 Content="{x:Static assets:UI.addPhoto}"
                 IsEnabled="{Binding ActiveLayerSwitch, ElementName=root}" />
-            <Button
+            <ui:FloatingButton
                 x:Name="AddFrameButton"
                 Click="AddFrame"
                 Content="{x:Static assets:UI.addFrame}"
                 IsEnabled="{Binding !ActiveLayerSwitch, ElementName=root}" />
-            <Button
+            <ui:FloatingButton
                 x:Name="SaveLayoutButton"
                 Click="SaveLayout"
                 Content="{x:Static assets:UI.saveLayout}" />
-            <Button
+            <ui:FloatingButton
                 x:Name="ClearLayoutButton"
                 Click="ClearLayout"
                 Content="{x:Static assets:UI.clearLayout}" />
