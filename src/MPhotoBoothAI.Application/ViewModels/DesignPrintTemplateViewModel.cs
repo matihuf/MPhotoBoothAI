@@ -23,6 +23,8 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
 
     private readonly Dictionary<FormatTypes, string> _backgroundDir = [];
 
+    private IWindow _window;
+
     [ObservableProperty]
     private bool _notSavedChange;
 
@@ -82,6 +84,12 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void LoadedWindow(IWindow window)
+    {
+        _window = window;
+    }
+
+    [RelayCommand]
     private async Task SetBackground()
     {
         var pickFile = await FilePickerService.PickFilePath([FilePickerFileType.NonTransparentImage]);
@@ -97,7 +105,7 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
         }
         var formatRatio = SelectedLayoutFormat.FormatRatio;
         var ratio = imageSize.Value.Height / (double)imageSize.Value.Width;
-        if ((ratio > formatRatio * 1.01 || ratio < formatRatio * 0.99) && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, null))
+        if ((ratio > formatRatio * 1.01 || ratio < formatRatio * 0.99) && !await _messageBoxService.ShowYesNo(Assets.UI.wrongImageRatioTitle, Assets.UI.wrongImageRatioMessage, _window))
         {
             return;
         }
@@ -115,7 +123,7 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
             Id = index;
             return;
         }
-        if (await _messageBoxService.ShowYesNo(Assets.UI.notSavedChangesTittle, Assets.UI.notSavedChangesMessage, null))
+        if (await _messageBoxService.ShowYesNo(Assets.UI.notSavedChangesTittle, Assets.UI.notSavedChangesMessage, _window))
         {
             Id = index;
             NotSavedChange = false;
@@ -127,6 +135,6 @@ public partial class DesignPrintTemplateViewModel : ViewModelBase
     {
         _dbContext.SaveChanges();
         NotSavedChange = false;
-        await _messageBoxService.ShowInfo(Assets.UI.savedChanges, Assets.UI.savedChanges, null);
+        await _messageBoxService.ShowInfo(Assets.UI.savedChanges, Assets.UI.savedChanges, _window);
     }
 }

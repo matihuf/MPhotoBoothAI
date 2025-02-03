@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace MPhotoBoothAI.Avalonia.Services;
 public class MessageBoxService : IMessageBoxService
 {
-    public async Task<bool> ShowInfo(string title, string text, IWindow? mainWindow = null)
+    public async Task<bool> ShowInfo(string title, string text, IWindow mainWindow)
     {
-        var dialog = DialogHelper.CreateCommonDialog(new CommonDialogBuilderParams()
+        var result = await DialogHelper.CreateCommonDialog(new CommonDialogBuilderParams()
         {
             ContentHeader = title,
             SupportingText = text,
@@ -26,22 +26,13 @@ public class MessageBoxService : IMessageBoxService
                     DialogButtonStyle = new DialogButtonStyle(DialogButtonBackgroundColor.PrimaryColor, DialogButtonForegroundColor.White)
                 }
             ]
-        });
-        DialogResult result;
-        if (mainWindow != null)
-        {
-            result = await dialog.ShowDialog((Window)mainWindow);
-        }
-        else
-        {
-            result = await dialog.Show();
-        }
+        }).ShowDialog((Window)mainWindow);
         return result.GetResult == Application.Assets.UI.ok;
     }
 
-    public async Task<bool> ShowYesNo(string title, string text, IWindow? mainWindow = null)
+    public async Task<bool> ShowYesNo(string title, string text, IWindow mainWindow)
     {
-        var dialog = DialogHelper.CreateCommonDialog(new CommonDialogBuilderParams()
+        var result = await DialogHelper.CreateCommonDialog(new CommonDialogBuilderParams()
         {
             ContentHeader = title,
             SupportingText = text,
@@ -59,23 +50,13 @@ public class MessageBoxService : IMessageBoxService
                     DialogButtonStyle = new DialogButtonStyle(DialogButtonBackgroundColor.PrimaryColor, DialogButtonForegroundColor.White)
                 }
             ]
-        });
-
-        DialogResult result;
-        if (mainWindow != null)
-        {
-            result = await dialog.ShowDialog((Window)mainWindow);
-        }
-        else
-        {
-            result = await dialog.Show();
-        }
+        }).ShowDialog((Window)mainWindow);
         return result.GetResult == Application.Assets.UI.yes;
     }
 
-    public async Task<string> ShowInput(string title, string text, int maxLength, IWindow? mainWindow = null)
+    public async Task<string> ShowInput(string title, string text, int maxLength, IWindow mainWindow)
     {
-        var dialog = DialogHelper.CreateTextFieldDialog(new TextFieldDialogBuilderParams()
+        var result = await DialogHelper.CreateTextFieldDialog(new TextFieldDialogBuilderParams()
         {
             ContentHeader = title,
             StartupLocation = WindowStartupLocation.CenterOwner,
@@ -98,17 +79,7 @@ public class MessageBoxService : IMessageBoxService
                     DialogButtonStyle = new DialogButtonStyle(DialogButtonBackgroundColor.PrimaryColor, DialogButtonForegroundColor.White)
                 }
             ],
-        });
-
-        TextFieldDialogResult result;
-        if (mainWindow != null)
-        {
-            result = await dialog.ShowDialog((Window)mainWindow);
-        }
-        else
-        {
-            result = await dialog.Show();
-        }
+        }).ShowDialog((Window)mainWindow);
         return result.GetResult == Application.Assets.UI.yes ? result.GetFieldsResult()[0].Text : string.Empty;
     }
 }

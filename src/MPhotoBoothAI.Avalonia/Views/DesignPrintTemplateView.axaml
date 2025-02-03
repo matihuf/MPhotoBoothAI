@@ -7,7 +7,8 @@
     xmlns:converter="using:MPhotoBoothAI.Avalonia.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
-    xmlns:format="using:MPhotoBoothAI.Application.Models"
+    xmlns:ia="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:ic="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="clr-namespace:Avalonia.Themes.Neumorphism.Controls;assembly=Avalonia.Themes.Neumorphism"
     xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
@@ -16,6 +17,13 @@
     d:DesignWidth="1920"
     x:DataType="vm:DesignPrintTemplateViewModel"
     mc:Ignorable="d">
+
+    <ia:Interaction.Behaviors>
+        <ic:EventTriggerBehavior EventName="AttachedToVisualTree">
+            <ic:InvokeCommandAction Command="{Binding LoadedWindowCommand}" CommandParameter="{Binding $parent[Window]}" />
+        </ic:EventTriggerBehavior>
+    </ia:Interaction.Behaviors>
+
 
     <UserControl.Resources>
         <converter:FullPathToFileNameConverter x:Key="fullPathToName" />
@@ -35,6 +43,7 @@
     </UserControl.Styles>
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+
         <StackPanel>
             <TextBlock
                 Margin="20,20,20,0"

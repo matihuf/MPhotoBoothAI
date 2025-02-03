@@ -4,7 +4,7 @@ using System.Globalization;
 namespace MPhotoBoothAI.Avalonia.Tests.Converters;
 public class IntCompareToBoolConverterTests
 {
-    private IntCompareToBoolConverter _converter;
+    private readonly IntCompareToBoolConverter _converter;
 
     public IntCompareToBoolConverterTests()
     {
