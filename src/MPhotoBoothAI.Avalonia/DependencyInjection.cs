@@ -12,7 +12,6 @@ using MPhotoBoothAI.Application.ViewModels;
 using MPhotoBoothAI.Application.ViewModels.FaceSwapTemplates;
 using MPhotoBoothAI.Avalonia.Navigation;
 using MPhotoBoothAI.Avalonia.Services;
-using MPhotoBoothAI.Avalonia.Views;
 using MPhotoBoothAI.Infrastructure.CameraDevices;
 using MPhotoBoothAI.Infrastructure.Persistence;
 using MPhotoBoothAI.Infrastructure.Services;
@@ -39,11 +38,6 @@ public static class DependencyInjection
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
         AddDatabase(services);
         return services;
-    }
-
-    private static void RegisterMainWindow(this IServiceCollection services, MainWindow window)
-    {
-        services.AddTransient<IWindow>(w => window);
     }
 
     private static void AddDatabase(IServiceCollection services)
