@@ -84,6 +84,7 @@ public static class DependencyInjection
         services.AddTransient<FaceDetectionViewModel>();
         services.AddTransient<LanguageViewModel>();
         services.AddTransient<CameraSettingsViewModel>();
+        services.AddTransient<DesignPrintTemplateViewModel>();
         services.AddTransient<FaceSwapGroupTemplatesViewModel>();
         services.AddTransient<AddFaceSwapTemplateViewModel>();
         services.AddTransient<PreviewFaceSwapTemplateViewModel>();
@@ -106,6 +107,8 @@ public static class DependencyInjection
         services.AddTransient<IDiskInfoService, DiskInfoService>();
         services.AddTransient<SDKHandler>();
         services.AddTransient<IMessageBoxService, MessageBoxService>();
+        services.AddTransient<IFilesManager, FilesManager>();
+        services.AddTransient<IImageManager, ImagesManager>();
         services.AddTransient<IWindowService, WindowService>();
     }
 

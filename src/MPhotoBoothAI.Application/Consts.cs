@@ -11,4 +11,10 @@ public static class Consts
         public const string Gfpgan = "gfpgan_1.4";
         public const string VggGender = "vgg_ilsvrc_16_gender_imdb_wiki";
     }
+
+    public static class Sizes
+    {
+        public const int PhotoWidth = 3000;
+        public const int PhotoHeight = 2000;
+    }
 }

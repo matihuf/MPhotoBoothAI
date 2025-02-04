@@ -25,7 +25,7 @@ public class AddFaceSwapTemplateManagerTests
         //act
         using var faceTemplate = await manager.PickTemplate();
         //assert
-        _builder.FilePickerService.Verify(x => x.PickFilePath(new[] { FilePickerFileType.Image }));
+        _builder.FilePickerService.Verify(x => x.PickFilePath(new[] { FilePickerFileType.AllImage }));
     }
 
     [Fact]

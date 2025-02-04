@@ -201,6 +201,99 @@
   <data name="yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="printLayout" xml:space="preserve">
+    <value>Print layout</value>
+  </data>
+  <data name="setBackground" xml:space="preserve">
+    <value>Set background</value>
+  </data>
+  <data name="addPhoto" xml:space="preserve">
+    <value>Add photo</value>
+  </data>
+  <data name="removePhoto" xml:space="preserve">
+    <value>Remove photo</value>
+  </data>
+  <data name="saveLayout" xml:space="preserve">
+    <value>Save layout</value>
+  </data>
+  <data name="clearLayout" xml:space="preserve">
+    <value>Clear layout</value>
+  </data>
+  <data name="frameLayer" xml:space="preserve">
+    <value>Frame layer</value>
+  </data>
+  <data name="photoLayer" xml:space="preserve">
+    <value>Photo layer</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="wrongImageRatioTitle" xml:space="preserve">
+    <value>Wrong image ratio</value>
+  </data>
+  <data name="wrongImageRatioMessage" xml:space="preserve">
+    <value>Wrong aspect ratio, the image will be stretched to fit the print area. Do you still want to add?</value>
+  </data>
+  <data name="designCanvasText" xml:space="preserve">
+    <value>Print design. Add a background using the “Set background” option.</value>
+  </data>
+  <data name="stripe" xml:space="preserve">
+    <value>Stripe</value>
+  </data>
+  <data name="postcard" xml:space="preserve">
+    <value>Postcard</value>
+  </data>
+  <data name="clone" xml:space="preserve">
+    <value>Clone</value>
+  </data>
+  <data name="addFrame" xml:space="preserve">
+    <value>Add frame</value>
+  </data>
+  <data name="openFile" xml:space="preserve">
+    <value>Open File</value>
+  </data>
+  <data name="chooseFormat" xml:space="preserve">
+    <value>Choose format</value>
+  </data>
+  <data name="editFormat" xml:space="preserve">
+    <value>Select a format to edit</value>
+  </data>
+  <data name="notSavedChangesMessage" xml:space="preserve">
+    <value>Failure to save the changes will result in their loss. Do you continue?</value>
+  </data>
+  <data name="notSavedChangesTittle" xml:space="preserve">
+    <value>Unsaved changes</value>
+  </data>
+  <data name="layoutDescription_1" xml:space="preserve">
+    <value>To set the background, select “Set background”, then point to the file on your computer.</value>
+  </data>
+  <data name="layoutDescription_0" xml:space="preserve">
+    <value>To switch between layouts, select the button with the designation of the layout you want to edit.</value>
+  </data>
+  <data name="layoutDescription_2" xml:space="preserve">
+    <value>To change the number of photos in a series use the “Add photo” option. To manipulate the position, size and tilt of the photo, switch to the photo layer, the active layer is marked with a colored circle. </value>
+  </data>
+  <data name="layoutDescription_3" xml:space="preserve">
+    <value>The frames layer is used to design a layer to be applied to a photo. To add elements to the frame layer, switch to it. The active layer is marked with a colored circle. Use the add frame button and in the new window point to the file or drag the image file to the preview box with the mouse.</value>
+  </data>
+  <data name="layoutDescription_4" xml:space="preserve">
+    <value>You will change the position of the elements with mouse movement. You will change the rotation angle of an element with the mouse wheel, and its size with the CTRL key and the mouse wheel. In addition, SHIFT increases zoom in and out. A menu is available under the right mouse button to delete or copy an element.</value>
+  </data>
+  <data name="savedChanges" xml:space="preserve">
+    <value>Saved changes</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="helpInfo" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="layoutDescription_5" xml:space="preserve">
+    <value>When you have finished editing, save your settings. Failure to save your settings will result in the loss of any changes. Clearing the layers will remove all photos in the series, the graphic elements from the frames layer and their settings</value>
+  </data>
   <data name="en-EN" xml:space="preserve">
     <value>English</value>
   </data>
@@ -216,10 +309,10 @@
   <data name="swap" xml:space="preserve">
     <value>Swap</value>
   </data>
-  <data name="close" xml:space="preserve">
-    <value>Close</value>
-  </data>
   <data name="deleteTemplate" xml:space="preserve">
     <value>Delete template?</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>Ok</value>
   </data>
 </root>

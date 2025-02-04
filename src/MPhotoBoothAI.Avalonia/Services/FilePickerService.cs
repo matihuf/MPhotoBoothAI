@@ -15,7 +15,8 @@ public class FilePickerService : IFilePickerService
     {
         { MPhotoBoothAI.Models.Enums.FilePickerFileType.Pdf, FilePickerFileTypes.Pdf  },
         { MPhotoBoothAI.Models.Enums.FilePickerFileType.Text, FilePickerFileTypes.TextPlain  },
-        { MPhotoBoothAI.Models.Enums.FilePickerFileType.Image, ImageAll  }
+        { MPhotoBoothAI.Models.Enums.FilePickerFileType.AllImage, ImageAll  },
+        { MPhotoBoothAI.Models.Enums.FilePickerFileType.NonTransparentImage, FilePickerFileTypes.ImageJpg},
     };
 
     public async Task<byte[]> PickFile(MPhotoBoothAI.Models.Enums.FilePickerFileType[]? filePickerFileTypes = null)
@@ -36,7 +37,7 @@ public class FilePickerService : IFilePickerService
         var file = await PickFileInternal(filePickerFileTypes);
         if (file != null)
         {
-            return file.Path.AbsolutePath;
+            return file.Path.LocalPath;
         }
         return string.Empty;
     }
@@ -47,10 +48,9 @@ public class FilePickerService : IFilePickerService
         {
             throw new NullReferenceException("Missing StorageProvider instance.");
         }
-
         var files = await provider.OpenFilePickerAsync(new FilePickerOpenOptions()
         {
-            Title = "Open File",
+            Title = Application.Assets.UI.openFile,
             AllowMultiple = false,
             FileTypeFilter = Map(filePickerFileTypes)
         });

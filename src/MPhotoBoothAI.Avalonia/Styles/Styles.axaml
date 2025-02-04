@@ -1,9 +1,25 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        >
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-  <Style Selector="Border.BorderContent">
-    <Setter Property="CornerRadius" Value="20" />
-    <Setter Property="Padding" Value="10" />
-    <Setter Property="Background" Value="WhiteSmoke" />
-  </Style>
+    <Style Selector="Border.BorderContent">
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Background" Value="WhiteSmoke" />
+    </Style>
+    <Style Selector="Border.LayerButton">
+        <Setter Property="Background" Value="{StaticResource ActiveColor}" />
+        <Setter Property="Width" Value="15" />
+        <Setter Property="Height" Value="15" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Margin" Value="10 0 0 0" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource ActiveColor}" />
+    </Style>
+    <Style Selector="TextBlock">
+        <Setter Property="Foreground" Value="#ff616161" />
+    </Style>
+    <Style Selector="TextBlock.Body1">
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Margin" Value="0,0,24,0" />
+        <Setter Property="TextAlignment" Value="DetectFromContent" />
+    </Style>
 </Styles>

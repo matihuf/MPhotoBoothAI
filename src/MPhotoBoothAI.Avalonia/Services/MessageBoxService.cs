@@ -7,6 +7,29 @@ using System.Threading.Tasks;
 namespace MPhotoBoothAI.Avalonia.Services;
 public class MessageBoxService : IMessageBoxService
 {
+    public async Task<bool> ShowInfo(string title, string text, IWindow mainWindow)
+    {
+        var result = await DialogHelper.CreateCommonDialog(new CommonDialogBuilderParams()
+        {
+            ContentHeader = title,
+            SupportingText = text,
+            StartupLocation = WindowStartupLocation.CenterOwner,
+            NegativeResult = new DialogResult(Application.Assets.UI.cancel),
+            Borderless = true,
+            Width = 480,
+            RightDialogButtons =
+            [
+                new DialogButton
+                {
+                    Content = Application.Assets.UI.ok,
+                    Result = Application.Assets.UI.ok,
+                    DialogButtonStyle = new DialogButtonStyle(DialogButtonBackgroundColor.PrimaryColor, DialogButtonForegroundColor.White)
+                }
+            ]
+        }).ShowDialog((Window)mainWindow);
+        return result.GetResult == Application.Assets.UI.ok;
+    }
+
     public async Task<bool> ShowYesNo(string title, string text, IWindow mainWindow)
     {
         var result = await DialogHelper.CreateCommonDialog(new CommonDialogBuilderParams()

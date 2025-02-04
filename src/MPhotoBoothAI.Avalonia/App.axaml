@@ -1,21 +1,37 @@
-<Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="MPhotoBoothAI.Avalonia.App"
-             xmlns:local="using:MPhotoBoothAI.Avalonia"
-             xmlns:themes="clr-namespace:Avalonia.Themes.Neumorphism;assembly=Avalonia.Themes.Neumorphism"
-             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             RequestedThemeVariant="Default">
-  <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+<Application
+    x:Class="MPhotoBoothAI.Avalonia.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MPhotoBoothAI.Avalonia"
+    xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:themes="clr-namespace:Avalonia.Themes.Neumorphism;assembly=Avalonia.Themes.Neumorphism"
+    RequestedThemeVariant="Default">
+    <!--  "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options.  -->
 
-  <Application.DataTemplates>
-    <local:ViewLocator/>
-  </Application.DataTemplates>
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
 
-  <Application.Styles>
-    <materialIcons:MaterialIconStyles />
-    <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Icons.axaml" />
-    <themes:NeumorphismTheme BaseTheme="Light" PrimaryColor="Purple" SecondaryColor="Lime" />
-    <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Styles.axaml" />
-    <StyleInclude Source="avares://FluentAvalonia.ProgressRing/Styling/Controls/ProgressRing.axaml" />
-  </Application.Styles>
+    <Application.Resources>
+        <x:Boolean x:Key="True">True</x:Boolean>
+        <x:Boolean x:Key="False">False</x:Boolean>
+
+        <x:Double x:Key="TouchItemHeight">40</x:Double>
+        <SolidColorBrush x:Key="ActiveColor">#2a9d8f</SolidColorBrush>
+
+        <!--  FontSize  -->
+        <x:Double x:Key="CanvasFontSize">20</x:Double>
+        <x:Double x:Key="TitleFontSize">20</x:Double>
+    </Application.Resources>
+
+    <Application.Styles>
+        <materialIcons:MaterialIconStyles />
+        <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Icons.axaml" />
+        <themes:NeumorphismTheme
+            BaseTheme="Light"
+            PrimaryColor="Purple"
+            SecondaryColor="Lime" />
+        <StyleInclude Source="avares://MPhotoBoothAI.Avalonia/Styles/Styles.axaml" />
+        <StyleInclude Source="avares://FluentAvalonia.ProgressRing/Styling/Controls/ProgressRing.axaml" />
+    </Application.Styles>
 </Application>

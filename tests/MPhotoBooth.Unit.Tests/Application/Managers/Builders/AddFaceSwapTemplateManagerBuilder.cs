@@ -12,7 +12,7 @@ internal class AddFaceSwapTemplateManagerBuilder
 
     public AddFaceSwapTemplateManagerBuilder()
     {
-        FilePickerService.Setup(x => x.PickFilePath(new[] { FilePickerFileType.Image })).ReturnsAsync("TestData/square.png");
+        FilePickerService.Setup(x => x.PickFilePath(new[] { FilePickerFileType.AllImage })).ReturnsAsync("TestData/square.png");
     }
 
     public IAddFaceSwapTemplateManager Build(IDatabaseContext databaseContext) => new AddFaceSwapTemplateManager(FilePickerService.Object, _faceDetectionManager.Object,

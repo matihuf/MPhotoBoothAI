@@ -3,6 +3,7 @@ using System;
 using MPhotoBoothAI.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,55 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250106120849_LayoutData")]
+    partial class LayoutData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
-
-            modelBuilder.Entity("MPhotoBoothAI.Application.Models.LayoutFormatEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<double>("FormatHeight")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("FormatRatio")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("FormatWidth")
-                        .HasColumnType("REAL");
-
-                    b.Property<string>("SizeName")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("NVARCHAR");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LayoutFormat");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FormatHeight = 1000.0,
-                            FormatRatio = 0.33333333333333331,
-                            FormatWidth = 3000.0,
-                            SizeName = "5x15"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FormatHeight = 2000.0,
-                            FormatRatio = 0.66666666666666663,
-                            FormatWidth = 3000.0,
-                            SizeName = "10x15"
-                        });
-                });
 
             modelBuilder.Entity("MPhotoBoothAI.Models.Entities.CameraSettingsEntity", b =>
                 {
@@ -113,6 +73,11 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.Property<int>("Faces")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("NVARCHAR");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FaceSwapTemplateGroupId");
@@ -153,16 +118,6 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LayoutDatas");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1
-                        },
-                        new
-                        {
-                            Id = 2
-                        });
                 });
 
             modelBuilder.Entity("MPhotoBoothAI.Models.Entities.OverlayImageDataEntity", b =>
@@ -195,7 +150,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("LayoutDataEntityId");
 
-                    b.ToTable("OverlayImagesData");
+                    b.ToTable("OverlayImageDataEntity");
                 });
 
             modelBuilder.Entity("MPhotoBoothAI.Models.Entities.PhotoLayoutDataEntity", b =>
@@ -223,7 +178,7 @@ namespace MPhotoBoothAI.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("LayoutDataEntityId");
 
-                    b.ToTable("PhotoLayouts");
+                    b.ToTable("PhotoLayoutDataEntity");
                 });
 
             modelBuilder.Entity("MPhotoBoothAI.Models.Entities.UserSettingsEntity", b =>

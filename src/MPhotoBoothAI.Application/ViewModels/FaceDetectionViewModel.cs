@@ -4,6 +4,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using MPhotoBoothAI.Application.Interfaces;
 using MPhotoBoothAI.Application.Interfaces.Observers;
+using MPhotoBoothAI.Models.Enums;
 
 namespace MPhotoBoothAI.Application.ViewModels;
 
@@ -31,7 +32,7 @@ public partial class FaceDetectionViewModel : ViewModelBase, IObserver, IDisposa
     [RelayCommand]
     private async Task SetTarget()
     {
-        byte[] target = await _filePickerService.PickFile();
+        byte[] target = await _filePickerService.PickFile([FilePickerFileType.AllImage]);
         CvInvoke.Imdecode(target, ImreadModes.Color, _target);
     }
 

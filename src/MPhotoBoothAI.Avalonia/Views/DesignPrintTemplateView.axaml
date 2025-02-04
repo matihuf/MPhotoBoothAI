@@ -1,0 +1,156 @@
+<UserControl
+    x:Class="MPhotoBoothAI.Avalonia.Views.DesignPrintTemplateView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:assets="using:MPhotoBoothAI.Application.Assets"
+    xmlns:control="using:MPhotoBoothAI.Avalonia.Controls"
+    xmlns:converter="using:MPhotoBoothAI.Avalonia.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dvm="using:MPhotoBoothAI.Avalonia.Design.ViewModels"
+    xmlns:ia="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:ic="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:Avalonia.Themes.Neumorphism.Controls;assembly=Avalonia.Themes.Neumorphism"
+    xmlns:vm="using:MPhotoBoothAI.Application.ViewModels"
+    x:Name="root"
+    d:DesignHeight="1080"
+    d:DesignWidth="1920"
+    x:DataType="vm:DesignPrintTemplateViewModel"
+    mc:Ignorable="d">
+
+    <ia:Interaction.Behaviors>
+        <ic:EventTriggerBehavior EventName="AttachedToVisualTree">
+            <ic:InvokeCommandAction Command="{Binding LoadedWindowCommand}" CommandParameter="{Binding $parent[Window]}" />
+        </ic:EventTriggerBehavior>
+    </ia:Interaction.Behaviors>
+
+
+    <UserControl.Resources>
+        <converter:FullPathToFileNameConverter x:Key="fullPathToName" />
+        <converter:FormatTypeToTranslatedNameConverter x:Key="formatToName" />
+        <converter:IntCompareToBoolConverter x:Key="intToBool" />
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="Button">
+            <Setter Property="Width" Value="120" />
+        </Style>
+        <Style Selector="TextBlock.formatName">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0 0 0 10" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+
+        <StackPanel>
+            <TextBlock
+                Margin="20,20,20,0"
+                FontSize="{StaticResource TitleFontSize}"
+                Text="{x:Static assets:UI.editFormat}" />
+            <ItemsControl
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                ClipToBounds="False"
+                ItemsSource="{Binding LayoutFormat}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Margin="20"
+                            Orientation="Horizontal"
+                            Spacing="20" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            Padding="0"
+                            Classes="Light"
+                            ClipToBounds="False"
+                            Command="{Binding ((vm:DesignPrintTemplateViewModel)DataContext).ChangeFormatIndexCommand, ElementName=root}"
+                            CommandParameter="{Binding Id}"
+                            CornerRadius="20"
+                            IsEnabled="True">
+                            <Button.Content>
+                                <StackPanel
+                                    Width="{Binding $parent.Bounds.Width}"
+                                    Height="{Binding $parent.Bounds.Height}"
+                                    ClipToBounds="False">
+                                    <TextBlock
+                                        Margin="0,25,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        Text="{Binding Id, Converter={StaticResource formatToName}}"
+                                        TextAlignment="Center" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="15"
+                                        Text="{Binding SizeName}"
+                                        TextAlignment="Center" />
+                                    <Border Margin="0" Classes="LayerButton">
+                                        <Border.IsVisible>
+                                            <MultiBinding Converter="{StaticResource intToBool}">
+                                                <Binding Path="Id" />
+                                                <Binding ElementName="root" Path="((vm:DesignPrintTemplateViewModel)DataContext).Id" />
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                    </Border>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+            <Separator
+                Height="1"
+                HorizontalAlignment="Stretch"
+                CornerRadius="1" />
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition MinWidth="800" />
+                    </Grid.ColumnDefinitions>
+
+                    <Expander
+                        Grid.Column="1"
+                        Margin="10,10,10,10"
+                        Padding="20"
+                        HorizontalAlignment="Stretch"
+                        Classes="Info"
+                        CornerRadius="20"
+                        Header="{x:Static assets:UI.helpInfo}"
+                        Theme="{StaticResource BorderInset}">
+                        <StackPanel
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Spacing="20">
+                            <StackPanel.Styles>
+                                <Style Selector="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap" />
+                                </Style>
+                            </StackPanel.Styles>
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_0}" />
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_1}" />
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_2}" />
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_3}" />
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_4}" />
+                            <TextBlock Width="{Binding $parent.Bounds.Width}" Text="{x:Static assets:UI.layoutDescription_5}" />
+                        </StackPanel>
+                    </Expander>
+                </Grid>
+                <control:DesignLayoutControl
+                    Margin="10,20,10,0"
+                    FilePicker="{Binding FilePickerService}"
+                    LayoutBackgroundPath="{Binding BackgroundPath}"
+                    LayoutData="{Binding SelectedLayoutData}"
+                    LayoutFormat="{Binding SelectedLayoutFormat}"
+                    NotSavedChange="{Binding NotSavedChange}"
+                    SaveLayoutCommand="{Binding SaveLayoutCommand}"
+                    SetBackground="{Binding SetBackgroundCommand}" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

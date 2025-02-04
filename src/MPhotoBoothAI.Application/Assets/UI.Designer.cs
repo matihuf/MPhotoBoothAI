@@ -70,11 +70,38 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dodaj.
+        /// </summary>
+        public static string add {
+            get {
+                return ResourceManager.GetString("add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dodaj ramkę.
+        /// </summary>
+        public static string addFrame {
+            get {
+                return ResourceManager.GetString("addFrame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dodaj grupę.
         /// </summary>
         public static string addGroup {
             get {
                 return ResourceManager.GetString("addGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dodaj zdjęcie.
+        /// </summary>
+        public static string addPhoto {
+            get {
+                return ResourceManager.GetString("addPhoto", resourceCulture);
             }
         }
         
@@ -133,6 +160,33 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wybierz format.
+        /// </summary>
+        public static string chooseFormat {
+            get {
+                return ResourceManager.GetString("chooseFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wyczyść layout.
+        /// </summary>
+        public static string clearLayout {
+            get {
+                return ResourceManager.GetString("clearLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Powiel.
+        /// </summary>
+        public static string clone {
+            get {
+                return ResourceManager.GetString("clone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zamknij.
         /// </summary>
         public static string close {
@@ -178,11 +232,29 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Projekt wydruku. Dodaj tło za pomocą opcji &quot;Ustaw tło&quot;.
+        /// </summary>
+        public static string designCanvasText {
+            get {
+                return ResourceManager.GetString("designCanvasText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edytuj.
         /// </summary>
         public static string edit {
             get {
                 return ResourceManager.GetString("edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wybierz format do edycji.
+        /// </summary>
+        public static string editFormat {
+            get {
+                return ResourceManager.GetString("editFormat", resourceCulture);
             }
         }
         
@@ -205,11 +277,29 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warstwa ramek.
+        /// </summary>
+        public static string frameLayer {
+            get {
+                return ResourceManager.GetString("frameLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grupy.
         /// </summary>
         public static string groups {
             get {
                 return ResourceManager.GetString("groups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pomoc.
+        /// </summary>
+        public static string helpInfo {
+            get {
+                return ResourceManager.GetString("helpInfo", resourceCulture);
             }
         }
         
@@ -228,6 +318,60 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string language {
             get {
                 return ResourceManager.GetString("language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aby przełączać się między layoutami wybierz przycisk z oznaczeniem layoutu który chcesz edytować..
+        /// </summary>
+        public static string layoutDescription_0 {
+            get {
+                return ResourceManager.GetString("layoutDescription_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aby ustawić tło wybierz opcję „Ustaw tło”, następnie wskaż plik na komputerze..
+        /// </summary>
+        public static string layoutDescription_1 {
+            get {
+                return ResourceManager.GetString("layoutDescription_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aby zmieniać ilość zdjęć w serii korzystaj z opcji „Dodaj zdjęcie”. Aby manipulować pozycją, rozmiarem oraz pochyleniem zdjęcia, przełącz się na warstwę zdjęć, aktywna warstwa jest oznaczona kolorowym kółkiem. .
+        /// </summary>
+        public static string layoutDescription_2 {
+            get {
+                return ResourceManager.GetString("layoutDescription_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warstwa ramek służy do projektowania warstwy nakładanej na zdjęci. Aby dodać elementy do warstwy ramek, przełącz się na nią. Aktywna warstwa jest oznaczona kolorowym kółkiem. Użyj przycisku dodaj ramkę i w nowym oknie wskaż plik lub przeciągnij myszką plik graficzny na pole podglądu..
+        /// </summary>
+        public static string layoutDescription_3 {
+            get {
+                return ResourceManager.GetString("layoutDescription_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pozycję elementów zmienisz za pomocą ruchu myszy. Kąt obrotu elementu zmienisz kółkiem myszy, a jego rozmiar za pomocą klawisza CTRL oraz kółka myszy. Dodatkowo SHIFT zwiększa stopień powiększania i zmniejszania. Pod prawym przyciskiem myszy dostępne jest menu umożliwiające usunięcie lub skopiowanie elementu..
+        /// </summary>
+        public static string layoutDescription_4 {
+            get {
+                return ResourceManager.GetString("layoutDescription_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Po zakończeniu edycji zapisz swoje ustawienia. Nie zapisanie ustawień spowoduję utratę wszelkim zmian. Wyczyszczenie warstw spowoduję usunięcie wszystkich zdjęć w serii, elementów grafiki z warstwy ramek oraz ich ustawień.
+        /// </summary>
+        public static string layoutDescription_5 {
+            get {
+                return ResourceManager.GetString("layoutDescription_5", resourceCulture);
             }
         }
         
@@ -259,6 +403,51 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nie zapisanie zmian spowoduję ich utratę. Czy kontynuować?.
+        /// </summary>
+        public static string notSavedChangesMessage {
+            get {
+                return ResourceManager.GetString("notSavedChangesMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nie zapisane zmiany.
+        /// </summary>
+        public static string notSavedChangesTittle {
+            get {
+                return ResourceManager.GetString("notSavedChangesTittle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        public static string ok {
+            get {
+                return ResourceManager.GetString("ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Otwórz plik.
+        /// </summary>
+        public static string openFile {
+            get {
+                return ResourceManager.GetString("openFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warstwa zdjęć.
+        /// </summary>
+        public static string photoLayer {
+            get {
+                return ResourceManager.GetString("photoLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wybierz.
         /// </summary>
         public static string pick {
@@ -273,6 +462,42 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string pl_PL {
             get {
                 return ResourceManager.GetString("pl-PL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pocztówka.
+        /// </summary>
+        public static string postcard {
+            get {
+                return ResourceManager.GetString("postcard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Layout wydruku.
+        /// </summary>
+        public static string printLayout {
+            get {
+                return ResourceManager.GetString("printLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usuń.
+        /// </summary>
+        public static string remove {
+            get {
+                return ResourceManager.GetString("remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usuń zdjęcie.
+        /// </summary>
+        public static string removePhoto {
+            get {
+                return ResourceManager.GetString("removePhoto", resourceCulture);
             }
         }
         
@@ -304,6 +529,33 @@ namespace MPhotoBoothAI.Application.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zapisano zmiany.
+        /// </summary>
+        public static string savedChanges {
+            get {
+                return ResourceManager.GetString("savedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zapisz layout.
+        /// </summary>
+        public static string saveLayout {
+            get {
+                return ResourceManager.GetString("saveLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ustaw tło.
+        /// </summary>
+        public static string setBackground {
+            get {
+                return ResourceManager.GetString("setBackground", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prędkość migawki.
         /// </summary>
         public static string shutterSpeed {
@@ -318,6 +570,15 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string startLiveView {
             get {
                 return ResourceManager.GetString("startLiveView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Listek.
+        /// </summary>
+        public static string stripe {
+            get {
+                return ResourceManager.GetString("stripe", resourceCulture);
             }
         }
         
@@ -363,6 +624,24 @@ namespace MPhotoBoothAI.Application.Assets {
         public static string whiteBalance {
             get {
                 return ResourceManager.GetString("whiteBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Niewłaściwe proporcje obrazu, obraz zostanie rozciągnięty, aby dopasować się do obszaru wydruku. Czy mimo to chcesz dodać?.
+        /// </summary>
+        public static string wrongImageRatioMessage {
+            get {
+                return ResourceManager.GetString("wrongImageRatioMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Niewłaściwe proporcję obrazu.
+        /// </summary>
+        public static string wrongImageRatioTitle {
+            get {
+                return ResourceManager.GetString("wrongImageRatioTitle", resourceCulture);
             }
         }
         
