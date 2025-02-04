@@ -17,4 +17,9 @@
     <Style Selector="TextBlock">
         <Setter Property="Foreground" Value="#ff616161" />
     </Style>
+    <Style Selector="TextBlock.Body1">
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Margin" Value="0,0,24,0" />
+        <Setter Property="TextAlignment" Value="DetectFromContent" />
+    </Style>
 </Styles>
